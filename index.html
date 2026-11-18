@@ -55,6 +55,14 @@
       font-variant-numeric: tabular-nums;
     }
 
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
     .panel {
       background-color: var(--card);
       border: 1px solid var(--line);
@@ -137,70 +145,80 @@
 <body class="min-h-screen flex flex-col">
 
   <!-- ========================================================================
-       1. ROLE-ISOLATED STICKY HEADER
+       1. ROLE-ISOLATED STICKY HEADER (MOBILE OPTIMIZED)
        ======================================================================== -->
   <header class="sticky top-0 z-40 border-b border-[#dfe4dc] bg-[#fafaf5]/95 backdrop-blur-sm">
-    <div class="mx-auto max-w-6xl px-4 py-3.5 sm:px-6">
+    <div class="mx-auto max-w-6xl px-3.5 py-2.5 sm:px-6 sm:py-3.5">
       <!-- State A: Public Unauthenticated Header -->
-      <div id="headerPublic" class="flex items-center justify-between">
+      <div id="headerPublic" class="flex items-center justify-between gap-2">
         <a href="#top" onclick="event.preventDefault(); window.scrollTo({top:0, behavior:'smooth'});"
-          class="text-base sm:text-lg font-bold tracking-tight text-[#234c3c]">
+          class="text-base sm:text-lg font-bold tracking-tight text-[#234c3c] truncate">
           康橋 × 舊鞋救命
         </a>
         <button type="button" onclick="openLoginModal('student')"
-          class="btn-primary rounded-lg px-4 py-2 text-xs sm:text-sm font-bold">
+          class="btn-primary shrink-0 rounded-lg px-4 py-2 text-xs sm:text-sm font-bold">
           專區登入
         </button>
       </div>
 
       <!-- State B: Authenticated Student Header -->
       <div id="headerStudent" class="hidden flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <div class="text-base sm:text-lg font-bold tracking-tight text-[#234c3c]">
+        <div class="text-sm sm:text-lg font-bold tracking-tight text-[#234c3c] truncate">
           康橋 × 舊鞋救命｜學生專區
         </div>
-        <div class="flex flex-wrap items-center gap-2 sm:gap-3">
-          <span id="headerStudentIdentity" class="tabular-nums rounded-lg border border-[#d1dcc7] bg-[#e7eddf] px-3 py-1 text-xs sm:text-sm font-bold text-[#243a32]">
+        <div class="flex flex-wrap items-center gap-1.5 sm:gap-3">
+          <span id="headerStudentIdentity" class="tabular-nums rounded-lg border border-[#d1dcc7] bg-[#e7eddf] px-2.5 py-1 text-xs sm:text-sm font-bold text-[#243a32]">
             —
           </span>
           <button type="button" onclick="openChangePasswordModal()"
-            class="btn-outline rounded-lg px-3 py-1.5 text-xs font-bold">
+            class="btn-outline rounded-lg px-2.5 py-1 text-xs font-bold">
             變更密碼
           </button>
           <button type="button" onclick="logoutUser()"
-            class="rounded-lg border border-[#dfe4dc] bg-white px-3 py-1.5 text-xs font-bold text-[#52625a] hover:border-[#234c3c] hover:text-[#234c3c]">
+            class="rounded-lg border border-[#dfe4dc] bg-white px-2.5 py-1 text-xs font-bold text-[#52625a] hover:border-[#234c3c] hover:text-[#234c3c]">
             登出
           </button>
         </div>
       </div>
 
-      <!-- State C: Authenticated Teacher / Staff Header -->
-      <div id="headerTeacher" class="hidden flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <div class="text-base sm:text-lg font-bold tracking-tight text-[#234c3c]">
-          康橋 × 舊鞋救命｜教師與工作人員管理專區
-        </div>
-        <div class="flex flex-wrap items-center gap-2 sm:gap-3">
-          <span id="headerTeacherIdentity" class="rounded-lg border border-[#d1dcc7] bg-[#e7eddf] px-3 py-1 text-xs sm:text-sm font-bold text-[#243a32]">
-            —
-          </span>
-          <button type="button" onclick="openChangePasswordModal()"
-            class="btn-outline rounded-lg px-3 py-1.5 text-xs font-bold">
-            變更密碼
-          </button>
-          <button type="button" id="teacherPreviewToggleBtn" onclick="toggleTeacherPublicPreview()"
-            class="btn-outline rounded-lg px-3 py-1.5 text-xs font-bold">
-            返回活動總覽
-          </button>
+      <!-- State C: Authenticated Teacher / Staff Header (Compact Single-Row Actions on Mobile) -->
+      <div id="headerTeacher" class="hidden flex-col gap-1.5 sm:flex-row sm:items-center sm:justify-between">
+        <div class="flex items-center justify-between gap-2 min-w-0">
+          <div class="text-sm sm:text-lg font-bold tracking-tight text-[#234c3c] truncate">
+            <span class="sm:hidden">康橋 × 舊鞋救命｜管理專區</span>
+            <span class="hidden sm:inline">康橋 × 舊鞋救命｜教師與工作人員管理專區</span>
+          </div>
           <button type="button" onclick="logoutUser()"
-            class="rounded-lg border border-[#dfe4dc] bg-white px-3 py-1.5 text-xs font-bold text-[#52625a] hover:border-[#234c3c] hover:text-[#234c3c]">
+            class="sm:hidden shrink-0 rounded-lg border border-[#ecc4c8] bg-[#fdf0f1] px-2.5 py-1 text-xs font-bold text-[#992634]">
             登出
           </button>
+        </div>
+        <div class="flex items-center justify-between sm:justify-end gap-1.5 sm:gap-2.5">
+          <span id="headerTeacherIdentity" class="truncate rounded-lg border border-[#d1dcc7] bg-[#e7eddf] px-2.5 py-1 text-xs sm:text-sm font-bold text-[#243a32]">
+            —
+          </span>
+          <div class="flex items-center gap-1.5 shrink-0">
+            <button type="button" onclick="openChangePasswordModal()"
+              class="btn-outline rounded-lg px-2.5 py-1 text-xs font-bold">
+              <span class="sm:hidden">改密碼</span>
+              <span class="hidden sm:inline">變更密碼</span>
+            </button>
+            <button type="button" id="teacherPreviewToggleBtn" onclick="toggleTeacherPublicPreview()"
+              class="btn-outline rounded-lg px-2.5 py-1 text-xs font-bold">
+              返回活動總覽
+            </button>
+            <button type="button" onclick="logoutUser()"
+              class="hidden sm:inline-block rounded-lg border border-[#dfe4dc] bg-white px-3 py-1.5 text-xs font-bold text-[#52625a] hover:border-[#234c3c] hover:text-[#234c3c]">
+              登出
+            </button>
+          </div>
         </div>
       </div>
     </div>
   </header>
 
   <!-- Non-blocking Toast Banner -->
-  <div id="toastBanner" class="fixed bottom-5 right-5 z-50 hidden max-w-md rounded-xl border border-[#234c3c] bg-[#234c3c] px-4 py-3 text-sm font-medium text-white">
+  <div id="toastBanner" class="fixed bottom-5 left-4 right-4 sm:left-auto sm:right-5 z-50 hidden max-w-md rounded-xl border border-[#234c3c] bg-[#234c3c] px-4 py-3 text-sm font-medium text-white shadow-lg">
     <div class="flex items-center gap-2">
       <span id="toastIcon">✓</span>
       <span id="toastText">系統提示訊息</span>
@@ -210,7 +228,7 @@
   <!-- ========================================================================
        2. MAIN WORKSPACE CONTAINER
        ======================================================================== -->
-  <main id="top" class="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:px-6 sm:py-8">
+  <main id="top" class="mx-auto w-full max-w-6xl flex-1 px-3.5 py-4 sm:px-6 sm:py-8">
 
     <!-- ======================================================================
          STATE A: PUBLIC UNAUTHENTICATED VIEW (`活動總覽` ONLY)
@@ -603,109 +621,155 @@
     <!-- ======================================================================
          STATE C: AUTHENTICATED TEACHER / STAFF VIEW (`教師與工作人員管理專區`)
          ====================================================================== -->
-    <div id="teacherPortalContainer" class="hidden space-y-6">
-      <!-- Live Mail Backend Status Strip -->
-      <div id="teacherMailEngineStrip" class="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-[#c5d2bd] bg-[#edf1e7] px-4 py-2.5 text-xs">
-        <div class="flex items-center gap-2 font-bold text-[#234c3c]">
-          <span id="teacherMailStatusDot" class="inline-block h-2.5 w-2.5 rounded-full bg-[#825612]"></span>
-          <span id="teacherMailStatusText">校內信箱發信引擎：尚未綁定 Apps Script 網址（目前為本機離線模式）</span>
+    <div id="teacherPortalContainer" class="hidden space-y-3.5 sm:space-y-6">
+      <!-- Live Mail Backend Status Strip (Compact on Mobile) -->
+      <div id="teacherMailEngineStrip" class="flex items-center justify-between gap-2 rounded-xl border border-[#c5d2bd] bg-[#edf1e7] px-3 py-2 sm:px-4 sm:py-2.5 text-xs">
+        <div class="flex items-center gap-2 font-bold text-[#234c3c] min-w-0">
+          <span id="teacherMailStatusDot" class="inline-block h-2.5 w-2.5 shrink-0 rounded-full bg-[#825612]"></span>
+          <span id="teacherMailStatusText" class="truncate">校內信箱發信引擎：已連線</span>
         </div>
-        <button type="button" onclick="switchTeacherTab('system')" class="btn-outline rounded-lg px-3 py-1 text-xs font-bold">
-          設定發信引擎與測試 ↗
+        <button type="button" onclick="switchTeacherTab('system')" class="btn-outline shrink-0 rounded-lg px-2.5 py-1 text-xs font-bold">
+          連線設定 ↗
         </button>
       </div>
 
-      <!-- Teacher Sub-Navigation Tabs -->
-      <section class="panel p-3 sm:p-4">
-        <div class="flex flex-wrap gap-1.5">
+      <!-- Teacher Sub-Navigation Tabs (Single-Row Horizontal Swipeable on Mobile) -->
+      <section class="panel p-2 sm:p-4">
+        <div class="flex overflow-x-auto no-scrollbar gap-1.5 sm:flex-wrap">
           <button type="button" data-ttab="attendance" onclick="switchTeacherTab('attendance')"
-            class="teacher-subtab rounded-lg px-3.5 py-2 text-xs sm:text-sm font-bold transition">
-            ① 現場點名（上午梯 / 下午梯）
+            class="teacher-subtab whitespace-nowrap shrink-0 rounded-lg px-3 py-2 text-xs sm:text-sm font-bold transition">
+            ① 現場點名與備取
           </button>
           <button type="button" data-ttab="review" onclick="switchTeacherTab('review')"
-            class="teacher-subtab rounded-lg px-3.5 py-2 text-xs sm:text-sm font-bold transition">
-            ② 任務審核、學習單閱卷與總時數匯出
+            class="teacher-subtab whitespace-nowrap shrink-0 rounded-lg px-3 py-2 text-xs sm:text-sm font-bold transition">
+            ② 任務審核與總時數
           </button>
           <button type="button" data-ttab="roster" onclick="switchTeacherTab('roster')"
-            class="teacher-subtab rounded-lg px-3.5 py-2 text-xs sm:text-sm font-bold transition">
-            ③ 學生報名名單管理（CRUD、匯入與匯出）
+            class="teacher-subtab whitespace-nowrap shrink-0 rounded-lg px-3 py-2 text-xs sm:text-sm font-bold transition">
+            ③ 報名名單與備取管理
           </button>
           <button type="button" data-ttab="cms" onclick="switchTeacherTab('cms')"
-            class="teacher-subtab rounded-lg px-3.5 py-2 text-xs sm:text-sm font-bold transition">
-            ④ 全站內容、影片路徑與題庫編輯
+            class="teacher-subtab whitespace-nowrap shrink-0 rounded-lg px-3 py-2 text-xs sm:text-sm font-bold transition">
+            ④ 內容與題庫編輯
           </button>
           <button type="button" data-ttab="system" onclick="switchTeacherTab('system')"
-            class="teacher-subtab rounded-lg px-3.5 py-2 text-xs sm:text-sm font-bold transition">
-            ⑤ 管理員帳號、信箱發信與試算表同步
+            class="teacher-subtab whitespace-nowrap shrink-0 rounded-lg px-3 py-2 text-xs sm:text-sm font-bold transition">
+            ⑤ 帳號與雲端同步
           </button>
         </div>
       </section>
 
-      <!-- SUB-TAB ①: 現場點名（上午梯 / 下午梯） -->
-      <div id="t-tab-attendance" class="space-y-5">
-        <section class="sage-panel p-5 sm:p-6 space-y-4">
+      <!-- SUB-TAB ①: 現場點名（上午梯 / 下午梯 / 備取遞補） -->
+      <div id="t-tab-attendance" class="space-y-3.5 sm:space-y-5">
+        <section class="sage-panel p-3.5 sm:p-6 space-y-3 sm:space-y-4">
           <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-            <div>
-              <div class="inline-flex rounded-lg border border-[#c5d2bd] bg-white p-1 mb-2">
+            <div class="space-y-2">
+              <!-- Session + Waitlist Switcher -->
+              <div class="grid grid-cols-3 sm:inline-flex rounded-xl border border-[#c5d2bd] bg-white p-1 gap-1">
                 <button type="button" id="attSessionAmBtn" onclick="switchAttendanceSession('AM')"
-                  class="rounded-md px-3.5 py-1.5 text-xs sm:text-sm font-bold bg-[#234c3c] text-white">
-                  上午梯（09:30–12:30）
+                  class="rounded-lg px-2 py-2 sm:px-3.5 sm:py-1.5 text-xs sm:text-sm font-bold bg-[#234c3c] text-white text-center">
+                  上午梯 (45)
                 </button>
                 <button type="button" id="attSessionPmBtn" onclick="switchAttendanceSession('PM')"
-                  class="rounded-md px-3.5 py-1.5 text-xs sm:text-sm font-bold text-[#52625a]">
-                  下午梯（14:00–17:00）
+                  class="rounded-lg px-2 py-2 sm:px-3.5 sm:py-1.5 text-xs sm:text-sm font-bold text-[#52625a] text-center">
+                  下午梯 (47)
+                </button>
+                <button type="button" id="attSessionWaitlistBtn" onclick="switchAttendanceSession('WAITLIST')"
+                  class="rounded-lg px-2 py-2 sm:px-3.5 sm:py-1.5 text-xs sm:text-sm font-bold text-[#825612] text-center">
+                  備取遞補 (14)
                 </button>
               </div>
-              <h2 id="attHeaderTitle" class="text-lg sm:text-xl font-bold text-[#243a32]">
-                11/21 上午梯現場點名表（上午A 25人＋上午B 20人）
-              </h2>
-              <p id="attHeaderSub" class="tabular-nums text-xs sm:text-sm text-[#3e524a]">
-                開訓時間 09:30｜逾 20 分鐘（09:50 後）未報到自動判定缺席（0h）
-              </p>
+
+              <div>
+                <h2 id="attHeaderTitle" class="text-base sm:text-xl font-bold text-[#243a32]">
+                  11/21 上午梯現場點名表（上午A 25人＋上午B 20人）
+                </h2>
+                <p id="attHeaderSub" class="tabular-nums text-xs sm:text-sm text-[#3e524a]">
+                  開訓時間 09:30｜逾 20 分鐘（09:50 後）未報到自動判定缺席（0h）
+                </p>
+              </div>
             </div>
 
-            <div class="flex flex-wrap items-center gap-2">
-              <div class="flex items-center gap-1.5 rounded-lg border border-[#c5d2bd] bg-white px-3 py-1.5">
+            <!-- Regular Session Time Controls -->
+            <div id="attTimeControlBar" class="flex flex-wrap items-center gap-2">
+              <div class="flex items-center gap-1.5 rounded-lg border border-[#c5d2bd] bg-white px-2.5 py-1.5">
                 <span class="text-xs font-bold text-[#52625a]">時間判定：</span>
                 <select id="attTimeModeSelect" onchange="onAttendanceTimeModeChange()"
-                  class="text-xs font-bold text-[#234c3c] focus:outline-none">
+                  class="text-xs font-bold text-[#234c3c] focus:outline-none bg-transparent">
                   <option value="auto">自動依系統時間</option>
                   <option value="within20">開訓 20 分鐘內</option>
                   <option value="over20">已逾 20 分鐘</option>
                 </select>
               </div>
               <button type="button" onclick="markOverdueAbsentNow()"
-                class="rounded-lg border border-[#ecc4c8] bg-[#fdf0f1] px-3 py-2 text-xs font-bold text-[#992634] hover:bg-[#fae2e4]">
-                逾時未報到一鍵判缺席
+                class="rounded-lg border border-[#ecc4c8] bg-[#fdf0f1] px-3 py-1.5 text-xs font-bold text-[#992634] hover:bg-[#fae2e4]">
+                逾時一鍵判缺席
               </button>
             </div>
           </div>
 
-          <div id="attKpiSummary" class="grid grid-cols-2 gap-2.5 sm:grid-cols-5 tabular-nums"></div>
+          <!-- Regular Session KPI Summary -->
+          <div id="attKpiSummary" class="grid grid-cols-3 gap-2 sm:grid-cols-5 tabular-nums"></div>
+
+          <!-- Waitlist Promotion Info Banner (Shown when WAITLIST tab is active) -->
+          <div id="attWaitlistInfoBanner" class="hidden rounded-xl border border-[#e9d5ae] bg-[#fdf6e7] p-3.5 space-y-2.5">
+            <div class="text-xs sm:text-sm font-bold text-[#825612]">
+              現場遇正取缺席或名額釋出時，可直接點選下方備取學生「遞補轉正取」，系統將立即加入該梯次點名表並同步雲端。
+            </div>
+            <label class="inline-flex items-center gap-2 cursor-pointer select-none rounded-lg border border-[#e9d5ae] bg-white px-3 py-1.5 text-xs font-bold text-[#243a32]">
+              <input type="checkbox" id="attWaitlistAutoPresentChk" checked class="h-4 w-4 rounded border-[#234c3c] text-[#234c3c]" />
+              <span>遞補轉正取時，同時直接標記「✓ 有出席 (3.0h)」完成報到</span>
+            </label>
+          </div>
         </section>
 
-        <section class="panel p-4 sm:p-5 space-y-4">
-          <div class="flex flex-wrap items-center justify-between gap-2">
-            <div class="flex flex-wrap items-center gap-2">
-              <div id="attAmSubFilter" class="inline-flex rounded-lg border border-[#dfe4dc] bg-[#fafaf5] p-0.5">
-                <button type="button" data-amgrp="ALL" onclick="setAmGroupFilter('ALL')" class="am-grp-pill rounded-md px-3 py-1 text-xs font-bold bg-[#234c3c] text-white">全部</button>
-                <button type="button" data-amgrp="上午A" onclick="setAmGroupFilter('上午A')" class="am-grp-pill rounded-md px-3 py-1 text-xs font-medium text-[#52625a]">上午A</button>
-                <button type="button" data-amgrp="上午B" onclick="setAmGroupFilter('上午B')" class="am-grp-pill rounded-md px-3 py-1 text-xs font-medium text-[#52625a]">上午B</button>
-              </div>
-              <input type="text" id="attSearchInput" oninput="renderAttendanceTable()"
+        <!-- Search, Filters & Student Roll-Call Cards / Desktop Table -->
+        <section class="panel p-3.5 sm:p-5 space-y-3.5">
+          <div class="space-y-2.5">
+            <div class="flex flex-col sm:flex-row sm:items-center gap-2">
+              <input type="search" id="attSearchInput" oninput="renderAttendanceTable()"
                 placeholder="搜尋班級 / 座號 / 學號 / 姓名..."
-                class="rounded-lg border border-[#dfe4dc] px-3 py-1.5 text-xs sm:text-sm" />
+                class="w-full sm:w-72 rounded-xl border border-[#cfd7cb] bg-[#fafaf5] px-3.5 py-2 text-sm focus:border-[#234c3c] focus:bg-white focus:outline-none" />
+
+              <!-- Regular Session Filters -->
+              <div id="attRegularFilterBar" class="flex flex-wrap items-center gap-1.5">
+                <div id="attAmSubFilter" class="inline-flex rounded-lg border border-[#dfe4dc] bg-[#fafaf5] p-0.5">
+                  <button type="button" data-amgrp="ALL" onclick="setAmGroupFilter('ALL')" class="am-grp-pill rounded-md px-2.5 py-1 text-xs font-bold bg-[#234c3c] text-white">全部</button>
+                  <button type="button" data-amgrp="上午A" onclick="setAmGroupFilter('上午A')" class="am-grp-pill rounded-md px-2.5 py-1 text-xs font-medium text-[#52625a]">上午A</button>
+                  <button type="button" data-amgrp="上午B" onclick="setAmGroupFilter('上午B')" class="am-grp-pill rounded-md px-2.5 py-1 text-xs font-medium text-[#52625a]">上午B</button>
+                </div>
+
+                <div class="flex overflow-x-auto no-scrollbar gap-1">
+                  <button type="button" data-attst="ALL" onclick="setAttStatusFilter('ALL')" class="att-st-pill rounded-full border border-[#234c3c] bg-[#234c3c] px-2.5 py-1 text-xs font-bold text-white whitespace-nowrap">全部狀態</button>
+                  <button type="button" data-attst="pending" onclick="setAttStatusFilter('pending')" class="att-st-pill rounded-full border border-[#dfe4dc] bg-white px-2.5 py-1 text-xs font-bold text-[#52625a] whitespace-nowrap">未點名</button>
+                  <button type="button" data-attst="present" onclick="setAttStatusFilter('present')" class="att-st-pill rounded-full border border-[#dfe4dc] bg-white px-2.5 py-1 text-xs font-bold text-[#234c3c] whitespace-nowrap">✓ 出席</button>
+                  <button type="button" data-attst="late_early" onclick="setAttStatusFilter('late_early')" class="att-st-pill rounded-full border border-[#dfe4dc] bg-white px-2.5 py-1 text-xs font-bold text-[#825612] whitespace-nowrap">⏰ 遲到/早退</button>
+                  <button type="button" data-attst="absent" onclick="setAttStatusFilter('absent')" class="att-st-pill rounded-full border border-[#dfe4dc] bg-white px-2.5 py-1 text-xs font-bold text-[#992634] whitespace-nowrap">✕ 缺席</button>
+                </div>
+              </div>
+
+              <!-- Waitlist Preference Filters -->
+              <div id="attWaitlistFilterBar" class="hidden flex flex-wrap items-center gap-1.5">
+                <button type="button" data-wpref="ALL" onclick="setWaitlistPrefFilter('ALL')" class="wpref-pill rounded-full border border-[#825612] bg-[#825612] px-3 py-1 text-xs font-bold text-white">全部備取</button>
+                <button type="button" data-wpref="AM" onclick="setWaitlistPrefFilter('AM')" class="wpref-pill rounded-full border border-[#dfe4dc] bg-white px-3 py-1 text-xs font-bold text-[#52625a]">上午梯優先</button>
+                <button type="button" data-wpref="PM" onclick="setWaitlistPrefFilter('PM')" class="wpref-pill rounded-full border border-[#dfe4dc] bg-white px-3 py-1 text-xs font-bold text-[#52625a]">下午梯優先</button>
+              </div>
             </div>
-            <div class="text-xs text-[#52625a]">
-              點選左側按鈕依序切換：<strong>✓ 有出席 (3.0h) → ⏰ 遲到 (2.5h) → 🏃 早退 (0.5h–2.5h) → ✕ 缺席 (0h)</strong>
+
+            <div id="attHintBar" class="hidden md:block text-xs text-[#52625a]">
+              點選按鈕可直接設定出席狀態（再次點選已選按鈕可取消為未點名）：<strong>✓ 有出席 (3.0h)</strong>｜<strong>⏰ 遲到 (2.5h)</strong>｜<strong>🏃 早退 (0.5h–2.5h)</strong>｜<strong>✕ 缺席 (0h)</strong>
             </div>
           </div>
 
-          <div class="overflow-x-auto rounded-xl border border-[#dfe4dc]">
+          <!-- MOBILE THUMB-FRIENDLY CARD LIST (< 768px) -->
+          <div id="attMobileCards" class="space-y-2.5 md:hidden tabular-nums"></div>
+
+          <!-- DESKTOP FULL-WIDTH TABLE (>= 768px) -->
+          <div id="attDesktopTableWrap" class="hidden md:block overflow-x-auto rounded-xl border border-[#dfe4dc]">
             <table class="w-full border-collapse text-left text-xs sm:text-sm">
-              <thead class="bg-[#f4f7f1] border-b border-[#dfe4dc] text-[#234c3c]">
+              <thead id="attTableHead" class="bg-[#f4f7f1] border-b border-[#dfe4dc] text-[#234c3c]">
                 <tr>
-                  <th class="sticky-col px-3.5 py-3 font-bold min-w-[220px]">出席狀況（點選切換）</th>
+                  <th class="sticky-col px-3.5 py-3 font-bold min-w-[330px]">出席狀況（一鍵點選）</th>
                   <th class="px-3 py-3 font-bold">序號</th>
                   <th class="px-3 py-3 font-bold">班級</th>
                   <th class="px-3 py-3 font-bold">座號</th>
@@ -726,7 +790,7 @@
       <div id="t-tab-review" class="hidden space-y-5">
         <div id="reviewKpiRow" class="grid grid-cols-2 gap-3 sm:grid-cols-5 tabular-nums"></div>
 
-        <section class="panel p-5 sm:p-6 space-y-4">
+        <section class="panel p-4 sm:p-6 space-y-4">
           <div class="flex flex-wrap items-center justify-between gap-3 border-b border-[#dfe4dc] pb-4">
             <div>
               <h2 class="text-lg font-bold text-[#243a32]">任務審核、學習單閱卷與總時數匯出</h2>
@@ -781,7 +845,7 @@
 
       <!-- SUB-TAB ③: 學生報名名單管理（CRUD、總名單匯入與匯出） -->
       <div id="t-tab-roster" class="hidden space-y-5">
-        <section class="panel p-5 sm:p-6 space-y-4">
+        <section class="panel p-4 sm:p-6 space-y-4">
           <div class="flex flex-wrap items-center justify-between gap-3 border-b border-[#dfe4dc] pb-4">
             <div>
               <h2 id="rosterSectionHeading" class="text-lg font-bold text-[#243a32]">學生報名名單管理（92 筆錄取＋14 筆備取）</h2>
@@ -1055,11 +1119,6 @@
             </div>
             <pre id="sysGasCodePre" class="tabular-nums overflow-x-auto rounded-xl border border-[#dfe4dc] bg-[#1e2823] p-4 text-xs text-[#e7eddf] leading-relaxed max-h-72">/**
  * 康橋 × 舊鞋救命｜2026 服務學習 正式上線雲端同步後端 (Google Apps Script)
- * 功能：
- * 1. 跨裝置完整資料庫同步（讀寫「系統雲端狀態庫」JSON 資料庫 + 自動更新「舊鞋救命錄取名單」可讀分頁）
- * 2. LockService 併發鎖定 + 學生端原子更新 (upsertStudent)，避免多人同時填寫互相覆蓋
- * 3. 實際寄送 6 位數登入驗證碼 (OTP) 至學生學校信箱 (@stu.kcislk.ntpc.edu.tw)
- * 4. 教師管理專區實際寄送個別／批次通知信並記錄於「系統發信紀錄」
  */
 
 const SPREADSHEET_ID = &#x27;1hOyDHewvzfxvnq3xioxO8KkBtogRZ2ypBI6wy1yabfk&#x27;;
@@ -1117,8 +1176,6 @@ function serverApiBridge(payload) {
   if (action === &#x27;syncPush&#x27;) return handleSyncPush(payload);
   return { ok: false, error: &#x27;不支援的操作類型：&#x27; + action };
 }
-
-/* ================= 完整雲端狀態讀寫（跨裝置核心） ================= */
 
 function readMasterStateFromSheet(ss) {
   const sheet = ss.getSheetByName(STATE_SHEET_NAME);
@@ -1256,8 +1313,6 @@ function handleUpsertStudent(payload) {
     lock.releaseLock();
   }
 }
-
-/* ================= 發信與原有相容 API ================= */
 
 function handlePing() {
   let senderEmail = &#x27;&#x27;;
@@ -1882,7 +1937,6 @@ function appendMailLog(type, studentId, name, email, subject, status) {
     const SHEET_ID = '1hOyDHewvzfxvnq3xioxO8KkBtogRZ2ypBI6wy1yabfk';
     const SHEET_GID = '1380079061';
 
-    // 教師部署 Code.gs 後，亦可直接將正式 /exec 網址填入此常數，所有學生裝置開啟網頁即自動連線發信
     const DEFAULT_PRODUCTION_GAS_URL = 'https://script.google.com/macros/s/AKfycbzrEyDg4VQEOu1wyQG0wdQOFdnpuREXj68_1xfSEiJI4AvV-H7hqZafxutEHZtG4FgK/exec';
 
     const DEFAULT_ADMINS = [
@@ -2243,9 +2297,10 @@ function appendMailLog(type, studentId, name, email, subject, status) {
     let currentTeacherTab = 'attendance';
     let attSessionMode = 'AM';
     let attAmGroupFilter = 'ALL';
+    let attStatusFilter = 'ALL';
+    let waitlistPrefFilter = 'ALL';
     let activeGradingStudentId = null;
 
-    // Production OTP UI timers
     let currentStudentLoginMode = 'password';
     let otpTargetStudentId = '';
     let otpExpiresAt = 0;
@@ -2262,6 +2317,7 @@ function appendMailLog(type, studentId, name, email, subject, status) {
           const parsed = JSON.parse(raw);
           if (parsed && Array.isArray(parsed.students) && parsed.students.length > 0) {
             if (!Array.isArray(parsed.mailLogs)) parsed.mailLogs = [];
+            if (!Array.isArray(parsed.waitlist)) parsed.waitlist = JSON.parse(JSON.stringify(RAW_WAITLIST_14));
             if (DEFAULT_PRODUCTION_GAS_URL) parsed.gasWebAppUrl = DEFAULT_PRODUCTION_GAS_URL;
             return parsed;
           }
@@ -2308,6 +2364,7 @@ function appendMailLog(type, studentId, name, email, subject, status) {
         if (res && res.ok && !res.empty && res.state && Array.isArray(res.state.students)) {
           const keepGasUrl = getActiveGasUrl();
           appState = res.state;
+          if (!Array.isArray(appState.waitlist)) appState.waitlist = JSON.parse(JSON.stringify(RAW_WAITLIST_14));
           if (keepGasUrl) appState.gasWebAppUrl = keepGasUrl;
           saveAppState(true);
           renderRootByRole();
@@ -2574,10 +2631,10 @@ function appendMailLog(type, studentId, name, email, subject, status) {
         fAuth.classList.add('flex');
 
         document.getElementById('headerTeacherIdentity').textContent =
-          `${adm.name}（${adm.role === 'admin' ? '管理員教師' : '現場點名人員'}）`;
+          `${adm.name}（${adm.role === 'admin' ? '管理員' : '點名人員'}）`;
         const previewBtn = document.getElementById('teacherPreviewToggleBtn');
         if (previewBtn) {
-          previewBtn.textContent = teacherPreviewingPublic ? '返回管理專區' : '返回活動總覽';
+          previewBtn.textContent = teacherPreviewingPublic ? '返回管理專區' : '活動總覽';
         }
 
         updateTeacherMailEngineBanner();
@@ -2605,13 +2662,13 @@ function appendMailLog(type, studentId, name, email, subject, status) {
       const txt = document.getElementById('teacherMailStatusText');
       if (!dot || !txt) return;
       if (isLiveMailBackendAvailable()) {
-        dot.className = 'inline-block h-2.5 w-2.5 rounded-full bg-[#234c3c]';
+        dot.className = 'inline-block h-2.5 w-2.5 shrink-0 rounded-full bg-[#234c3c]';
         txt.textContent = isAppsScriptHosted()
-          ? '校內信箱發信引擎：已直接連線（Google Apps Script 正式環境，可直接寄信至學生信箱）'
-          : '校內信箱發信引擎：已綁定 Apps Script 正式網址（可直接寄信至學生信箱與同步試算表）';
+          ? '雲端與發信引擎：已直接連線（Apps Script 正式環境）'
+          : '雲端與發信引擎：已綁定 Apps Script 正式網址';
       } else {
-        dot.className = 'inline-block h-2.5 w-2.5 rounded-full bg-[#825612]';
-        txt.textContent = '校內信箱發信引擎：尚未綁定 Apps Script 網址（請點右側設定以啟用真實寄信至學生信箱）';
+        dot.className = 'inline-block h-2.5 w-2.5 shrink-0 rounded-full bg-[#825612]';
+        txt.textContent = '雲端與發信引擎：尚未綁定 Apps Script 網址';
       }
     }
 
@@ -3445,8 +3502,8 @@ function appendMailLog(type, studentId, name, email, subject, status) {
       document.querySelectorAll('.teacher-subtab').forEach((btn) => {
         const k = btn.getAttribute('data-ttab');
         btn.className = (k === tabKey)
-          ? 'teacher-subtab rounded-lg px-3.5 py-2 text-xs sm:text-sm font-bold transition bg-[#234c3c] text-white'
-          : 'teacher-subtab rounded-lg px-3.5 py-2 text-xs sm:text-sm font-bold transition bg-white border border-[#dfe4dc] text-[#243a32] hover:bg-[#edf1e7]';
+          ? 'teacher-subtab whitespace-nowrap shrink-0 rounded-lg px-3 py-2 text-xs sm:text-sm font-bold transition bg-[#234c3c] text-white'
+          : 'teacher-subtab whitespace-nowrap shrink-0 rounded-lg px-3 py-2 text-xs sm:text-sm font-bold transition bg-white border border-[#dfe4dc] text-[#243a32] hover:bg-[#edf1e7]';
       });
 
       ['attendance', 'review', 'roster', 'cms', 'system'].forEach((k) => {
@@ -3460,10 +3517,12 @@ function appendMailLog(type, studentId, name, email, subject, status) {
       else if (tabKey === 'system') renderSystemAdminSection();
     }
 
-    /* --- TAB ①: ATTENDANCE --- */
+    /* --- TAB ①: ATTENDANCE & ON-SITE WAITLIST PROMOTION (MOBILE CARD + DESKTOP TABLE) --- */
     function switchAttendanceSession(mode) {
       attSessionMode = mode;
       attAmGroupFilter = 'ALL';
+      attStatusFilter = 'ALL';
+      waitlistPrefFilter = 'ALL';
       renderAttendanceSection();
     }
 
@@ -3472,40 +3531,85 @@ function appendMailLog(type, studentId, name, email, subject, status) {
       renderAttendanceSection();
     }
 
+    function setAttStatusFilter(st) {
+      attStatusFilter = st;
+      renderAttendanceSection();
+    }
+
+    function setWaitlistPrefFilter(pref) {
+      waitlistPrefFilter = pref;
+      renderAttendanceSection();
+    }
+
     function renderAttendanceSection() {
       const isAm = attSessionMode === 'AM';
+      const isPm = attSessionMode === 'PM';
+      const isWait = attSessionMode === 'WAITLIST';
+
       const amTotal = appState.students.filter((s) => s.session === '上午A' || s.session === '上午B').length;
       const amACnt = appState.students.filter((s) => s.session === '上午A').length;
       const amBCnt = appState.students.filter((s) => s.session === '上午B').length;
       const pmTotal = appState.students.filter((s) => s.session === '下午').length;
+      const waitTotal = appState.waitlist.length;
 
-      document.getElementById('attSessionAmBtn').textContent = `上午梯（09:30–12:30｜${amTotal}人）`;
-      document.getElementById('attSessionPmBtn').textContent = `下午梯（14:00–17:00｜${pmTotal}人）`;
+      document.getElementById('attSessionAmBtn').textContent = `上午梯 (${amTotal})`;
+      document.getElementById('attSessionPmBtn').textContent = `下午梯 (${pmTotal})`;
+      document.getElementById('attSessionWaitlistBtn').textContent = `備取遞補 (${waitTotal})`;
 
       document.getElementById('attSessionAmBtn').className = isAm
-        ? 'rounded-md px-3.5 py-1.5 text-xs sm:text-sm font-bold bg-[#234c3c] text-white'
-        : 'rounded-md px-3.5 py-1.5 text-xs sm:text-sm font-bold text-[#52625a]';
-      document.getElementById('attSessionPmBtn').className = !isAm
-        ? 'rounded-md px-3.5 py-1.5 text-xs sm:text-sm font-bold bg-[#234c3c] text-white'
-        : 'rounded-md px-3.5 py-1.5 text-xs sm:text-sm font-bold text-[#52625a]';
+        ? 'rounded-lg px-2 py-2 sm:px-3.5 sm:py-1.5 text-xs sm:text-sm font-bold bg-[#234c3c] text-white text-center'
+        : 'rounded-lg px-2 py-2 sm:px-3.5 sm:py-1.5 text-xs sm:text-sm font-bold text-[#52625a] text-center hover:bg-[#fafaf5]';
+      document.getElementById('attSessionPmBtn').className = isPm
+        ? 'rounded-lg px-2 py-2 sm:px-3.5 sm:py-1.5 text-xs sm:text-sm font-bold bg-[#234c3c] text-white text-center'
+        : 'rounded-lg px-2 py-2 sm:px-3.5 sm:py-1.5 text-xs sm:text-sm font-bold text-[#52625a] text-center hover:bg-[#fafaf5]';
+      document.getElementById('attSessionWaitlistBtn').className = isWait
+        ? 'rounded-lg px-2 py-2 sm:px-3.5 sm:py-1.5 text-xs sm:text-sm font-bold bg-[#825612] text-white text-center'
+        : 'rounded-lg px-2 py-2 sm:px-3.5 sm:py-1.5 text-xs sm:text-sm font-bold text-[#825612] text-center hover:bg-[#fdf6e7]';
 
-      document.getElementById('attHeaderTitle').textContent = isAm
-        ? `11/21 上午梯現場點名表（上午A ${amACnt}人＋上午B ${amBCnt}人）`
-        : `11/21 下午梯現場點名表（下午梯 ${pmTotal}人）`;
-      document.getElementById('attHeaderSub').textContent = isAm
-        ? '開訓時間 09:30｜逾 20 分鐘（09:50 後）未報到自動判定缺席（0h）'
-        : '開訓時間 14:00｜逾 20 分鐘（14:20 後）未報到自動判定缺席（0h）';
+      if (isWait) {
+        document.getElementById('attHeaderTitle').textContent = `現場備取遞補名單（目前剩餘 ${waitTotal} 位備取）`;
+        document.getElementById('attHeaderSub').textContent = '依備取序號叫號，點選目標梯次按鈕即可轉為正取名單';
+      } else if (isAm) {
+        document.getElementById('attHeaderTitle').textContent = `11/21 上午梯現場點名（上午A ${amACnt}人＋上午B ${amBCnt}人）`;
+        document.getElementById('attHeaderSub').textContent = '開訓 09:30｜逾 20 分鐘（09:50 後）未報到自動判定缺席（0h）';
+      } else {
+        document.getElementById('attHeaderTitle').textContent = `11/21 下午梯現場點名（下午梯 ${pmTotal}人）`;
+        document.getElementById('attHeaderSub').textContent = '開訓 14:00｜逾 20 分鐘（14:20 後）未報到自動判定缺席（0h）';
+      }
 
-      document.getElementById('attAmSubFilter').classList.toggle('hidden', !isAm);
-      if (isAm) {
-        document.querySelectorAll('.am-grp-pill').forEach((btn) => {
-          const g = btn.getAttribute('data-amgrp');
-          if (g === 'ALL') btn.textContent = `全部 (${amTotal})`;
-          else if (g === '上午A') btn.textContent = `上午A (${amACnt})`;
-          else if (g === '上午B') btn.textContent = `上午B (${amBCnt})`;
-          btn.className = (g === attAmGroupFilter)
-            ? 'am-grp-pill rounded-md px-3 py-1 text-xs font-bold bg-[#234c3c] text-white'
-            : 'am-grp-pill rounded-md px-3 py-1 text-xs font-medium text-[#52625a]';
+      // Toggle UI sections between Regular Attendance vs Waitlist
+      document.getElementById('attTimeControlBar').classList.toggle('hidden', isWait);
+      document.getElementById('attKpiSummary').classList.toggle('hidden', isWait);
+      document.getElementById('attWaitlistInfoBanner').classList.toggle('hidden', !isWait);
+      document.getElementById('attRegularFilterBar').classList.toggle('hidden', isWait);
+      document.getElementById('attWaitlistFilterBar').classList.toggle('hidden', !isWait);
+
+      if (!isWait) {
+        document.getElementById('attAmSubFilter').classList.toggle('hidden', !isAm);
+        if (isAm) {
+          document.querySelectorAll('.am-grp-pill').forEach((btn) => {
+            const g = btn.getAttribute('data-amgrp');
+            if (g === 'ALL') btn.textContent = `全部 (${amTotal})`;
+            else if (g === '上午A') btn.textContent = `上午A (${amACnt})`;
+            else if (g === '上午B') btn.textContent = `上午B (${amBCnt})`;
+            btn.className = (g === attAmGroupFilter)
+              ? 'am-grp-pill rounded-md px-2.5 py-1 text-xs font-bold bg-[#234c3c] text-white'
+              : 'am-grp-pill rounded-md px-2.5 py-1 text-xs font-medium text-[#52625a]';
+          });
+        }
+
+        document.querySelectorAll('.att-st-pill').forEach((btn) => {
+          const st = btn.getAttribute('data-attst');
+          btn.className = (st === attStatusFilter)
+            ? 'att-st-pill rounded-full border border-[#234c3c] bg-[#234c3c] px-2.5 py-1 text-xs font-bold text-white whitespace-nowrap'
+            : 'att-st-pill rounded-full border border-[#dfe4dc] bg-white px-2.5 py-1 text-xs font-bold text-[#52625a] whitespace-nowrap';
+        });
+      } else {
+        document.querySelectorAll('.wpref-pill').forEach((btn) => {
+          const wp = btn.getAttribute('data-wpref');
+          btn.className = (wp === waitlistPrefFilter)
+            ? 'wpref-pill rounded-full border border-[#825612] bg-[#825612] px-3 py-1 text-xs font-bold text-white'
+            : 'wpref-pill rounded-full border border-[#dfe4dc] bg-white px-3 py-1 text-xs font-bold text-[#52625a]';
         });
       }
 
@@ -3542,6 +3646,7 @@ function appendMailLog(type, studentId, name, email, subject, status) {
           s.attendance = 'absent';
           s.attTimestamp = `逾開訓20分鐘自動判缺席 (${nowClockTime()})`;
           s.attHours = 0;
+          s.reviews.warehouse = 'rejected';
           count++;
         }
       });
@@ -3563,6 +3668,97 @@ function appendMailLog(type, studentId, name, email, subject, status) {
 
     function renderAttendanceTable() {
       const kw = (document.getElementById('attSearchInput')?.value || '').trim().toLowerCase();
+      const mobileContainer = document.getElementById('attMobileCards');
+      const desktopHead = document.getElementById('attTableHead');
+      const desktopBody = document.getElementById('attTableBody');
+
+      // ================= MODE: WAITLIST PROMOTION =================
+      if (attSessionMode === 'WAITLIST') {
+        const wList = appState.waitlist.filter((w) => {
+          if (waitlistPrefFilter === 'AM' && !w.pref.includes('上午')) return false;
+          if (waitlistPrefFilter === 'PM' && !w.pref.includes('下午')) return false;
+          if (!kw) return true;
+          return w.name.toLowerCase().includes(kw) ||
+            w.id.toLowerCase().includes(kw) ||
+            w.className.toLowerCase().includes(kw) ||
+            `#${w.rank}` === kw ||
+            String(w.rank) === kw;
+        });
+
+        // Mobile Waitlist Cards
+        if (wList.length === 0) {
+          mobileContainer.innerHTML = `<div class="rounded-xl border border-[#dfe4dc] bg-[#fafaf5] p-6 text-center text-sm font-bold text-[#52625a]">無符合條件的備取學生</div>`;
+        } else {
+          mobileContainer.innerHTML = wList.map((w) => `
+            <div class="rounded-xl border border-[#e9d5ae] border-l-4 border-l-[#825612] bg-white p-3.5 space-y-2.5">
+              <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2 min-w-0">
+                  <span class="shrink-0 rounded-md bg-[#fdf6e7] border border-[#e9d5ae] px-2 py-0.5 text-xs font-bold text-[#825612]">備取 #${w.rank}</span>
+                  <span class="shrink-0 rounded-md bg-[#edf1e7] px-2 py-0.5 text-xs font-bold text-[#234c3c]">${escapeHtml(w.className)}-${w.seat}</span>
+                  <span class="text-base font-bold text-[#243a32] truncate">${escapeHtml(w.name)}</span>
+                </div>
+                <span class="shrink-0 text-xs text-[#52625a]">${escapeHtml(w.id)}</span>
+              </div>
+              <div class="text-xs text-[#825612] font-bold">志願梯次：${escapeHtml(w.pref)}</div>
+              <div class="grid grid-cols-3 gap-1.5 pt-0.5">
+                <button type="button" onclick="promoteWaitlistFromAttendance('${w.id}', '上午A')"
+                  class="rounded-lg border border-[#234c3c] bg-[#e7eddf] py-2 text-xs font-bold text-[#234c3c] active:scale-[0.98]">
+                  遞補上午A
+                </button>
+                <button type="button" onclick="promoteWaitlistFromAttendance('${w.id}', '上午B')"
+                  class="rounded-lg border border-[#234c3c] bg-[#e7eddf] py-2 text-xs font-bold text-[#234c3c] active:scale-[0.98]">
+                  遞補上午B
+                </button>
+                <button type="button" onclick="promoteWaitlistFromAttendance('${w.id}', '下午')"
+                  class="rounded-lg border border-[#244b63] bg-[#eef4f8] py-2 text-xs font-bold text-[#244b63] active:scale-[0.98]">
+                  遞補下午梯
+                </button>
+              </div>
+            </div>
+          `).join('');
+        }
+
+        // Desktop Waitlist Table
+        desktopHead.innerHTML = `
+          <tr>
+            <th class="px-3.5 py-3 font-bold">備取序號</th>
+            <th class="px-3 py-3 font-bold">班級</th>
+            <th class="px-3 py-3 font-bold">座號</th>
+            <th class="px-3 py-3 font-bold">學號</th>
+            <th class="px-3 py-3 font-bold">姓名</th>
+            <th class="px-3 py-3 font-bold">志願梯次</th>
+            <th class="px-3.5 py-3 font-bold text-right">現場遞補操作</th>
+          </tr>
+        `;
+
+        desktopBody.innerHTML = wList.map((w) => `
+          <tr class="bg-[#fdf6e7]/35">
+            <td class="px-3.5 py-2.5 font-bold text-[#825612]">備取 #${w.rank}</td>
+            <td class="px-3 py-2.5 font-bold">${escapeHtml(w.className)}</td>
+            <td class="px-3 py-2.5">${w.seat}</td>
+            <td class="px-3 py-2.5">${escapeHtml(w.id)}</td>
+            <td class="px-3 py-2.5 font-bold text-[#243a32]">${escapeHtml(w.name)}</td>
+            <td class="px-3 py-2.5 text-[#825612] font-bold">${escapeHtml(w.pref)}</td>
+            <td class="px-3.5 py-2.5 text-right space-x-1.5">
+              <button type="button" onclick="promoteWaitlistFromAttendance('${w.id}', '上午A')"
+                class="rounded-lg border border-[#234c3c] bg-[#e7eddf] px-3 py-1.5 text-xs font-bold text-[#234c3c] hover:bg-[#d8e3cd]">
+                遞補上午A
+              </button>
+              <button type="button" onclick="promoteWaitlistFromAttendance('${w.id}', '上午B')"
+                class="rounded-lg border border-[#234c3c] bg-[#e7eddf] px-3 py-1.5 text-xs font-bold text-[#234c3c] hover:bg-[#d8e3cd]">
+                遞補上午B
+              </button>
+              <button type="button" onclick="promoteWaitlistFromAttendance('${w.id}', '下午')"
+                class="rounded-lg border border-[#244b63] bg-[#eef4f8] px-3 py-1.5 text-xs font-bold text-[#244b63] hover:bg-[#dce8f0]">
+                遞補下午梯
+              </button>
+            </td>
+          </tr>
+        `).join('');
+        return;
+      }
+
+      // ================= MODE: REGULAR SESSION ROLL CALL (AM / PM) =================
       const base = getAttendanceSessionStudents();
 
       const cPres = base.filter((s) => s.attendance === 'present').length;
@@ -3573,108 +3769,220 @@ function appendMailLog(type, studentId, name, email, subject, status) {
 
       document.getElementById('attKpiSummary').innerHTML = [
         { label: '本梯總人數', val: `${base.length} 人`, cls: 'bg-white border-[#dfe4dc] text-[#243a32]' },
-        { label: '✓ 有出席 (3.0h)', val: `${cPres} 人`, cls: 'bg-[#e7eddf] border-[#b9c9b2] text-[#234c3c]' },
+        { label: '✓ 出席 (3.0h)', val: `${cPres} 人`, cls: 'bg-[#e7eddf] border-[#b9c9b2] text-[#234c3c]' },
         { label: '⏰ 遲到 (2.5h)', val: `${cLate} 人`, cls: 'bg-[#fdf6e7] border-[#e9d5ae] text-[#825612]' },
-        { label: '🏃 早退 (0.5–2.5h)', val: `${cEarly} 人`, cls: 'bg-[#eef4f8] border-[#c4d7e3] text-[#244b63]' },
-        { label: '✕ 缺席 / 待點名', val: `${cAbs} 缺 / ${cPend} 待`, cls: 'bg-[#fdf0f1] border-[#ecc4c8] text-[#992634]' }
+        { label: '🏃 早退', val: `${cEarly} 人`, cls: 'bg-[#eef4f8] border-[#c4d7e3] text-[#244b63]' },
+        { label: '✕ 缺席 / 待點', val: `${cAbs}缺 / ${cPend}待`, cls: 'bg-[#fdf0f1] border-[#ecc4c8] text-[#992634]' }
       ].map((k) => `
-        <div class="rounded-xl border px-3.5 py-2.5 ${k.cls}">
-          <div class="text-[11px] font-medium opacity-85">${k.label}</div>
-          <div class="mt-0.5 text-base font-bold">${k.val}</div>
+        <div class="rounded-xl border px-2.5 py-2 sm:px-3.5 sm:py-2.5 ${k.cls}">
+          <div class="text-[11px] font-medium opacity-85 truncate">${k.label}</div>
+          <div class="mt-0.5 text-sm sm:text-base font-bold">${k.val}</div>
         </div>
       `).join('');
 
       const filtered = base.filter((s) => {
+        if (attStatusFilter === 'pending' && s.attendance !== 'pending') return false;
+        if (attStatusFilter === 'present' && s.attendance !== 'present') return false;
+        if (attStatusFilter === 'late_early' && s.attendance !== 'late' && s.attendance !== 'early') return false;
+        if (attStatusFilter === 'absent' && s.attendance !== 'absent') return false;
+
         if (!kw) return true;
-        return s.name.toLowerCase().includes(kw) || s.id.toLowerCase().includes(kw) || s.className.toLowerCase().includes(kw) || String(s.seat) === kw;
+        return s.name.toLowerCase().includes(kw) ||
+          s.id.toLowerCase().includes(kw) ||
+          s.className.toLowerCase().includes(kw) ||
+          String(s.seat) === kw;
       });
 
       const overCutoff = checkAutoAbsentActive();
 
-      document.getElementById('attTableBody').innerHTML = filtered.map((s) => {
-        let btnCls = 'border-[#dfe4dc] bg-[#fafaf5] text-[#52625a]';
-        let btnText = '○ 點選報到';
+      // 1. Render Mobile Thumb-Friendly Cards
+      if (filtered.length === 0) {
+        mobileContainer.innerHTML = `<div class="rounded-xl border border-[#dfe4dc] bg-[#fafaf5] p-6 text-center text-sm font-bold text-[#52625a]">無符合搜尋或篩選條件的學生</div>`;
+      } else {
+        mobileContainer.innerHTML = filtered.map((s) => {
+          let hrs = 0;
+          let borderAccent = 'border-l-4 border-l-[#dfe4dc]';
+          let hrsBadgeCls = 'bg-[#fafaf5] text-[#52625a] border-[#dfe4dc]';
+
+          if (s.attendance === 'present') {
+            hrs = 3.0;
+            borderAccent = 'border-l-4 border-l-[#234c3c]';
+            hrsBadgeCls = 'bg-[#e7eddf] text-[#234c3c] border-[#b9c9b2]';
+          } else if (s.attendance === 'late') {
+            hrs = 2.5;
+            borderAccent = 'border-l-4 border-l-[#d99b26]';
+            hrsBadgeCls = 'bg-[#fdf6e7] text-[#825612] border-[#e9d5ae]';
+          } else if (s.attendance === 'early') {
+            hrs = Number(s.attHours || 2.0);
+            borderAccent = 'border-l-4 border-l-[#3a7ca5]';
+            hrsBadgeCls = 'bg-[#eef4f8] text-[#244b63] border-[#c4d7e3]';
+          } else if (s.attendance === 'absent') {
+            hrs = 0.0;
+            borderAccent = 'border-l-4 border-l-[#c93b4b]';
+            hrsBadgeCls = 'bg-[#fdf0f1] text-[#992634] border-[#ecc4c8]';
+          }
+
+          const earlyQuickBtns = (s.attendance === 'early') ? `
+            <div class="flex items-center justify-between gap-1.5 rounded-lg border border-[#c4d7e3] bg-[#eef4f8] px-2.5 py-1.5">
+              <span class="text-xs font-bold text-[#244b63]">早退時數：</span>
+              <div class="flex items-center gap-1">
+                ${[0.5, 1.0, 1.5, 2.0, 2.5].map((h) => `
+                  <button type="button" onclick="setEarlyDepartureHours('${s.id}', ${h})"
+                    class="rounded-md px-2 py-1 text-xs font-bold ${Number(s.attHours || 2.0) === h ? 'bg-[#244b63] text-white' : 'bg-white text-[#244b63] border border-[#c4d7e3]'}">
+                    ${h.toFixed(1)}h
+                  </button>
+                `).join('')}
+              </div>
+            </div>
+          ` : '';
+
+          const timeNote = s.attTimestamp
+            ? `<span class="text-xs font-medium text-[#234c3c]">${escapeHtml(s.attTimestamp)}</span>`
+            : (overCutoff && s.attendance === 'pending'
+              ? `<span class="text-xs font-bold text-[#992634]">⚠️ 已逾開訓20分鐘未報到</span>`
+              : `<span class="text-xs text-[#7a8780]">尚未點名</span>`);
+
+          return `
+            <div class="rounded-xl border border-[#dfe4dc] ${borderAccent} bg-white p-3 space-y-2.5">
+              <!-- Top Row: No, Class/Seat, Name, Hours -->
+              <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center gap-1.5 min-w-0">
+                  <span class="shrink-0 text-xs font-bold text-[#52625a]">#${s.no}</span>
+                  <span class="shrink-0 rounded-md bg-[#edf1e7] px-2 py-0.5 text-xs font-bold text-[#234c3c]">${escapeHtml(s.className)}-${s.seat}</span>
+                  <span class="text-base font-bold text-[#243a32] truncate">${escapeHtml(s.name)}</span>
+                </div>
+                <span class="shrink-0 rounded-lg border px-2 py-0.5 text-xs font-bold ${hrsBadgeCls}">
+                  ${hrs.toFixed(1)}h
+                </span>
+              </div>
+
+              <!-- Middle Row: Student ID, Group & Check-in Timestamp -->
+              <div class="flex items-center justify-between gap-2 text-xs">
+                <span class="text-[#52625a]">${escapeHtml(s.id)} · <strong class="text-[#234c3c]">${escapeHtml(s.session)}</strong></span>
+                <div class="truncate text-right">${timeNote}</div>
+              </div>
+
+              <!-- Bottom Row: 4-Button One-Tap Status Bar -->
+              <div class="grid grid-cols-4 gap-1.5 pt-0.5">
+                <button type="button" onclick="setAttendanceState('${s.id}', 'present')"
+                  class="rounded-lg border py-2 text-xs font-bold transition active:scale-[0.97] ${s.attendance === 'present' ? 'border-[#234c3c] bg-[#234c3c] text-white' : 'border-[#dfe4dc] bg-[#fafaf5] text-[#234c3c]'}">
+                  ✓ 出席
+                </button>
+                <button type="button" onclick="setAttendanceState('${s.id}', 'late')"
+                  class="rounded-lg border py-2 text-xs font-bold transition active:scale-[0.97] ${s.attendance === 'late' ? 'border-[#825612] bg-[#825612] text-white' : 'border-[#dfe4dc] bg-[#fafaf5] text-[#825612]'}">
+                  ⏰ 遲到
+                </button>
+                <button type="button" onclick="setAttendanceState('${s.id}', 'early')"
+                  class="rounded-lg border py-2 text-xs font-bold transition active:scale-[0.97] ${s.attendance === 'early' ? 'border-[#244b63] bg-[#244b63] text-white' : 'border-[#dfe4dc] bg-[#fafaf5] text-[#244b63]'}">
+                  🏃 早退
+                </button>
+                <button type="button" onclick="setAttendanceState('${s.id}', 'absent')"
+                  class="rounded-lg border py-2 text-xs font-bold transition active:scale-[0.97] ${s.attendance === 'absent' ? 'border-[#992634] bg-[#992634] text-white' : 'border-[#dfe4dc] bg-[#fafaf5] text-[#992634]'}">
+                  ✕ 缺席
+                </button>
+              </div>
+
+              ${earlyQuickBtns}
+            </div>
+          `;
+        }).join('');
+      }
+
+      // 2. Render Desktop Table
+      desktopHead.innerHTML = `
+        <tr>
+          <th class="sticky-col px-3.5 py-3 font-bold min-w-[330px]">出席狀況（一鍵點選）</th>
+          <th class="px-3 py-3 font-bold">序號</th>
+          <th class="px-3 py-3 font-bold">班級</th>
+          <th class="px-3 py-3 font-bold">座號</th>
+          <th class="px-3 py-3 font-bold">學號</th>
+          <th class="px-3 py-3 font-bold">姓名</th>
+          <th class="px-3 py-3 font-bold">梯次分組</th>
+          <th class="px-3 py-3 font-bold">簽到／離場時間紀錄</th>
+          <th class="px-3 py-3 font-bold text-right">核發時數</th>
+        </tr>
+      `;
+
+      desktopBody.innerHTML = filtered.map((s) => {
         let hrs = 0;
+        if (s.attendance === 'present') hrs = 3.0;
+        else if (s.attendance === 'late') hrs = 2.5;
+        else if (s.attendance === 'early') hrs = Number(s.attHours || 2.0);
+        else if (s.attendance === 'absent') hrs = 0.0;
 
-        if (s.attendance === 'present') {
-          btnCls = 'border-[#234c3c] bg-[#e7eddf] text-[#234c3c]';
-          btnText = '✓ 有出席 (3.0h)';
-          hrs = 3.0;
-        } else if (s.attendance === 'late') {
-          btnCls = 'border-[#e9d5ae] bg-[#fdf6e7] text-[#825612]';
-          btnText = '⏰ 遲到 (2.5h)';
-          hrs = 2.5;
-        } else if (s.attendance === 'early') {
-          btnCls = 'border-[#c4d7e3] bg-[#eef4f8] text-[#244b63]';
-          btnText = '🏃 早退';
-          hrs = Number(s.attHours || 2.0);
-        }
-
-        const isOverdueAbsent = s.attendance === 'absent' || (s.attendance === 'pending' && overCutoff);
-        if (isOverdueAbsent) {
-          btnCls = 'border-[#ecc4c8] bg-[#fdf0f1] text-[#992634]';
-          btnText = '✕ 缺席 (0h)';
-          hrs = 0;
-        }
-
-        const earlySel = (s.attendance === 'early') ? `
+        const earlySelect = (s.attendance === 'early') ? `
           <select onchange="setEarlyDepartureHours('${s.id}', this.value)"
-            class="ml-1.5 rounded-lg border border-[#c4d7e3] bg-white px-2 py-1 text-xs font-bold text-[#244b63]">
+            class="ml-1 rounded-lg border border-[#c4d7e3] bg-white px-2 py-1 text-xs font-bold text-[#244b63]">
             ${[0.5, 1.0, 1.5, 2.0, 2.5].map((h) => `<option value="${h}" ${Number(s.attHours || 2.0) === h ? 'selected' : ''}>${h.toFixed(1)}h</option>`).join('')}
           </select>
         ` : '';
 
-        const timeRecordHtml = isOverdueAbsent
-          ? `<span class="inline-block rounded border border-[#ecc4c8] bg-[#fdf0f1] px-2 py-0.5 text-xs font-bold text-[#992634]">${escapeHtml(s.attTimestamp || '已逾開訓20分鐘自動判缺席')}</span>`
-          : `<span class="text-xs text-[#52625a]">${escapeHtml(s.attTimestamp || '尚未報到')}</span>`;
+        const autoAbsentTag = (overCutoff && s.attendance === 'pending')
+          ? `<span class="ml-1 rounded bg-[#fdf0f1] px-2 py-0.5 text-[11px] font-bold text-[#992634]">⚠️ 已逾開訓20分鐘</span>`
+          : '';
 
         return `
-          <tr class="${isOverdueAbsent ? 'bg-[#fdf0f1]/50' : ''}">
+          <tr>
             <td class="sticky-col px-3.5 py-2.5">
-              <div class="flex items-center">
-                <button type="button" onclick="cycleAttendanceState('${s.id}')"
-                  class="rounded-lg border px-3 py-1.5 text-xs font-bold transition ${btnCls}}">
-                  ${btnText}
+              <div class="inline-flex items-center gap-1">
+                <button type="button" onclick="setAttendanceState('${s.id}', 'present')"
+                  class="rounded-md border px-2 py-1 text-xs font-bold ${s.attendance === 'present' ? 'border-[#234c3c] bg-[#234c3c] text-white' : 'border-[#dfe4dc] bg-[#fafaf5] text-[#234c3c] hover:bg-[#e7eddf]'}">
+                  ✓ 出席
                 </button>
-                ${earlySel}
+                <button type="button" onclick="setAttendanceState('${s.id}', 'late')"
+                  class="rounded-md border px-2 py-1 text-xs font-bold ${s.attendance === 'late' ? 'border-[#825612] bg-[#825612] text-white' : 'border-[#dfe4dc] bg-[#fafaf5] text-[#825612] hover:bg-[#fdf6e7]'}">
+                  ⏰ 遲到
+                </button>
+                <button type="button" onclick="setAttendanceState('${s.id}', 'early')"
+                  class="rounded-md border px-2 py-1 text-xs font-bold ${s.attendance === 'early' ? 'border-[#244b63] bg-[#244b63] text-white' : 'border-[#dfe4dc] bg-[#fafaf5] text-[#244b63] hover:bg-[#eef4f8]'}">
+                  🏃 早退
+                </button>
+                <button type="button" onclick="setAttendanceState('${s.id}', 'absent')"
+                  class="rounded-md border px-2 py-1 text-xs font-bold ${s.attendance === 'absent' ? 'border-[#992634] bg-[#992634] text-white' : 'border-[#dfe4dc] bg-[#fafaf5] text-[#992634] hover:bg-[#fdf0f1]'}">
+                  ✕ 缺席
+                </button>
+                ${earlySelect}
               </div>
             </td>
-            <td class="px-3 py-2.5 text-[#52625a]">${s.no}</td>
-            <td class="px-3 py-2.5 font-medium">${escapeHtml(s.className)}</td>
+            <td class="px-3 py-2.5 font-bold">${s.no}</td>
+            <td class="px-3 py-2.5">${escapeHtml(s.className)}</td>
             <td class="px-3 py-2.5">${s.seat}</td>
-            <td class="px-3 py-2.5">${escapeHtml(s.id)}</td>
+            <td class="px-3 py-2.5 font-medium">${escapeHtml(s.id)}</td>
             <td class="px-3 py-2.5 font-bold text-[#243a32]">${escapeHtml(s.name)}</td>
-            <td class="px-3 py-2.5"><span class="rounded bg-[#edf1e7] px-2 py-0.5 text-xs font-bold text-[#234c3c]">${escapeHtml(s.session)}</span></td>
-            <td class="px-3 py-2.5">${timeRecordHtml}</td>
-            <td class="px-3 py-2.5 text-right font-bold text-[#234c3c]">${hrs.toFixed(1)} 小時</td>
+            <td class="px-3 py-2.5">
+              <span class="rounded bg-[#edf1e7] px-2 py-0.5 text-xs font-bold text-[#234c3c]">${escapeHtml(s.session)}</span>
+            </td>
+            <td class="px-3 py-2.5 text-xs text-[#52625a]">${escapeHtml(s.attTimestamp || '尚未點名')}${autoAbsentTag}</td>
+            <td class="px-3 py-2.5 text-right font-bold text-[#234c3c]">${hrs.toFixed(1)} h</td>
           </tr>
         `;
       }).join('');
     }
 
-    function cycleAttendanceState(stuId) {
+    function setAttendanceState(stuId, targetStatus) {
       const s = appState.students.find((x) => x.id === stuId);
       if (!s) return;
-      const seq = ['pending', 'present', 'late', 'early', 'absent'];
-      const next = seq[(seq.indexOf(s.attendance) + 1) % seq.length];
-      const clock = nowClockTime();
 
+      // Tapping the already-active status resets back to pending
+      const next = (s.attendance === targetStatus) ? 'pending' : targetStatus;
       s.attendance = next;
+      const t = nowClockTime();
+
       if (next === 'present') {
         s.attHours = 3.0;
-        s.attTimestamp = `準時報到 ${clock}`;
+        s.attTimestamp = `報到簽到 ${t}`;
         s.reviews.warehouse = 'passed';
       } else if (next === 'late') {
         s.attHours = 2.5;
-        s.attTimestamp = `遲到抵達 ${clock}`;
+        s.attTimestamp = `遲到報到 ${t}`;
         s.reviews.warehouse = 'passed';
       } else if (next === 'early') {
         s.attHours = 2.0;
-        s.attTimestamp = `早退離場 ${clock}`;
+        s.attTimestamp = `早退離場 ${t}`;
         s.reviews.warehouse = 'passed';
       } else if (next === 'absent') {
         s.attHours = 0.0;
-        s.attTimestamp = `缺席登記 ${clock}`;
+        s.attTimestamp = `判定缺席 ${t}`;
         s.reviews.warehouse = 'rejected';
       } else {
         s.attHours = 0.0;
@@ -3687,32 +3995,48 @@ function appendMailLog(type, studentId, name, email, subject, status) {
       renderAttendanceTable();
     }
 
+    function cycleAttendanceState(stuId) {
+      const s = appState.students.find((x) => x.id === stuId);
+      if (!s) return;
+      const order = ['pending', 'present', 'late', 'early', 'absent'];
+      const next = order[(order.indexOf(s.attendance) + 1) % order.length];
+      setAttendanceState(stuId, next);
+    }
+
     function setEarlyDepartureHours(stuId, val) {
       const s = appState.students.find((x) => x.id === stuId);
       if (!s) return;
       s.attHours = Number(val);
       saveAppState();
+      silentPushStudentToCloud(s);
       renderAttendanceTable();
     }
 
-    /* --- TAB ②: TASK REVIEW, GRADING & REAL EMAIL NOTICES --- */
+    function promoteWaitlistFromAttendance(waitId, targetSession) {
+      const autoPresent = document.getElementById('attWaitlistAutoPresentChk')?.checked ?? true;
+      promoteWaitlistStudent(waitId, targetSession, autoPresent);
+      renderAttendanceSection();
+    }
+
+    /* --- TAB ②: 4-TASK REVIEW, GRADING & TOTAL HOURS EXPORT --- */
     function renderReviewSection() {
-      const total = appState.students.length;
-      const conf = appState.students.filter((s) => s.confirmed).length;
-      const wsSub = appState.students.filter((s) => s.wsLocked).length;
-      const refSub = appState.students.filter((s) => s.refLocked).length;
-      const pend = appState.students.filter((s) => (s.wsLocked && s.reviews.pre === 'pending') || (s.refLocked && s.reviews.reflection === 'pending')).length;
+      const passThresh = Number(appState.videoConfig.passScore || 80);
+      const totalCnt = appState.students.length;
+      const confCnt = appState.students.filter((s) => s.confirmed).length;
+      const wsDoneCnt = appState.students.filter((s) => s.wsLocked).length;
+      const wsPassCnt = appState.students.filter((s) => s.wsLocked && s.wsScore >= passThresh).length;
+      const refDoneCnt = appState.students.filter((s) => s.refLocked).length;
 
       document.getElementById('reviewKpiRow').innerHTML = [
-        { label: '名單總筆數', val: `${total} 筆` },
-        { label: '已確認參加', val: `${conf} 人` },
-        { label: '已交學習單', val: `${wsSub} 份` },
-        { label: '已交活動反思', val: `${refSub} 份` },
-        { label: '待教師閱卷審核', val: `${pend} 件` }
+        { label: '總錄取人數', val: `${totalCnt} 人` },
+        { label: '正取已確認', val: `${confCnt} / ${totalCnt}` },
+        { label: '學習單已鎖定', val: `${wsDoneCnt} 份` },
+        { label: `達 ${passThresh} 分以上`, val: `${wsPassCnt} 人` },
+        { label: '活動反思已鎖定', val: `${refDoneCnt} 份` }
       ].map((k) => `
-        <div class="panel p-3.5">
+        <div class="rounded-xl border border-[#dfe4dc] bg-white px-4 py-3">
           <div class="text-xs text-[#52625a]">${k.label}</div>
-          <div class="mt-1 text-lg sm:text-xl font-bold text-[#234c3c]">${k.val}</div>
+          <div class="mt-0.5 text-lg font-bold text-[#234c3c]">${k.val}</div>
         </div>
       `).join('');
 
@@ -3721,55 +4045,49 @@ function appendMailLog(type, studentId, name, email, subject, status) {
 
     function renderReviewTable() {
       const kw = (document.getElementById('reviewSearchInput')?.value || '').trim().toLowerCase();
-      const filter = document.getElementById('reviewStatusFilter')?.value || 'ALL';
+      const st = document.getElementById('reviewStatusFilter')?.value || 'ALL';
 
       const list = appState.students.filter((s) => {
-        if (filter === 'SUBMITTED' && !(s.wsLocked || s.refLocked)) return false;
-        if (filter === 'NEEDS_REVIEW') {
-          const need = (s.wsLocked && s.reviews.pre !== 'passed') || (s.refLocked && s.reviews.reflection !== 'passed') || s.urgentAlert;
-          if (!need) return false;
-        }
+        if (st === 'SUBMITTED' && !s.wsLocked && !s.refLocked) return false;
+        if (st === 'NEEDS_REVIEW' && !(s.wsLocked && s.reviews.pre !== 'passed') && !(s.refLocked && s.reviews.reflection !== 'passed')) return false;
         if (!kw) return true;
         return s.name.toLowerCase().includes(kw) || s.id.toLowerCase().includes(kw) || s.className.toLowerCase().includes(kw);
       });
 
-      const pill = (st) => {
-        if (st === 'passed') return '<span class="rounded bg-[#e7eddf] px-1.5 py-0.5 text-[11px] font-bold text-[#234c3c]">✓ 通過</span>';
-        if (st === 'rejected') return '<span class="rounded bg-[#fdf0f1] px-1.5 py-0.5 text-[11px] font-bold text-[#992634]">✕ 未通過</span>';
-        return '<span class="rounded bg-[#fdf6e7] px-1.5 py-0.5 text-[11px] font-bold text-[#825612]">待審核</span>';
+      const badge = (status, extra = '') => {
+        if (status === 'passed') return `<span class="rounded bg-[#e7eddf] px-2 py-0.5 text-[11px] font-bold text-[#234c3c]">✓ 通過 ${extra}</span>`;
+        if (status === 'rejected') return `<span class="rounded bg-[#fdf0f1] px-2 py-0.5 text-[11px] font-bold text-[#992634]">✕ 退件 ${extra}</span>`;
+        return `<span class="rounded bg-[#fdf6e7] px-2 py-0.5 text-[11px] font-bold text-[#825612]">⏳ 待審 ${extra}</span>`;
       };
 
       document.getElementById('reviewTableBody').innerHTML = list.map((s) => {
-        const h = computeStudentHours(s);
+        const hrs = computeStudentHours(s);
         return `
           <tr>
             <td class="px-3 py-2.5">
-              <div class="font-bold text-[#243a32]">${escapeHtml(s.className)} ${s.seat}號 ${escapeHtml(s.name)}</div>
-              <div class="text-[11px] text-[#52625a]">${escapeHtml(s.id)}｜${escapeHtml(s.session)}</div>
+              <div class="font-bold text-[#243a32]">${escapeHtml(s.name)} <span class="text-xs font-normal text-[#52625a]">(${escapeHtml(s.className)}-${s.seat})</span></div>
+              <div class="text-xs text-[#52625a]">${escapeHtml(s.id)}｜${escapeHtml(s.session)}</div>
             </td>
-            <td class="px-3 py-2.5 text-xs">
-              <div>${s.wsLocked ? `<strong>${s.wsScore} 分</strong>` : '<span class="text-[#7a8780]">未繳交</span>'}</div>
-              <div class="mt-0.5">${pill(s.reviews.pre)}</div>
+            <td class="px-3 py-2.5">
+              ${s.wsLocked ? badge(s.reviews.pre, `(${s.wsScore}分)`) : '<span class="text-xs text-[#7a8780]">未繳交</span>'}
             </td>
-            <td class="px-3 py-2.5 text-xs">
-              <div>${s.attendance === 'pending' ? '未點名' : `${h.whApp.toFixed(1)}h`}</div>
+            <td class="px-3 py-2.5">
+              <span class="text-xs font-bold text-[#234c3c]">${hrs.whApp.toFixed(1)}h</span>
+              <span class="text-[11px] text-[#52625a]">(${s.attendance})</span>
             </td>
-            <td class="px-3 py-2.5 text-xs">
-              <div>${s.shiftsLocked ? `${s.shifts.length} 班` : '未排班'}</div>
-              <div class="mt-0.5">${pill(s.reviews.campus)}</div>
+            <td class="px-3 py-2.5">
+              ${s.shiftsLocked ? badge(s.reviews.campus, `(${s.shifts.length}班)`) : '<span class="text-xs text-[#7a8780]">未排班</span>'}
             </td>
-            <td class="px-3 py-2.5 text-xs">
-              <div>${s.refLocked ? `${analyzeReflectionText(s.reflectionText).count} 字` : '<span class="text-[#7a8780]">未繳交</span>'}</div>
-              <div class="mt-0.5">${pill(s.reviews.reflection)}</div>
+            <td class="px-3 py-2.5">
+              ${s.refLocked ? badge(s.reviews.reflection) : '<span class="text-xs text-[#7a8780]">未繳交</span>'}
             </td>
-            <td class="px-3 py-2.5 text-right font-bold text-[#234c3c]">${h.totalApp.toFixed(1)} 小時</td>
-            <td class="px-3 py-2.5 text-center whitespace-nowrap space-x-1">
-              <button type="button" onclick="openGradingModal('${s.id}')" class="btn-primary rounded-lg px-2.5 py-1 text-xs font-bold">
+            <td class="px-3 py-2.5 text-right font-bold text-[#234c3c]">
+              ${hrs.totalApp.toFixed(1)} / ${hrs.totalEst.toFixed(1)} h
+            </td>
+            <td class="px-3 py-2.5 text-center">
+              <button type="button" onclick="openGradingModal('${s.id}')"
+                class="btn-outline rounded-lg px-3 py-1 text-xs font-bold">
                 閱卷與審核
-              </button>
-              <button type="button" onclick="triggerUrgentStudentAlert('${s.id}')"
-                class="rounded-lg border border-[#e9d5ae] bg-[#fdf6e7] px-2 py-1 text-xs font-bold text-[#825612]">
-                ✉ 寄信通知
               </button>
             </td>
           </tr>
@@ -3782,108 +4100,88 @@ function appendMailLog(type, studentId, name, email, subject, status) {
       if (!s) return;
       activeGradingStudentId = stuId;
 
-      document.getElementById('gmStudentTitle').textContent = `${s.className} ${s.seat}號｜${s.name}（${s.id}）｜${s.session}`;
-      document.getElementById('gmPassThreshLabel').textContent = appState.videoConfig.passScore || 80;
+      document.getElementById('gmStudentTitle').textContent =
+        `${s.name}（${s.className} ${s.seat}號｜${s.id}｜${s.session}）`;
       document.getElementById('gmTeacherNoteInput').value = s.teacherNote || '';
+      document.getElementById('gmPassThreshLabel').textContent = appState.videoConfig.passScore || 80;
 
-      const taskItems = [
-        { key: 'pre', label: '① 行前學習 (1.0h)' },
-        { key: 'warehouse', label: '② 11/21 倉庫 (3.0h)' },
-        { key: 'campus', label: '③ 校內募集 (0.5h/班)' },
-        { key: 'reflection', label: '④ 活動反思 (1.0h)' }
+      const tasks = [
+        { key: 'pre', title: '1. 行前學習單 (1.0h)', sub: s.wsLocked ? `已送出（${s.wsScore} 分）` : '尚未送出' },
+        { key: 'warehouse', title: '2. 11/21 倉庫服務 (3.0h)', sub: `點名：${s.attendance} (${computeStudentHours(s).whApp.toFixed(1)}h)` },
+        { key: 'campus', title: '3. 校內募集排班 (0.5h/班)', sub: s.shiftsLocked ? `已鎖定 ${s.shifts.length} 班` : '尚未排班' },
+        { key: 'reflection', title: '4. 活動後心得反思 (1.0h)', sub: s.refLocked ? '已送出反思' : '尚未送出' }
       ];
 
-      document.getElementById('gmFourTasksGrid').innerHTML = taskItems.map((t) => `
-        <div class="rounded-lg border border-[#c5d2bd] bg-white p-2.5">
-          <div class="font-bold text-[#243a32] mb-1">${t.label}</div>
-          <select id="gmTaskSelect-${t.key}" class="w-full rounded border border-[#dfe4dc] bg-[#fafaf5] px-2 py-1 text-xs font-bold">
-            <option value="pending" ${s.reviews[t.key] === 'pending' ? 'selected' : ''}>待審核</option>
-            <option value="passed" ${s.reviews[t.key] === 'passed' ? 'selected' : ''}>通過</option>
-            <option value="rejected" ${s.reviews[t.key] === 'rejected' ? 'selected' : ''}>未通過</option>
+      document.getElementById('gmFourTasksGrid').innerHTML = tasks.map((t) => `
+        <div class="rounded-lg border border-[#c5d2bd] bg-white p-3 space-y-1.5">
+          <div class="font-bold text-[#243a32]">${t.title}</div>
+          <div class="text-[11px] text-[#52625a]">${t.sub}</div>
+          <select id="gm-task-${t.key}" class="w-full rounded border border-[#dfe4dc] bg-[#fafaf5] px-2 py-1 text-xs font-bold">
+            <option value="pending" ${s.reviews[t.key] === 'pending' ? 'selected' : ''}>⏳ 待審核</option>
+            <option value="passed" ${s.reviews[t.key] === 'passed' ? 'selected' : ''}>✓ 審核通過（核發時數）</option>
+            <option value="rejected" ${s.reviews[t.key] === 'rejected' ? 'selected' : ''}>✕ 退件重交（解除鎖定）</option>
           </select>
         </div>
       `).join('');
 
       const refInfo = analyzeReflectionText(s.reflectionText);
-      document.getElementById('gmReflectionWordInfo').textContent = s.refLocked ? refInfo.label : '尚未繳交反思';
-      document.getElementById('gmReflectionText').textContent = s.reflectionText || '（學生尚未送出活動後心得反思）';
+      document.getElementById('gmReflectionWordInfo').textContent = s.refLocked ? refInfo.label : '學生尚未送出活動反思';
+      document.getElementById('gmReflectionText').textContent = s.reflectionText || '（無作答內容）';
 
       document.getElementById('gmQuestionsContainer').innerHTML = appState.questions.map((q) => {
-        const ans = s.answers[q.num] || '（尚未作答）';
-        const eff = countEffectiveChars(s.answers[q.num] || '');
-        const shortWarn = q.minChars > 0 && eff < q.minChars;
-        const curScore = (s.qScores && s.qScores[q.num] !== undefined) ? Number(s.qScores[q.num]) : 0;
+        const stuAns = s.answers[q.num] || '（未作答）';
+        const curPt = Number(s.qScores[q.num] ?? 0);
+        const effInfo = q.minChars > 0 ? `｜有效字數：${countEffectiveChars(s.answers[q.num] || '')} 字` : '';
 
         return `
-          <div class="rounded-xl border border-[#dfe4dc] bg-white p-4">
-            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#dfe4dc] pb-2 mb-3">
+          <div class="rounded-xl border border-[#dfe4dc] bg-white p-4 space-y-2.5">
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#dfe4dc] pb-2">
               <div class="text-xs sm:text-sm font-bold text-[#243a32]">
-                第 ${q.num} 題【${escapeHtml(q.type)}】${escapeHtml(q.text)}
+                <span class="text-[#234c3c]">${q.num}.【${escapeHtml(q.type)}】</span>${escapeHtml(q.text)}
               </div>
               <div class="flex items-center gap-1.5 tabular-nums">
-                <button type="button" onclick="setModalQuestionScore(${q.num}, 10)" class="rounded border border-[#234c3c] bg-[#e7eddf] px-2 py-0.5 text-xs font-bold text-[#234c3c]">10 分</button>
-                <button type="button" onclick="setModalQuestionScore(${q.num}, 5)" class="rounded border border-[#e9d5ae] bg-[#fdf6e7] px-2 py-0.5 text-xs font-bold text-[#825612]">5 分</button>
-                <button type="button" onclick="setModalQuestionScore(${q.num}, 0)" class="rounded border border-[#ecc4c8] bg-[#fdf0f1] px-2 py-0.5 text-xs font-bold text-[#992634]">0 分</button>
-                <input type="number" id="gmQScore-${q.num}" min="0" max="10" value="${curScore}" oninput="recalcModalScoreTotal()"
-                  class="w-14 rounded border border-[#234c3c] px-1.5 py-0.5 text-center text-xs font-bold" />
+                <span class="text-xs font-bold text-[#52625a]">給分：</span>
+                <select data-qscore="${q.num}" onchange="recalcGradingModalTotal()"
+                  class="rounded border border-[#234c3c] bg-[#edf1e7] px-2 py-1 text-xs font-bold text-[#234c3c]">
+                  <option value="0" ${curPt === 0 ? 'selected' : ''}>0 分</option>
+                  <option value="5" ${curPt === 5 ? 'selected' : ''}>5 分（半對/未滿字數）</option>
+                  <option value="10" ${curPt === 10 ? 'selected' : ''}>10 分（滿分）</option>
+                </select>
               </div>
             </div>
 
             <div class="grid grid-cols-1 gap-3 md:grid-cols-2 text-xs">
               <div class="rounded-lg border border-[#dfe4dc] bg-[#fafaf5] p-3">
-                <div class="flex justify-between font-bold text-[#52625a] mb-1">
-                  <span>學生作答內容</span>
-                  ${q.minChars > 0 ? `<span class="${shortWarn ? 'text-[#992634]' : 'text-[#234c3c]'}">有效字數：${eff} / ${q.minChars} 字${shortWarn ? '（未滿20字上限5分）' : ''}</span>` : ''}
-                </div>
-                <div class="text-[#243a32] whitespace-pre-wrap leading-relaxed">${escapeHtml(ans)}</div>
+                <div class="font-bold text-[#52625a] mb-1">學生作答內容${effInfo}</div>
+                <div class="text-[#243a32] whitespace-pre-wrap leading-relaxed">${escapeHtml(stuAns)}</div>
               </div>
-              <div class="rounded-lg border border-[#c5d2bd] bg-[#edf1e7]/50 p-3">
-                <div class="font-bold text-[#234c3c] mb-1">教師用參考答案與給分依據</div>
-                <div class="text-[#243a32]"><strong>參考答案：</strong>${escapeHtml(q.refAnswer || '—')}</div>
-                <div class="mt-1 text-[#52625a]"><strong>給分依據：</strong>${escapeHtml(q.rubric || '—')}</div>
+              <div class="rounded-lg border border-[#c5d2bd] bg-[#edf1e7]/60 p-3">
+                <div class="font-bold text-[#234c3c] mb-1">參考答案與給分依據</div>
+                <div class="text-[#243a32] leading-relaxed"><strong>參考答案：</strong>${escapeHtml(q.refAnswer)}</div>
+                <div class="mt-1 text-[#52625a]"><strong>評分標準：</strong>${escapeHtml(q.rubric)}</div>
               </div>
             </div>
           </div>
         `;
       }).join('');
 
-      recalcModalScoreTotal();
+      recalcGradingModalTotal();
       document.getElementById('gradingModal').classList.remove('hidden');
       document.getElementById('gradingModal').classList.add('flex');
     }
 
-    function setModalQuestionScore(qNum, score) {
-      const inp = document.getElementById(`gmQScore-${qNum}`);
-      if (!inp) return;
-      const s = appState.students.find((x) => x.id === activeGradingStudentId);
-      const q = appState.questions.find((item) => item.num === qNum);
-      let finalScore = Number(score);
-      if (q && q.num === 5 && s) {
-        const eff = countEffectiveChars(s.answers[5] || '');
-        if (eff < 20 && finalScore > 5) {
-          finalScore = 5;
-          showToast('第 5 題有效字數未滿 20 字，依規定上限為 5 分', '⚠️');
-        }
-      }
-      inp.value = finalScore;
-      recalcModalScoreTotal();
-    }
-
-    function recalcModalScoreTotal() {
-      const s = appState.students.find((x) => x.id === activeGradingStudentId);
+    function recalcGradingModalTotal() {
       let sum = 0;
-      appState.questions.forEach((q) => {
-        const inp = document.getElementById(`gmQScore-${q.num}`);
-        if (inp) {
-          let val = Number(inp.value || 0);
-          if (q.num === 5 && s && countEffectiveChars(s.answers[5] || '') < 20 && val > 5) {
-            val = 5;
-            inp.value = 5;
-          }
-          sum += val;
-        }
+      document.querySelectorAll('[data-qscore]').forEach((sel) => {
+        sum += Number(sel.value || 0);
       });
       document.getElementById('gmScoreTotalText').textContent = sum;
+    }
+
+    function closeGradingModal() {
+      document.getElementById('gradingModal').classList.add('hidden');
+      document.getElementById('gradingModal').classList.remove('flex');
+      activeGradingStudentId = null;
     }
 
     function saveGradingModalChanges() {
@@ -3891,88 +4189,46 @@ function appendMailLog(type, studentId, name, email, subject, status) {
       if (!s) return;
 
       let total = 0;
-      appState.questions.forEach((q) => {
-        const inp = document.getElementById(`gmQScore-${q.num}`);
-        const val = inp ? Number(inp.value || 0) : 0;
-        s.qScores[q.num] = val;
-        total += val;
+      document.querySelectorAll('[data-qscore]').forEach((sel) => {
+        const qNum = Number(sel.getAttribute('data-qscore'));
+        const pt = Number(sel.value || 0);
+        s.qScores[qNum] = pt;
+        total += pt;
       });
       s.wsScore = total;
 
       ['pre', 'warehouse', 'campus', 'reflection'].forEach((k) => {
-        const sel = document.getElementById(`gmTaskSelect-${k}`);
-        if (sel) s.reviews[k] = sel.value;
+        s.reviews[k] = document.getElementById(`gm-task-${k}`).value;
       });
+
       s.teacherNote = document.getElementById('gmTeacherNoteInput').value.trim();
 
-      const passThresh = Number(appState.videoConfig.passScore || 80);
-      if (total >= passThresh && s.wsLocked && s.reviews.pre === 'pending') {
-        s.reviews.pre = 'passed';
-      }
-
-      if (s.reviews.pre === 'rejected') {
-        s.wsLocked = false;
-        s.urgentAlert = true;
-      }
-      if (s.reviews.reflection === 'rejected') {
-        s.refLocked = false;
-        s.urgentAlert = true;
-      }
-      if (s.reviews.pre === 'passed' && s.reviews.reflection === 'passed') {
-        s.urgentAlert = false;
-      }
+      let hasReject = false;
+      if (s.reviews.pre === 'rejected') { s.wsLocked = false; hasReject = true; }
+      if (s.reviews.campus === 'rejected') { s.shiftsLocked = false; hasReject = true; }
+      if (s.reviews.reflection === 'rejected') { s.refLocked = false; hasReject = true; }
+      s.urgentAlert = hasReject;
 
       saveAppState();
       silentPushStudentToCloud(s);
       closeGradingModal();
       renderReviewSection();
-      showToast(`已儲存 ${s.name} 的閱卷總分（${total} 分）與審核狀態！`, '✓');
+      showToast(`已儲存 ${s.name} 的閱卷與審核結果`, '✓');
     }
 
-    function notifyStudentUrgentFromModal() {
-      const stuId = activeGradingStudentId;
-      saveGradingModalChanges();
-      if (stuId) triggerUrgentStudentAlert(stuId);
-    }
-
-    function closeGradingModal() {
-      activeGradingStudentId = null;
-      document.getElementById('gradingModal').classList.add('hidden');
-      document.getElementById('gradingModal').classList.remove('flex');
-    }
-
-    async function triggerUrgentStudentAlert(stuId) {
-      const s = appState.students.find((x) => x.id === stuId);
+    async function notifyStudentUrgentFromModal() {
+      const s = appState.students.find((x) => x.id === activeGradingStudentId);
       if (!s) return;
-      if (s.reviews.pre !== 'passed') {
-        s.reviews.pre = 'rejected';
-        s.wsLocked = false;
-      }
-      if (s.reviews.reflection !== 'passed') {
-        s.reviews.reflection = 'rejected';
-        s.refLocked = false;
-      }
+      const note = document.getElementById('gmTeacherNoteInput').value.trim();
+      s.teacherNote = note;
       s.urgentAlert = true;
-      if (!s.teacherNote) {
-        s.teacherNote = '請於期限內儘速完成或修正退件之行前學習單／活動後心得反思。';
-      }
       saveAppState();
-      renderReviewSection();
-
-      const subject = '【康橋 × 舊鞋救命】服務學習任務補件與進度通知';
-      const message = [
-        `錄取梯次：${s.session}`,
-        `指導教師通知事項：${s.teacherNote}`,
-        '',
-        '請登入「學生服務學習專區」（帳號為您的學號或學校信箱，預設密碼為學號，亦可於登入畫面點選「改用校內信箱 6 位數驗證碼登入」）完成修正並重新送出鎖定。'
-      ].join('\n');
 
       if (!isLiveMailBackendAvailable()) {
-        showToast(`已標記站內退件警示（尚未綁定發信引擎，未實際寄出外部郵件）`, '⚠️');
+        showToast('已標記警示並解除鎖定；若要同步寄信請先於第 ⑤ 頁籤綁定 Apps Script 網址', '⚠️');
         return;
       }
 
-      showToast(`正在實際寄信至 ${s.email}...`, '✉');
       try {
         const res = await callMailBackendApi({
           action: 'sendNotice',
@@ -3982,370 +4238,219 @@ function appendMailLog(type, studentId, name, email, subject, status) {
             name: s.name,
             email: s.email,
             category: '退件補件通知',
-            subject,
-            message
+            subject: '【康橋 × 舊鞋救命】服務學習任務退件補件通知',
+            message: `指導教師已退回您的服務學習任務項目並解除寫入鎖定，請儘速登入學生專區修正後重新送出。${note ? '\n教師指導說明：' + note : ''}`
           }]
         });
         if (res && res.ok && res.sentCount > 0) {
-          recordLocalMailLog('退件補件通知', s.email, subject, '已寄出');
-          showToast(`✓ 已實際寄出補件通知信至 ${s.email}！`, '✉');
+          recordLocalMailLog('退件補件通知', s.email, '服務學習任務退件補件通知', '已寄出');
+          showToast(`✓ 已實際寄送退件補件信至 ${s.email}`, '✉');
         } else {
-          throw new Error((res && res.error) ? res.error : '寄送失敗');
+          throw new Error((res && res.failedList && res.failedList[0]?.reason) || '寄信失敗');
         }
       } catch (err) {
-        recordLocalMailLog('退件補件通知', s.email, subject, '失敗：' + err.message);
         showToast(`寄信失敗：${err.message}`, '⚠️');
       }
     }
 
     async function batchNotifyIncomplete() {
-      const targets = appState.students.filter(
-        (s) => !s.isTeacherTest && (!s.confirmed || !s.wsLocked || !s.refLocked)
-      );
+      const targets = appState.students.filter((s) => !s.isTeacherTest && (!s.confirmed || !s.wsLocked || !s.refLocked));
       if (targets.length === 0) {
-        showToast('目前全體學生皆已完成所有任務！', '✓');
+        showToast('所有學生皆已完成全部任務項目！', '✓');
         return;
       }
 
-      targets.forEach((s) => {
-        s.urgentAlert = true;
-        if (!s.teacherNote) {
-          s.teacherNote = '尚有未完成之正取確認、行前學習單或活動反思任務，請儘速登入學生專區完成。';
-        }
-      });
+      targets.forEach((s) => { s.urgentAlert = true; });
       saveAppState();
-      renderReviewSection();
 
       if (!isLiveMailBackendAvailable()) {
-        showToast(`已標記 ${targets.length} 位學生站內提醒（尚未綁定 Apps Script 發信引擎，請至第 ⑤ 頁籤設定後即可實際寄信）`, '⚠️');
+        showToast(`已為 ${targets.length} 位學生開啟站內警示；請先於第 ⑤ 頁籤綁定 Apps Script 以啟用實際寄信`, '⚠️');
         return;
       }
 
-      const recipients = targets.map((s) => {
-        const missing = [];
-        if (!s.confirmed) missing.push('步驟 1｜正取確認');
-        if (!s.shiftsLocked) missing.push('步驟 2｜校內募集排班');
-        if (!s.wsLocked) missing.push('步驟 3｜行前影片與 10 題學習單');
-        if (!s.refLocked) missing.push('步驟 5｜活動後心得反思');
-        return {
-          id: s.id,
-          name: s.name,
-          email: s.email,
-          category: '任務進度催繳',
-          subject: '【康橋 × 舊鞋救命】2026 服務學習任務進度提醒',
-          message: `您的錄取梯次為「${s.session}」，目前尚有以下項目尚未完成：\n• ${missing.join('\n• ')}\n\n請儘速登入學生專區完成相關步驟。`
-        };
-      });
-
-      showToast(`正在批次寄信至 ${recipients.length} 位學生學校信箱，請稍候...`, '✉');
+      showToast(`正在透過校內信箱批次寄送通知給 ${targets.length} 位學生...`, '✉');
       try {
+        const recipients = targets.map((s) => {
+          const missing = [];
+          if (!s.confirmed) missing.push('步驟1正取確認');
+          if (!s.shiftsLocked) missing.push('步驟2校內排班');
+          if (!s.wsLocked) missing.push('步驟3行前影片學習單');
+          if (!s.refLocked) missing.push('步驟5活動後心得反思');
+          return {
+            id: s.id,
+            name: s.name,
+            email: s.email,
+            category: '批次催繳通知',
+            subject: '【康橋 × 舊鞋救命】2026 服務學習未完成任務提醒',
+            message: `提醒您尚有以下服務學習任務尚未完成送出：${missing.join('、')}。\n請儘速登入學生專區完成並寫入鎖定。`
+          };
+        });
+
         const res = await callMailBackendApi({
           action: 'sendNotice',
           portalUrl: getPortalPublicUrl(),
           recipients
         });
+
         if (res && res.ok) {
-          recordLocalMailLog('批次任務催繳', `共 ${res.sentCount} 位未完成學生`, '2026 服務學習任務進度提醒', `成功 ${res.sentCount} 封`);
-          showToast(`✓ 已實際寄出 ${res.sentCount} 封進度提醒信至學生信箱！`, '✉');
+          recordLocalMailLog('批次催繳通知', `共 ${res.sentCount} 位未完成學生`, '2026 服務學習未完成任務提醒', '已寄出');
+          showToast(`✓ 已成功實際寄出 ${res.sentCount} 封提醒信至學生校內信箱！`, '✉');
         } else {
-          throw new Error((res && res.error) ? res.error : '批次寄信失敗');
+          throw new Error((res && res.error) || '批次寄信失敗');
         }
       } catch (err) {
-        showToast(`批次寄信發生錯誤：${err.message}`, '⚠️');
+        showToast(`批次寄信失敗：${err.message}`, '⚠️');
       }
-    }
-
-    /* --- PURE-JS OOXML .XLSX & CSV GENERATOR --- */
-    function exportAllParticipantsHoursCsv() {
-      const headers = [
-        '序號', '班級', '座號', '學號', '姓名', '錄取梯次', '正取確認',
-        '行前學習分數', '行前核發時數', '11/21出席狀態', '11/21核發時數',
-        '校內排班數', '校內核發時數', '活動反思字數', '反思核發時數', '核發總時數', '審核備註'
-      ];
-      const attMap = { pending: '未點名', present: '有出席', late: '遲到', early: '早退', absent: '缺席' };
-      const rows = appState.students.map((s) => {
-        const h = computeStudentHours(s);
-        const refCnt = analyzeReflectionText(s.reflectionText).count;
-        return [
-          s.no, s.className, s.seat, s.id, s.name, s.session,
-          s.confirmed ? '已確認' : '未確認',
-          s.wsScore, h.preApp, attMap[s.attendance] || '未點名', h.whApp,
-          s.shifts.length, h.campusApp, refCnt, h.refApp, h.totalApp, s.teacherNote || ''
-        ];
-      });
-      const lines = [headers.join(','), ...rows.map((r) => r.map((v) => `"${String(v).replace(/"/g, '""')}"`).join(','))];
-      const blob = new Blob(['\uFEFF' + lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = '康橋舊鞋救命2026_全體參加者總時數總表.csv';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      showToast('已匯出全體參加者總時數 CSV 報表！', '✓');
-    }
-
-    function exportAllParticipantsHoursXlsx() {
-      const headers = [
-        '序號', '班級', '座號', '學號', '姓名', '錄取梯次', '正取確認',
-        '行前學習分數', '行前核發時數', '11/21出席狀態', '11/21核發時數',
-        '校內排班數', '校內核發時數', '活動反思字數', '反思核發時數', '核發總時數', '審核備註'
-      ];
-      const attMap = { pending: '未點名', present: '有出席', late: '遲到', early: '早退', absent: '缺席' };
-      const rows = appState.students.map((s) => {
-        const h = computeStudentHours(s);
-        const refCnt = analyzeReflectionText(s.reflectionText).count;
-        return [
-          s.no, s.className, s.seat, s.id, s.name, s.session,
-          s.confirmed ? '已確認' : '未確認',
-          s.wsScore, h.preApp, attMap[s.attendance] || '未點名', h.whApp,
-          s.shifts.length, h.campusApp, refCnt, h.refApp, h.totalApp, s.teacherNote || ''
-        ];
-      });
-      downloadGenuineXlsx('康橋舊鞋救命2026_全體參加者總時數總表.xlsx', '核發總時數', headers, rows);
-      showToast('已匯出標準 Excel (.xlsx) 總時數報表！', '📊');
-    }
-
-    function downloadGenuineXlsx(filename, sheetName, headers, rows) {
-      const escXml = (v) => String(v ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-      const colLetter = (idx) => {
-        let s = '', n = idx + 1;
-        while (n > 0) {
-          const r = (n - 1) % 26;
-          s = String.fromCharCode(65 + r) + s;
-          n = Math.floor((n - 1) / 26);
-        }
-        return s;
-      };
-
-      const allRows = [headers, ...rows];
-      const sheetRowsXml = allRows.map((row, rIdx) => {
-        const cells = row.map((val, cIdx) => {
-          const ref = `${colLetter(cIdx)}${rIdx + 1}`;
-          if (typeof val === 'number' && !Number.isNaN(val)) {
-            return `<c r="${ref}" t="n"><v>${val}</v></c>`;
-          }
-          return `<c r="${ref}" t="inlineStr"><is><t>${escXml(val)}</t></is></c>`;
-        }).join('');
-        return `<row r="${rIdx + 1}">${cells}</row>`;
-      }).join('');
-
-      const files = [
-        {
-          name: '[Content_Types].xml',
-          content: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
-  <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
-  <Default Extension="xml" ContentType="application/xml"/>
-  <Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>
-  <Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>
-</Types>`
-        },
-        {
-          name: '_rels/.rels',
-          content: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
-  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/>
-</Relationships>`
-        },
-        {
-          name: 'xl/workbook.xml',
-          content: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
-  <sheets>
-    <sheet name="${escXml(sheetName)}" sheetId="1" r:id="rId1"/>
-  </sheets>
-</workbook>`
-        },
-        {
-          name: 'xl/_rels/workbook.xml.rels',
-          content: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
-  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/>
-</Relationships>`
-        },
-        {
-          name: 'xl/worksheets/sheet1.xml',
-          content: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
-  <sheetData>${sheetRowsXml}</sheetData>
-</worksheet>`
-        }
-      ];
-
-      const encoder = new TextEncoder();
-      const crcTable = new Uint32Array(256);
-      for (let i = 0; i < 256; i++) {
-        let c = i;
-        for (let k = 0; k < 8; k++) c = (c & 1) ? (0xedb88320 ^ (c >>> 1)) : (c >>> 1);
-        crcTable[i] = c;
-      }
-      const crc32 = (bytes) => {
-        let crc = 0xffffffff;
-        for (let i = 0; i < bytes.length; i++) crc = crcTable[(crc ^ bytes[i]) & 0xff] ^ (crc >>> 8);
-        return (crc ^ 0xffffffff) >>> 0;
-      };
-
-      const localParts = [];
-      const centralParts = [];
-      let offset = 0;
-
-      files.forEach((f) => {
-        const nameBytes = encoder.encode(f.name);
-        const dataBytes = encoder.encode(f.content);
-        const crc = crc32(dataBytes);
-
-        const localHeader = new Uint8Array(30 + nameBytes.length);
-        const ldv = new DataView(localHeader.buffer);
-        ldv.setUint32(0, 0x04034b50, true);
-        ldv.setUint16(4, 20, true);
-        ldv.setUint16(6, 0, true);
-        ldv.setUint16(8, 0, true);
-        ldv.setUint16(10, 0, true);
-        ldv.setUint16(12, 0, true);
-        ldv.setUint32(14, crc, true);
-        ldv.setUint32(18, dataBytes.length, true);
-        ldv.setUint32(22, dataBytes.length, true);
-        ldv.setUint16(26, nameBytes.length, true);
-        ldv.setUint16(28, 0, true);
-        localHeader.set(nameBytes, 30);
-
-        localParts.push(localHeader, dataBytes);
-
-        const centralHeader = new Uint8Array(46 + nameBytes.length);
-        const cdv = new DataView(centralHeader.buffer);
-        cdv.setUint32(0, 0x02014b50, true);
-        cdv.setUint16(4, 20, true);
-        cdv.setUint16(6, 20, true);
-        cdv.setUint16(8, 0, true);
-        cdv.setUint16(10, 0, true);
-        cdv.setUint16(12, 0, true);
-        cdv.setUint16(14, 0, true);
-        cdv.setUint32(16, crc, true);
-        cdv.setUint32(20, dataBytes.length, true);
-        cdv.setUint32(24, dataBytes.length, true);
-        cdv.setUint16(28, nameBytes.length, true);
-        cdv.setUint16(30, 0, true);
-        cdv.setUint16(32, 0, true);
-        cdv.setUint16(34, 0, true);
-        cdv.setUint16(36, 0, true);
-        cdv.setUint32(38, 0, true);
-        cdv.setUint32(42, offset, true);
-        centralHeader.set(nameBytes, 46);
-
-        centralParts.push(centralHeader);
-        offset += localHeader.length + dataBytes.length;
-      });
-
-      const centralSize = centralParts.reduce((acc, p) => acc + p.length, 0);
-      const eocd = new Uint8Array(22);
-      const edv = new DataView(eocd.buffer);
-      edv.setUint32(0, 0x06054b50, true);
-      edv.setUint16(4, 0, true);
-      edv.setUint16(6, 0, true);
-      edv.setUint16(8, files.length, true);
-      edv.setUint16(10, files.length, true);
-      edv.setUint32(12, centralSize, true);
-      edv.setUint32(16, offset, true);
-      edv.setUint16(20, 0, true);
-
-      const blob = new Blob([...localParts, ...centralParts, eocd], {
-        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-      });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    }
-
-    /* --- TAB ③: STUDENT ROSTER CRUD, ADMISSION EMAILS, BULK IMPORT & EXPORT --- */
-    function updateDynamicRosterCounters() {
-      const admCount = appState.students.length;
-      const waitCount = appState.waitlist.length;
-      const hEl = document.getElementById('rosterSectionHeading');
-      if (hEl) hEl.textContent = `學生報名名單管理（${admCount} 筆錄取＋${waitCount} 筆備取）`;
-      const allOpt = document.getElementById('rosterBatchAllOpt');
-      if (allOpt) allOpt.textContent = `錄取名單：全部（${admCount} 筆）`;
-      const waitOpt = document.getElementById('rosterBatchWaitOpt');
-      if (waitOpt) waitOpt.textContent = `備取名單（${waitCount} 筆）`;
     }
 
     async function batchSendAdmissionEmails() {
-      const unconfirmed = appState.students.filter((s) => !s.isTeacherTest && !s.confirmed);
-      if (unconfirmed.length === 0) {
-        showToast('目前所有正取學生皆已完成確認！', '✓');
+      const targets = appState.students.filter((s) => !s.isTeacherTest && !s.confirmed);
+      if (targets.length === 0) {
+        showToast('所有錄取學生皆已完成正取確認！', '✓');
         return;
       }
 
       if (!isLiveMailBackendAvailable()) {
-        showToast('尚未綁定校內信箱發信引擎（請至第 ⑤ 頁籤貼上 Apps Script 網址）', '⚠️');
-        switchTeacherTab('system');
+        showToast('請先至「⑤ 管理員帳號、信箱發信與試算表同步」綁定 Apps Script 網址後即可實際寄信！', '⚠️');
         return;
       }
 
-      const recipients = unconfirmed.map((s) => ({
-        id: s.id,
-        name: s.name,
-        email: s.email,
-        category: '正取確認通知',
-        subject: '【康橋 × 舊鞋救命】2026 服務學習錄取通知與正取確認提醒',
-        message: [
-          `恭喜您錄取「2026 舊鞋救命服務學習」！`,
-          `• 服務日期：2026/11/21（六）`,
-          `• 服務地點：伯利恆倉庫（新北市林口區南勢四街 48 號）`,
-          `• 您的錄取梯次：${s.session}`,
-          '',
-          '請於 11/16（一）中午 12:00 前登入「學生服務學習專區」完成線上正取確認（預設密碼為您的學號，亦可於登入視窗點選「改用校內信箱 6 位數驗證碼登入」），並依序完成校內募集排班與行前學習單。'
-        ].join('\n')
-      }));
-
-      showToast(`正在寄送錄取確認通知信至 ${recipients.length} 位尚未確認學生信箱...`, '✉');
+      showToast(`正在寄送正取確認通知信給 ${targets.length} 位尚未確認學生...`, '✉');
       try {
+        const recipients = targets.map((s) => ({
+          id: s.id,
+          name: s.name,
+          email: s.email,
+          category: '正取確認通知',
+          subject: `【康橋 × 舊鞋救命】2026 服務學習正取通知（${s.session}）`,
+          message: `恭喜您錄取「2026 康橋 × 舊鞋救命服務學習」，您的錄取梯次為【${s.session}】（服務日期：2026/11/21 週六，地點：伯利恆倉庫）。\n\n請於 11/16（一）中午 12:00 前登入學生專區完成「步驟 1｜正取確認」（初次登入帳號與預設密碼皆為您的學號 ${s.id}，亦可使用校內信箱 6 位數驗證碼登入）。`
+        }));
+
         const res = await callMailBackendApi({
           action: 'sendNotice',
           portalUrl: getPortalPublicUrl(),
           recipients
         });
+
         if (res && res.ok) {
-          recordLocalMailLog('正取確認通知', `共 ${res.sentCount} 位正取學生`, '2026 服務學習錄取通知與正取確認提醒', `成功 ${res.sentCount} 封`);
-          showToast(`✓ 已實際寄出 ${res.sentCount} 封錄取確認通知信至學生信箱！`, '✉');
+          recordLocalMailLog('正取確認通知', `共 ${res.sentCount} 位未確認學生`, '2026 服務學習正取通知', '已寄出');
+          showToast(`✓ 已成功寄出 ${res.sentCount} 封正取確認通知信！`, '✉');
         } else {
-          throw new Error((res && res.error) ? res.error : '寄送失敗');
+          throw new Error((res && res.error) || '寄信失敗');
         }
       } catch (err) {
-        showToast(`寄送失敗：${err.message}`, '⚠️');
+        showToast(`正取通知信寄送失敗：${err.message}`, '⚠️');
       }
     }
 
+    function buildExportRows() {
+      return appState.students.map((s) => {
+        const hrs = computeStudentHours(s);
+        const attMap = { pending: '未點名', present: '有出席', late: '遲到', early: '早退', absent: '缺席' };
+        return {
+          '序號': s.no,
+          '班級': s.className,
+          '座號': s.seat,
+          '學號': s.id,
+          '姓名': s.name,
+          '校園信箱': s.email,
+          '錄取梯次': s.session,
+          '正取確認': s.confirmed ? '已確認' : '未確認',
+          '行前學習單分數': s.wsScore,
+          '①行前學習核發時數': hrs.preApp,
+          '11/21出席狀態': attMap[s.attendance] || '未點名',
+          '②11/21倉庫核發時數': hrs.whApp,
+          '校內排班班次': s.shifts.map(getShiftDisplayName).join('、') || '無',
+          '③校內募集核發時數': hrs.campusApp,
+          '活動反思字數': analyzeReflectionText(s.reflectionText).count,
+          '④活動反思核發時數': hrs.refApp,
+          '已核發總時數': hrs.totalApp,
+          '預計總時數': hrs.totalEst
+        };
+      });
+    }
+
+    function exportAllParticipantsHoursCsv() {
+      const rows = buildExportRows();
+      const headers = Object.keys(rows[0]);
+      const csv = '\uFEFF' + [
+        headers.join(','),
+        ...rows.map((r) => headers.map((h) => `"${String(r[h]).replace(/"/g, '""')}"`).join(','))
+      ].join('\n');
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `康橋舊鞋救命_全體參加者總時數表_${new Date().toISOString().slice(0, 10)}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('已匯出全體參加者總時數 CSV 檔案', '✓');
+    }
+
+    function exportAllParticipantsHoursXlsx() {
+      const rows = buildExportRows();
+      if (typeof XLSX !== 'undefined') {
+        const wb = XLSX.utils.book_new();
+        const ws = XLSX.utils.json_to_sheet(rows);
+        XLSX.utils.book_append_sheet(wb, ws, '全體參加者總時數');
+        XLSX.writeFile(wb, `康橋舊鞋救命_全體參加者總時數表_${new Date().toISOString().slice(0, 10)}.xlsx`);
+        showToast('已匯出所有參加者總時數 Excel (.xlsx)', '✓');
+      } else {
+        exportAllParticipantsHoursCsv();
+      }
+    }
+
+    /* --- TAB ③: STUDENT ROSTER CRUD & WAITLIST --- */
     function renderRosterAdminTable() {
-      updateDynamicRosterCounters();
       const kw = (document.getElementById('rosterSearchInput')?.value || '').trim().toLowerCase();
       const batch = document.getElementById('rosterBatchFilter')?.value || 'ALL';
       const conf = document.getElementById('rosterConfirmFilter')?.value || 'ALL';
+
+      const rosterHeading = document.getElementById('rosterSectionHeading');
+      const batchAllOpt = document.getElementById('rosterBatchAllOpt');
+      const batchWaitOpt = document.getElementById('rosterBatchWaitOpt');
+      if (rosterHeading) {
+        rosterHeading.textContent = `學生報名名單管理（${appState.students.length} 筆錄取＋${appState.waitlist.length} 筆備取）`;
+      }
+      if (batchAllOpt) {
+        batchAllOpt.textContent = `錄取名單：全部（${appState.students.length} 筆）`;
+      }
+      if (batchWaitOpt) {
+        batchWaitOpt.textContent = `備取名單（${appState.waitlist.length} 筆）`;
+      }
+
       const tbody = document.getElementById('rosterAdminTableBody');
 
       if (batch === 'WAITLIST') {
-        const wList = appState.waitlist.filter((w) =>
-          !kw || w.name.toLowerCase().includes(kw) || w.id.toLowerCase().includes(kw) || w.className.toLowerCase().includes(kw)
-        );
+        const wList = appState.waitlist.filter((w) => {
+          if (!kw) return true;
+          return w.name.toLowerCase().includes(kw) || w.id.toLowerCase().includes(kw) || w.className.toLowerCase().includes(kw);
+        });
         document.getElementById('rosterCountLabel').textContent = `顯示備取 ${wList.length} 筆`;
+
         tbody.innerHTML = wList.map((w) => `
-          <tr>
+          <tr class="bg-[#fdf6e7]/40">
             <td class="px-3 py-2.5 font-bold text-[#825612]">備取 #${w.rank}</td>
-            <td class="px-3 py-2.5">${escapeHtml(w.className)} 班 ${w.seat} 號</td>
-            <td class="px-3 py-2.5"><div class="font-bold">${escapeHtml(w.name)}</div><div class="text-[11px] text-[#52625a]">${escapeHtml(w.id)}</div></td>
-            <td class="px-3 py-2.5"><span class="rounded bg-[#fdf6e7] px-2 py-0.5 text-xs font-bold text-[#825612]">${escapeHtml(w.pref)}</span></td>
-            <td class="px-3 py-2.5 text-xs text-[#52625a]">候補遞補名單</td>
-            <td class="px-3 py-2.5 text-xs text-[#52625a]">—</td>
-            <td class="px-3 py-2.5 text-right">—</td>
-            <td class="px-3 py-2.5 text-center">
-              <button type="button" onclick="promoteWaitlistStudent('${w.id}')" class="btn-outline rounded px-2.5 py-1 text-xs font-bold">
-                遞補轉正取
+            <td class="px-3 py-2.5">${escapeHtml(w.className)} ${w.seat}號</td>
+            <td class="px-3 py-2.5">
+              <div class="font-bold text-[#243a32]">${escapeHtml(w.name)}</div>
+              <div class="text-xs text-[#52625a]">${escapeHtml(w.id)}</div>
+            </td>
+            <td class="px-3 py-2.5 text-xs font-bold text-[#825612]">${escapeHtml(w.pref)}</td>
+            <td colspan="3" class="px-3 py-2.5 text-xs text-[#52625a]">備取候補中，名額釋出時可點選右側遞補為正取</td>
+            <td class="px-3 py-2.5 text-center space-x-1">
+              <button type="button" onclick="promoteWaitlistStudent('${w.id}', '上午A', false)"
+                class="btn-outline rounded px-2 py-1 text-xs font-bold">
+                遞補上午A
+              </button>
+              <button type="button" onclick="promoteWaitlistStudent('${w.id}', '上午B', false)"
+                class="btn-outline rounded px-2 py-1 text-xs font-bold">
+                遞補上午B
+              </button>
+              <button type="button" onclick="promoteWaitlistStudent('${w.id}', '下午', false)"
+                class="btn-primary rounded px-2 py-1 text-xs font-bold">
+                遞補下午
               </button>
             </td>
           </tr>
@@ -4364,42 +4469,53 @@ function appendMailLog(type, studentId, name, email, subject, status) {
       document.getElementById('rosterCountLabel').textContent = `顯示 ${list.length} 筆`;
 
       tbody.innerHTML = list.map((s) => {
-        const h = computeStudentHours(s);
+        const hrs = computeStudentHours(s);
         return `
           <tr>
-            <td class="px-3 py-2.5 text-[#52625a]">${s.no}</td>
+            <td class="px-3 py-2.5 font-bold">${s.no}</td>
             <td class="px-3 py-2.5">${escapeHtml(s.className)} ${s.seat}號</td>
             <td class="px-3 py-2.5">
               <div class="font-bold text-[#243a32]">${escapeHtml(s.name)}</div>
-              <div class="text-[11px] text-[#52625a]">${escapeHtml(s.id)}</div>
+              <div class="text-xs text-[#52625a]">${escapeHtml(s.id)}</div>
             </td>
-            <td class="px-3 py-2.5"><span class="rounded bg-[#edf1e7] px-2 py-0.5 text-xs font-bold text-[#234c3c]">${escapeHtml(s.session)}</span></td>
+            <td class="px-3 py-2.5">
+              <span class="rounded bg-[#edf1e7] px-2 py-0.5 text-xs font-bold text-[#234c3c]">${escapeHtml(s.session)}</span>
+            </td>
+            <td class="px-3 py-2.5">
+              ${s.confirmed
+                ? '<span class="rounded bg-[#e7eddf] px-2 py-0.5 text-xs font-bold text-[#234c3c]">✓ 已確認</span>'
+                : '<span class="rounded bg-[#fdf6e7] px-2 py-0.5 text-xs font-bold text-[#825612]">尚未確認</span>'}
+            </td>
             <td class="px-3 py-2.5 text-xs">
-              ${s.confirmed ? '<span class="font-bold text-[#234c3c]">✓ 已確認</span>' : '<span class="text-[#825612]">尚未確認</span>'}
+              學習單：${s.wsLocked ? `🔒(${s.wsScore}分)` : '未鎖'}｜反思：${s.refLocked ? '🔒' : '未鎖'}
             </td>
-            <td class="px-3 py-2.5 text-xs">
-              <div>學習單：${s.wsLocked ? `🔒 ${s.wsScore}分` : '未鎖定'}</div>
-              <div>反思：${s.refLocked ? '🔒 已交' : '未交'}</div>
-            </td>
-            <td class="px-3 py-2.5 text-right font-bold text-[#234c3c]">${h.totalApp.toFixed(1)}h</td>
-            <td class="px-3 py-2.5 text-center whitespace-nowrap space-x-1">
-              <button type="button" onclick="openStudentCrudModal('edit', '${s.id}')" class="btn-outline rounded px-2 py-1 text-xs font-bold">編輯</button>
-              <button type="button" onclick="confirmDeleteStudent('${s.id}')" class="rounded border border-[#ecc4c8] bg-[#fdf0f1] px-2 py-1 text-xs font-bold text-[#992634]">刪除</button>
+            <td class="px-3 py-2.5 text-right font-bold text-[#234c3c]">${hrs.totalApp.toFixed(1)} h</td>
+            <td class="px-3 py-2.5 text-center space-x-1">
+              <button type="button" onclick="openStudentCrudModal('edit', '${s.id}')"
+                class="btn-outline rounded px-2.5 py-1 text-xs font-bold">
+                編輯
+              </button>
+              <button type="button" onclick="confirmDeleteStudent('${s.id}')"
+                class="rounded border border-[#ecc4c8] bg-[#fdf0f1] px-2.5 py-1 text-xs font-bold text-[#992634]">
+                刪除
+              </button>
             </td>
           </tr>
         `;
       }).join('');
     }
 
-    function promoteWaitlistStudent(waitId) {
+    function promoteWaitlistStudent(waitId, chosenSession = null, autoCheckIn = false) {
       const idx = appState.waitlist.findIndex((w) => w.id === waitId);
       if (idx < 0) return;
-      const w = appState.waitlist[idx];
-      const nextNo = appState.students.reduce((m, s) => Math.max(m, Number(s.no || 0)), 0) + 1;
-      const session = w.pref.includes('上午') ? '上午A' : '下午';
+      const w = appState.waitlist.splice(idx, 1)[0];
+      const maxNo = appState.students.reduce((m, s) => Math.max(m, Number(s.no || 0)), 0);
+      const session = chosenSession || (w.pref.includes('上午') ? '上午A' : '下午');
+      const nowStr = nowFullTimestamp();
+      const clockStr = nowClockTime();
 
-      appState.students.push({
-        no: nextNo,
+      const newStu = {
+        no: maxNo + 1,
         className: w.className,
         seat: w.seat,
         id: w.id,
@@ -4408,8 +4524,8 @@ function appendMailLog(type, studentId, name, email, subject, status) {
         isTeacherTest: false,
         email: `${w.id}@stu.kcislk.ntpc.edu.tw`,
         password: w.id,
-        confirmed: false,
-        confirmedAt: '',
+        confirmed: true,
+        confirmedAt: nowStr,
         shifts: [],
         shiftsLocked: false,
         shiftsLockedAt: '',
@@ -4419,28 +4535,55 @@ function appendMailLog(type, studentId, name, email, subject, status) {
         wsScore: 0,
         wsLocked: false,
         wsSubmittedAt: '',
-        attendance: 'pending',
-        attTimestamp: '',
-        attHours: 0,
+        attendance: autoCheckIn ? 'present' : 'pending',
+        attTimestamp: autoCheckIn ? `備取遞補報到 ${clockStr}` : '',
+        attHours: autoCheckIn ? 3.0 : 0,
         reflectionText: '',
         refLocked: false,
         refSubmittedAt: '',
-        reviews: { pre: 'pending', warehouse: 'pending', campus: 'pending', reflection: 'pending' },
+        reviews: {
+          pre: 'pending',
+          warehouse: autoCheckIn ? 'passed' : 'pending',
+          campus: 'pending',
+          reflection: 'pending'
+        },
         urgentAlert: false,
         teacherNote: ''
-      });
-      appState.waitlist.splice(idx, 1);
+      };
+
+      appState.students.push(newStu);
       saveAppState();
+      silentPushStudentToCloud(newStu);
       renderRosterAdminTable();
-      showToast(`已將備取學生 ${w.name} 遞補轉為正取（${session}）！`, '✓');
+      showToast(
+        autoCheckIn
+          ? `已將備取 #${w.rank} ${w.name} 遞補至【${session}】並標記有出席報到！`
+          : `已將備取 #${w.rank} ${w.name} 遞補轉入【${session}】正取名單！`,
+        '✓'
+      );
     }
 
     function openStudentCrudModal(mode, stuId = '') {
       document.getElementById('crudMode').value = mode;
       document.getElementById('crudTargetOrigId').value = stuId;
-      document.getElementById('crudModalHeading').textContent = mode === 'add' ? '新增學生報名資料' : '編輯學生報名資料';
 
-      if (mode === 'add') {
+      if (mode === 'edit') {
+        const s = appState.students.find((x) => x.id === stuId);
+        if (!s) return;
+        document.getElementById('crudModalHeading').textContent = `編輯學生資料：${s.name} (${s.id})`;
+        document.getElementById('crudClassInput').value = s.className;
+        document.getElementById('crudSeatInput').value = s.seat;
+        document.getElementById('crudSessionInput').value = s.session;
+        document.getElementById('crudIdInput').value = s.id;
+        document.getElementById('crudNameInput').value = s.name;
+        document.getElementById('crudEmailInput').value = s.email;
+        document.getElementById('crudConfirmedInput').value = String(s.confirmed);
+        document.getElementById('crudAttendanceInput').value = s.attendance;
+        document.getElementById('crudWsScoreInput').value = s.wsScore;
+        document.getElementById('crudWsLockedInput').value = String(s.wsLocked);
+        document.getElementById('crudRefLockedInput').value = String(s.refLocked);
+      } else {
+        document.getElementById('crudModalHeading').textContent = '新增學生報名資料';
         document.getElementById('crudClassInput').value = '';
         document.getElementById('crudSeatInput').value = '';
         document.getElementById('crudSessionInput').value = '上午A';
@@ -4452,24 +4595,15 @@ function appendMailLog(type, studentId, name, email, subject, status) {
         document.getElementById('crudWsScoreInput').value = '0';
         document.getElementById('crudWsLockedInput').value = 'false';
         document.getElementById('crudRefLockedInput').value = 'false';
-      } else {
-        const s = appState.students.find((x) => x.id === stuId);
-        if (!s) return;
-        document.getElementById('crudClassInput').value = s.className;
-        document.getElementById('crudSeatInput').value = s.seat;
-        document.getElementById('crudSessionInput').value = s.session;
-        document.getElementById('crudIdInput').value = s.id;
-        document.getElementById('crudNameInput').value = s.name;
-        document.getElementById('crudEmailInput').value = s.email;
-        document.getElementById('crudConfirmedInput').value = String(Boolean(s.confirmed));
-        document.getElementById('crudAttendanceInput').value = s.attendance || 'pending';
-        document.getElementById('crudWsScoreInput').value = s.wsScore || 0;
-        document.getElementById('crudWsLockedInput').value = String(Boolean(s.wsLocked));
-        document.getElementById('crudRefLockedInput').value = String(Boolean(s.refLocked));
       }
 
       document.getElementById('studentCrudModal').classList.remove('hidden');
       document.getElementById('studentCrudModal').classList.add('flex');
+    }
+
+    function onCrudStudentIdInput(val) {
+      const clean = val.trim().toUpperCase();
+      document.getElementById('crudEmailInput').value = clean ? `${clean}@stu.kcislk.ntpc.edu.tw` : '';
     }
 
     function closeStudentCrudModal() {
@@ -4477,46 +4611,46 @@ function appendMailLog(type, studentId, name, email, subject, status) {
       document.getElementById('studentCrudModal').classList.remove('flex');
     }
 
-    function onCrudStudentIdInput(val) {
-      const clean = val.trim();
-      const domain = (clean.toLowerCase() === 'chunyichou' || clean.toLowerCase() === 'yiyunchen')
-        ? '@kcislk.ntpc.edu.tw'
-        : '@stu.kcislk.ntpc.edu.tw';
-      document.getElementById('crudEmailInput').value = clean ? `${clean}${domain}` : '';
-    }
-
     function saveStudentCrudForm() {
       const mode = document.getElementById('crudMode').value;
       const origId = document.getElementById('crudTargetOrigId').value;
-
       const className = document.getElementById('crudClassInput').value.trim();
       const seat = Number(document.getElementById('crudSeatInput').value);
       const session = document.getElementById('crudSessionInput').value;
       const id = document.getElementById('crudIdInput').value.trim();
       const name = document.getElementById('crudNameInput').value.trim();
-      const email = document.getElementById('crudEmailInput').value.trim() || `${id}@stu.kcislk.ntpc.edu.tw`;
+      const email = document.getElementById('crudEmailInput').value.trim();
       const confirmed = document.getElementById('crudConfirmedInput').value === 'true';
       const attendance = document.getElementById('crudAttendanceInput').value;
       const wsScore = Number(document.getElementById('crudWsScoreInput').value || 0);
       const wsLocked = document.getElementById('crudWsLockedInput').value === 'true';
       const refLocked = document.getElementById('crudRefLockedInput').value === 'true';
 
-      if (!className || !seat || !id || !name) return;
-
-      if (mode === 'add') {
+      if (mode === 'edit') {
+        const s = appState.students.find((x) => x.id === origId);
+        if (!s) return;
+        Object.assign(s, { className, seat, session, id, name, email, confirmed, attendance, wsScore, wsLocked, refLocked });
+        if (confirmed && !s.confirmedAt) s.confirmedAt = nowFullTimestamp();
+        if (attendance === 'present') s.attHours = 3.0;
+        else if (attendance === 'late') s.attHours = 2.5;
+        else if (attendance === 'early') s.attHours = 2.0;
+        else s.attHours = 0;
+        silentPushStudentToCloud(s);
+        showToast(`已更新 ${name} 的報名與任務資料`, '✓');
+      } else {
         if (appState.students.some((x) => x.id.toLowerCase() === id.toLowerCase())) {
-          showToast(`學號 ${id} 已存在於名單中！`, '⚠️');
+          showToast(`學號 ${id} 已存在於名單中`, '⚠️');
           return;
         }
-        const nextNo = appState.students.reduce((m, s) => Math.max(m, Number(s.no || 0)), 0) + 1;
-        appState.students.push({
-          no: nextNo,
+        const maxNo = appState.students.reduce((m, s) => Math.max(m, Number(s.no || 0)), 0);
+        const created = {
+          no: maxNo + 1,
           className,
           seat,
           id,
           name,
           session,
-          isTeacherTest: className === '教師測試',
+          isTeacherTest: false,
           email,
           password: id,
           confirmed,
@@ -4524,14 +4658,14 @@ function appendMailLog(type, studentId, name, email, subject, status) {
           shifts: [],
           shiftsLocked: false,
           shiftsLockedAt: '',
-          videoWatched: wsLocked,
+          videoWatched: false,
           answers: {},
           qScores: {},
           wsScore,
           wsLocked,
           wsSubmittedAt: wsLocked ? nowFullTimestamp() : '',
           attendance,
-          attTimestamp: attendance !== 'pending' ? nowClockTime() : '',
+          attTimestamp: attendance !== 'pending' ? `管理員設定 (${nowClockTime()})` : '',
           attHours: attendance === 'present' ? 3.0 : (attendance === 'late' ? 2.5 : (attendance === 'early' ? 2.0 : 0)),
           reflectionText: '',
           refLocked,
@@ -4539,25 +4673,10 @@ function appendMailLog(type, studentId, name, email, subject, status) {
           reviews: { pre: 'pending', warehouse: 'pending', campus: 'pending', reflection: 'pending' },
           urgentAlert: false,
           teacherNote: ''
-        });
-        showToast(`已新增學生 ${name}（${id}）！`, '✓');
-      } else {
-        const s = appState.students.find((x) => x.id === origId);
-        if (!s) return;
-        s.className = className;
-        s.seat = seat;
-        s.session = session;
-        s.id = id;
-        s.name = name;
-        s.email = email;
-        s.confirmed = confirmed;
-        if (confirmed && !s.confirmedAt) s.confirmedAt = nowFullTimestamp();
-        s.attendance = attendance;
-        s.attHours = attendance === 'present' ? 3.0 : (attendance === 'late' ? 2.5 : (attendance === 'early' ? 2.0 : 0));
-        s.wsScore = wsScore;
-        s.wsLocked = wsLocked;
-        s.refLocked = refLocked;
-        showToast(`已更新學生 ${name}（${id}）資料！`, '✓');
+        };
+        appState.students.push(created);
+        silentPushStudentToCloud(created);
+        showToast(`已新增學生 ${name} (${id})`, '✓');
       }
 
       saveAppState();
@@ -4565,17 +4684,14 @@ function appendMailLog(type, studentId, name, email, subject, status) {
       renderRosterAdminTable();
     }
 
+    let pendingDeleteStudentId = null;
     function confirmDeleteStudent(stuId) {
       const s = appState.students.find((x) => x.id === stuId);
       if (!s) return;
-      document.getElementById('deleteConfirmMessage').textContent = `確定要從名單中刪除「${s.className} ${s.seat}號 ${s.name}（${s.id}）」嗎？此操作無法復原。`;
-      document.getElementById('deleteConfirmBtn').onclick = () => {
-        appState.students = appState.students.filter((x) => x.id !== stuId);
-        saveAppState();
-        closeDeleteConfirmModal();
-        renderRosterAdminTable();
-        showToast(`已刪除學生 ${s.name}`, '✓');
-      };
+      pendingDeleteStudentId = stuId;
+      document.getElementById('deleteConfirmMessage').textContent =
+        `確定要從名單中刪除「${s.name}（${s.className} ${s.seat}號｜${s.id}）」嗎？刪除後將無法復原。`;
+      document.getElementById('deleteConfirmBtn').onclick = executeDeleteStudent;
       document.getElementById('deleteConfirmModal').classList.remove('hidden');
       document.getElementById('deleteConfirmModal').classList.add('flex');
     }
@@ -4583,47 +4699,39 @@ function appendMailLog(type, studentId, name, email, subject, status) {
     function closeDeleteConfirmModal() {
       document.getElementById('deleteConfirmModal').classList.add('hidden');
       document.getElementById('deleteConfirmModal').classList.remove('flex');
+      pendingDeleteStudentId = null;
     }
 
-    function exportRosterFile(ext) {
-      const headers = ['序號', '班級', '座號', '學號', '姓名', '錄取梯次', '學校信箱', '正取確認', '學習單分數', '核發總時數'];
-      const rows = appState.students.map((s) => [
-        s.no, s.className, s.seat, s.id, s.name, s.session, s.email,
-        s.confirmed ? '已確認' : '未確認', s.wsScore, computeStudentHours(s).totalApp
-      ]);
-      if (ext === 'xlsx') {
-        downloadGenuineXlsx('康橋舊鞋救命2026_錄取名單總表.xlsx', '舊鞋救命錄取名單', headers, rows);
-        showToast('已匯出名單總表 .xlsx！', '📊');
-      } else {
-        const lines = [headers.join(','), ...rows.map((r) => r.map((v) => `"${String(v).replace(/"/g, '""')}"`).join(','))];
-        const blob = new Blob(['\uFEFF' + lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = '康橋舊鞋救命2026_錄取名單總表.csv';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        showToast('已匯出名單總表 .csv！', '✓');
-      }
+    function executeDeleteStudent() {
+      if (!pendingDeleteStudentId) return;
+      appState.students = appState.students.filter((s) => s.id !== pendingDeleteStudentId);
+      saveAppState();
+      closeDeleteConfirmModal();
+      renderRosterAdminTable();
+      showToast('已從報名名單中刪除此筆資料', '✓');
     }
 
-    /* --- BULK ROSTER IMPORT ENGINE --- */
-    let bulkRawGrid = [];
-    let bulkColMap = { no: 0, className: 1, seat: 2, id: 3, name: 4, session: 5, email: -1, confirmed: -1 };
-    let bulkValidatedRecords = [];
+    function exportRosterFile(fmt) {
+      if (fmt === 'xlsx') exportAllParticipantsHoursXlsx();
+      else exportAllParticipantsHoursCsv();
+    }
+
+    /* --- BULK ROSTER IMPORT --- */
+    let bulkRawRows = [];
+    let bulkMappedRecords = [];
+    const BULK_FIELDS = [
+      { key: 'no', label: '序號（選填）', aliases: ['序號', '編號', 'no', 'index', '序'] },
+      { key: 'className', label: '班級 *', aliases: ['班級', '年班', 'class', '班別'] },
+      { key: 'seat', label: '座號 *', aliases: ['座號', '號碼', 'seat', 'seatno'] },
+      { key: 'id', label: '學號 *', aliases: ['學號', '帳號', 'studentid', 'id', '校園帳號'] },
+      { key: 'name', label: '姓名 *', aliases: ['姓名', '學生姓名', 'name', '名字'] },
+      { key: 'session', label: '錄取梯次', aliases: ['梯次', '錄取梯次', '分組', '梯次分組', 'session', '組別', '備取'] },
+      { key: 'email', label: '校園信箱（選填）', aliases: ['信箱', '電子信箱', 'email', 'mail', '學校信箱'] },
+      { key: 'pref', label: '備取志願（備取用）', aliases: ['志願', '備取志願', '志願梯次', 'pref', '希望梯次'] }
+    ];
 
     function openBulkImportModal() {
-      bulkRawGrid = [];
-      bulkValidatedRecords = [];
-      document.getElementById('bulkFileInput').value = '';
-      document.getElementById('bulkPasteTextarea').value = '';
-      document.getElementById('bulkFileStatusText').textContent = '';
-      document.getElementById('bulkMappingSection').classList.add('hidden');
-      document.getElementById('bulkPreviewSection').classList.add('hidden');
-      document.getElementById('bulkConfirmImportBtn').disabled = true;
-      document.getElementById('bulkFooterHint').textContent = '請先上傳檔案或貼上名單資料以檢視預覽';
+      clearBulkImportInput();
       document.getElementById('bulkImportModal').classList.remove('hidden');
       document.getElementById('bulkImportModal').classList.add('flex');
     }
@@ -4634,110 +4742,144 @@ function appendMailLog(type, studentId, name, email, subject, status) {
     }
 
     function clearBulkImportInput() {
-      bulkRawGrid = [];
-      bulkValidatedRecords = [];
+      bulkRawRows = [];
+      bulkMappedRecords = [];
       document.getElementById('bulkFileInput').value = '';
-      document.getElementById('bulkPasteTextarea').value = '';
       document.getElementById('bulkFileStatusText').textContent = '';
+      document.getElementById('bulkPasteTextarea').value = '';
       document.getElementById('bulkMappingSection').classList.add('hidden');
       document.getElementById('bulkPreviewSection').classList.add('hidden');
       document.getElementById('bulkConfirmImportBtn').disabled = true;
-      document.getElementById('bulkFooterHint').textContent = '已清空，請重新選擇檔案或貼上資料';
+      document.getElementById('bulkFooterHint').textContent = '請先上傳檔案或貼上名單資料以檢視預覽';
     }
 
-    function downloadImportTemplate(ext) {
-      const headers = ['序號', '班級', '座號', '學號', '姓名', '錄取梯次', '校園信箱'];
+    function downloadImportTemplate(fmt) {
       const sampleRows = [
-        [1, '701', 27, 'LJ15049', '張文馨', '上午A', 'LJ15049@stu.kcislk.ntpc.edu.tw'],
-        [2, '704', 8, 'LJ15007', '吳承恩', '上午B', 'LJ15007@stu.kcislk.ntpc.edu.tw'],
-        [3, '701', 40, 'LJ15313', '陳秀姍', '下午', 'LJ15313@stu.kcislk.ntpc.edu.tw']
+        { '序號': 1, '班級': '701', '座號': 27, '學號': 'LJ15049', '姓名': '張文馨', '錄取梯次': '上午A', '校園信箱': 'LJ15049@stu.kcislk.ntpc.edu.tw', '備取志願': '' },
+        { '序號': 2, '班級': '704', '座號': 8, '學號': 'LJ15007', '姓名': '吳承恩', '錄取梯次': '上午B', '校園信箱': 'LJ15007@stu.kcislk.ntpc.edu.tw', '備取志願': '' },
+        { '序號': 3, '班級': '701', '座號': 40, '學號': 'LJ15313', '姓名': '陳秀姍', '錄取梯次': '下午', '校園信箱': 'LJ15313@stu.kcislk.ntpc.edu.tw', '備取志願': '' },
+        { '序號': 4, '班級': '9D', '座號': 6, '學號': 'LJ13322', '姓名': '趙修頡', '錄取梯次': '備取', '校園信箱': 'LJ13322@stu.kcislk.ntpc.edu.tw', '備取志願': '上午/下午皆可' }
       ];
-      if (ext === 'xlsx') {
-        downloadGenuineXlsx('康橋舊鞋救命2026_總名單匯入範本.xlsx', '舊鞋救命錄取名單', headers, sampleRows);
-        showToast('已下載標準匯入範本 .xlsx！', '📊');
+      if (fmt === 'xlsx' && typeof XLSX !== 'undefined') {
+        const wb = XLSX.utils.book_new();
+        const ws = XLSX.utils.json_to_sheet(sampleRows);
+        XLSX.utils.book_append_sheet(wb, ws, '總名單匯入範本');
+        XLSX.writeFile(wb, '康橋舊鞋救命_總名單匯入範本.xlsx');
+        showToast('已下載標準 Excel 匯入範本 (.xlsx)', '✓');
       } else {
-        const lines = [headers.join(','), ...sampleRows.map((r) => r.map((v) => `"${String(v)}"`).join(','))];
-        const blob = new Blob(['\uFEFF' + lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+        const headers = Object.keys(sampleRows[0]);
+        const csv = '\uFEFF' + [
+          headers.join(','),
+          ...sampleRows.map((r) => headers.map((h) => `"${r[h]}"`).join(','))
+        ].join('\n');
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = '康橋舊鞋救命2026_總名單匯入範本.csv';
-        document.body.appendChild(a);
+        a.download = '康橋舊鞋救命_總名單匯入範本.csv';
         a.click();
-        document.body.removeChild(a);
         URL.revokeObjectURL(url);
-        showToast('已下載標準匯入範本 .csv！', '✓');
+        showToast('已下載標準 CSV 匯入範本 (.csv)', '✓');
       }
     }
 
     function handleBulkFileDrop(event) {
       event.preventDefault();
-      event.currentTarget.classList.remove('border-[#234c3c]', 'bg-[#edf1e7]');
+      const zone = document.getElementById('bulkDropZone');
+      zone.classList.remove('border-[#234c3c]', 'bg-[#edf1e7]');
       const file = event.dataTransfer?.files?.[0];
       if (file) handleBulkFileSelect(file);
     }
 
-    async function handleBulkFileSelect(file) {
+    function handleBulkFileSelect(file) {
       if (!file) return;
       const statusEl = document.getElementById('bulkFileStatusText');
-      statusEl.textContent = `正在讀取檔案：${file.name}...`;
+      statusEl.textContent = `正在解析檔案：${file.name}...`;
+      const ext = file.name.split('.').pop().toLowerCase();
 
-      try {
-        const lowerName = file.name.toLowerCase();
-        if (lowerName.endsWith('.xlsx')) {
-          const buf = await file.arrayBuffer();
-          const grid = await parseXlsxArrayBuffer(buf);
-          if (!grid || grid.length === 0) throw new Error('Excel 工作表內無有效資料列');
-          statusEl.textContent = `✓ 已載入 Excel 檔案：${file.name}（共 ${grid.length} 列）`;
-          loadParsedGridIntoBulkMapper(grid);
-        } else {
-          const buf = await file.arrayBuffer();
+      if (ext === 'xlsx' || ext === 'xls') {
+        if (typeof XLSX === 'undefined') {
+          statusEl.textContent = '⚠️ 目前環境無法載入 Excel 解析器，請改存為 .csv 檔或直接從 Excel 複製貼上至右側文字框！';
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          try {
+            const data = new Uint8Array(e.target.result);
+            const wb = XLSX.read(data, { type: 'array' });
+            const firstSheet = wb.Sheets[wb.SheetNames[0]];
+            const aoa = XLSX.utils.sheet_to_json(firstSheet, { header: 1, defval: '' });
+            const cleaned = aoa.filter((row) => Array.isArray(row) && row.some((c) => String(c).trim() !== ''));
+            if (cleaned.length === 0) {
+              statusEl.textContent = '⚠️ 檔案工作表中無有效資料列。';
+              return;
+            }
+            statusEl.textContent = `✓ 已讀取檔案「${file.name}」（共 ${cleaned.length} 列資料）`;
+            initializeBulkMapping(cleaned);
+          } catch (err) {
+            statusEl.textContent = `⚠️ Excel 解析失敗：${err.message}`;
+          }
+        };
+        reader.readAsArrayBuffer(file);
+      } else {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const buf = e.target.result;
           let text = new TextDecoder('utf-8').decode(buf);
           if (text.includes('\uFFFD')) {
-            try { text = new TextDecoder('big5').decode(buf); } catch (e) {}
+            try { text = new TextDecoder('big5').decode(buf); } catch (_) {}
           }
-          const grid = parseDelimitedTextToGrid(text);
-          if (!grid || grid.length === 0) throw new Error('檔案內無有效資料列');
-          statusEl.textContent = `✓ 已載入文字名單：${file.name}（共 ${grid.length} 列）`;
-          loadParsedGridIntoBulkMapper(grid);
-        }
-      } catch (err) {
-        statusEl.textContent = `⚠️ 讀取失敗：${err.message || '檔案格式不支援'}`;
-        showToast(`檔案解析失敗：${err.message || '請確認檔案格式'}`, '⚠️');
+          const rows = parseDelimitedTextToAoa(text);
+          if (rows.length === 0) {
+            statusEl.textContent = '⚠️ 檔案中無有效資料列。';
+            return;
+          }
+          statusEl.textContent = `✓ 已讀取檔案「${file.name}」（共 ${rows.length} 列資料）`;
+          initializeBulkMapping(rows);
+        };
+        reader.readAsArrayBuffer(file);
       }
     }
 
-    function parseBulkPasteText(rawText) {
-      const grid = parseDelimitedTextToGrid(rawText);
-      if (!grid || grid.length === 0) {
+    function parseBulkPasteText(text) {
+      const trimmed = (text || '').trim();
+      if (!trimmed) {
         document.getElementById('bulkMappingSection').classList.add('hidden');
         document.getElementById('bulkPreviewSection').classList.add('hidden');
         document.getElementById('bulkConfirmImportBtn').disabled = true;
         return;
       }
-      document.getElementById('bulkFileStatusText').textContent = `✓ 已辨識貼上資料（共 ${grid.length} 列）`;
-      loadParsedGridIntoBulkMapper(grid);
+      const rows = parseDelimitedTextToAoa(trimmed);
+      if (rows.length > 0) {
+        document.getElementById('bulkFileStatusText').textContent = `✓ 已從貼上內容解析 ${rows.length} 列資料`;
+        initializeBulkMapping(rows);
+      }
     }
 
-    function parseDelimitedTextToGrid(text) {
-      const clean = String(text || '').replace(/^\uFEFF/, '').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+    function parseDelimitedTextToAoa(text) {
+      const clean = text.replace(/^\uFEFF/, '').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
       const lines = clean.split('\n').filter((l) => l.trim() !== '');
       if (lines.length === 0) return [];
-
       const firstLine = lines[0];
-      const sep = firstLine.includes('\t') ? '\t' : (firstLine.includes(',') ? ',' : (firstLine.includes(';') ? ';' : ','));
+      const delimiter = firstLine.includes('\t') ? '\t' : ',';
 
       return lines.map((line) => {
-        if (sep === '\t') return line.split('\t').map((c) => c.trim());
+        if (delimiter === '\t') {
+          return line.split('\t').map((c) => c.trim());
+        }
         const cells = [];
         let cur = '';
         let inQuotes = false;
         for (let i = 0; i < line.length; i++) {
           const ch = line[i];
           if (ch === '"') {
-            if (inQuotes && line[i + 1] === '"') { cur += '"'; i++; }
-            else { inQuotes = !inQuotes; }
-          } else if (ch === sep && !inQuotes) {
+            if (inQuotes && line[i + 1] === '"') {
+              cur += '"';
+              i++;
+            } else {
+              inQuotes = !inQuotes;
+            }
+          } else if (ch === ',' && !inQuotes) {
             cells.push(cur.trim());
             cur = '';
           } else {
@@ -4749,313 +4891,262 @@ function appendMailLog(type, studentId, name, email, subject, status) {
       });
     }
 
-    async function parseXlsxArrayBuffer(arrayBuffer) {
-      const bytes = new Uint8Array(arrayBuffer);
-      const dv = new DataView(arrayBuffer);
-      const decoder = new TextDecoder('utf-8');
+    function initializeBulkMapping(aoa) {
+      bulkRawRows = aoa;
+      const firstRow = aoa[0] || [];
+      const colCount = Math.max(...aoa.map((r) => r.length));
 
-      let eocdOffset = -1;
-      for (let i = bytes.length - 22; i >= Math.max(0, bytes.length - 65558); i--) {
-        if (dv.getUint32(i, true) === 0x06054b50) { eocdOffset = i; break; }
-      }
-      if (eocdOffset < 0) throw new Error('非有效的 .xlsx (ZIP) 檔案結構');
-
-      const cdSize = dv.getUint32(eocdOffset + 12, true);
-      const cdOffset = dv.getUint32(eocdOffset + 16, true);
-      const entries = {};
-      let ptr = cdOffset;
-      while (ptr < cdOffset + cdSize) {
-        if (dv.getUint32(ptr, true) !== 0x02014b50) break;
-        const method = dv.getUint16(ptr + 10, true);
-        const compSize = dv.getUint32(ptr + 20, true);
-        const nameLen = dv.getUint16(ptr + 28, true);
-        const extraLen = dv.getUint16(ptr + 30, true);
-        const commentLen = dv.getUint16(ptr + 32, true);
-        const localHeaderOffset = dv.getUint32(ptr + 42, true);
-        const entryName = decoder.decode(bytes.subarray(ptr + 46, ptr + 46 + nameLen));
-        entries[entryName] = { method, compSize, localHeaderOffset };
-        ptr += 46 + nameLen + extraLen + commentLen;
-      }
-
-      async function readZipEntryText(entryName) {
-        const ent = entries[entryName];
-        if (!ent) return null;
-        const lh = ent.localHeaderOffset;
-        const nLen = dv.getUint16(lh + 26, true);
-        const eLen = dv.getUint16(lh + 28, true);
-        const dataStart = lh + 30 + nLen + eLen;
-        const slice = bytes.subarray(dataStart, dataStart + ent.compSize);
-        if (ent.method === 0) return decoder.decode(slice);
-        if (ent.method === 8) {
-          if (typeof DecompressionStream === 'undefined') throw new Error('瀏覽器不支援內建解壓縮，請改用 .csv 或貼上儲存格');
-          const ds = new DecompressionStream('deflate-raw');
-          const writer = ds.writable.getWriter();
-          writer.write(slice);
-          writer.close();
-          const outBuf = await new Response(ds.readable).arrayBuffer();
-          return decoder.decode(outBuf);
-        }
-        throw new Error('不支援的壓縮格式');
-      }
-
-      let sharedStrings = [];
-      const ssXml = await readZipEntryText('xl/sharedStrings.xml');
-      if (ssXml) {
-        const doc = new DOMParser().parseFromString(ssXml, 'application/xml');
-        const siNodes = Array.from(doc.getElementsByTagName('si'));
-        sharedStrings = siNodes.map((si) => Array.from(si.getElementsByTagName('t')).map((t) => t.textContent || '').join(''));
-      }
-
-      const sheetKey = Object.keys(entries).filter((k) => /^xl\/worksheets\/sheet\d+\.xml$/i.test(k)).sort()[0];
-      if (!sheetKey) throw new Error('找不到工作表 XML');
-      const sheetXml = await readZipEntryText(sheetKey);
-      const sDoc = new DOMParser().parseFromString(sheetXml, 'application/xml');
-      const rowNodes = Array.from(sDoc.getElementsByTagName('row'));
-
-      const colIndexFromRef = (ref) => {
-        const letters = (ref || '').replace(/[0-9]/g, '');
-        let idx = 0;
-        for (let i = 0; i < letters.length; i++) idx = idx * 26 + (letters.charCodeAt(i) - 64);
-        return Math.max(0, idx - 1);
-      };
-
-      const grid = [];
-      rowNodes.forEach((rNode) => {
-        const rowArr = [];
-        Array.from(rNode.getElementsByTagName('c')).forEach((cNode) => {
-          const cIdx = colIndexFromRef(cNode.getAttribute('r') || '');
-          const tAttr = cNode.getAttribute('t') || '';
-          let val = '';
-          if (tAttr === 's') {
-            const v = cNode.getElementsByTagName('v')[0]?.textContent;
-            val = v !== undefined ? (sharedStrings[Number(v)] ?? '') : '';
-          } else if (tAttr === 'inlineStr') {
-            val = Array.from(cNode.getElementsByTagName('t')).map((t) => t.textContent || '').join('');
-          } else {
-            val = cNode.getElementsByTagName('v')[0]?.textContent ?? '';
-          }
-          rowArr[cIdx] = String(val).trim();
-        });
-        for (let i = 0; i < rowArr.length; i++) if (rowArr[i] === undefined) rowArr[i] = '';
-        if (rowArr.some((cell) => cell !== '')) grid.push(rowArr);
+      const looksLikeHeader = firstRow.some((cell) => {
+        const s = String(cell).trim().toLowerCase();
+        return ['班級', '座號', '學號', '姓名', '梯次', '序號', 'class', 'seat', 'id', 'name'].some((k) => s.includes(k));
       });
-      return grid;
-    }
-
-    function loadParsedGridIntoBulkMapper(grid) {
-      bulkRawGrid = grid;
-      const firstRow = grid[0] || [];
-      const looksLikeHeader = firstRow.some((cell) => /班級|座號|學號|姓名|梯次|序號|class|seat|id|name/i.test(cell));
       document.getElementById('bulkHasHeaderChk').checked = looksLikeHeader;
 
-      const maxCols = grid.reduce((m, r) => Math.max(m, r.length), 0);
-      bulkColMap = { no: -1, className: -1, seat: -1, id: -1, name: -1, session: -1, email: -1, confirmed: -1 };
+      const autoMap = {};
+      BULK_FIELDS.forEach((f) => { autoMap[f.key] = -1; });
 
       if (looksLikeHeader) {
-        firstRow.forEach((h, idx) => {
-          const t = h.trim().toLowerCase();
-          if (/序號|編號|no\b|#/.test(t) && bulkColMap.no === -1) bulkColMap.no = idx;
-          else if (/班級|班別|class/.test(t)) bulkColMap.className = idx;
-          else if (/座號|seat/.test(t)) bulkColMap.seat = idx;
-          else if (/學號|帳號|student.?id|\bid\b/.test(t)) bulkColMap.id = idx;
-          else if (/姓名|名字|name/.test(t)) bulkColMap.name = idx;
-          else if (/梯次|分組|組別|session|batch/.test(t)) bulkColMap.session = idx;
-          else if (/信箱|email|mail/.test(t)) bulkColMap.email = idx;
-          else if (/確認|狀態|confirm/.test(t)) bulkColMap.confirmed = idx;
+        firstRow.forEach((cell, idx) => {
+          const norm = String(cell).trim().toLowerCase().replace(/\s+/g, '');
+          BULK_FIELDS.forEach((f) => {
+            if (autoMap[f.key] === -1 && f.aliases.some((a) => norm === a.toLowerCase() || norm.includes(a.toLowerCase()))) {
+              autoMap[f.key] = idx;
+            }
+          });
         });
-      }
-
-      if (bulkColMap.id === -1 || bulkColMap.name === -1) {
-        if (maxCols >= 6) {
-          bulkColMap = { no: 0, className: 1, seat: 2, id: 3, name: 4, session: 5, email: maxCols >= 7 ? 6 : -1, confirmed: -1 };
-        } else if (maxCols === 5) {
-          bulkColMap = { no: -1, className: 0, seat: 1, id: 2, name: 3, session: 4, email: -1, confirmed: -1 };
-        } else if (maxCols === 4) {
-          bulkColMap = { no: -1, className: 0, seat: 1, id: 2, name: 3, session: -1, email: -1, confirmed: -1 };
+      } else {
+        if (colCount >= 6) {
+          autoMap.no = 0; autoMap.className = 1; autoMap.seat = 2; autoMap.id = 3; autoMap.name = 4; autoMap.session = 5;
+          if (colCount >= 7) autoMap.email = 6;
+        } else if (colCount === 5) {
+          autoMap.className = 0; autoMap.seat = 1; autoMap.id = 2; autoMap.name = 3; autoMap.session = 4;
+        } else if (colCount === 4) {
+          autoMap.className = 0; autoMap.seat = 1; autoMap.id = 2; autoMap.name = 3;
         }
       }
 
-      renderBulkColumnMappingSelectors(maxCols);
+      const colOptionsHtml = (selectedIdx) => {
+        let html = `<option value="-1" ${selectedIdx === -1 ? 'selected' : ''}>（略過／自動預設）</option>`;
+        for (let i = 0; i < colCount; i++) {
+          const sample = String(firstRow[i] ?? '').trim() || `第 ${i + 1} 欄`;
+          html += `<option value="${i}" ${selectedIdx === i ? 'selected' : ''}>欄 ${i + 1}（${escapeHtml(sample.slice(0, 14))}）</option>`;
+        }
+        return html;
+      };
+
+      document.getElementById('bulkColumnMappingGrid').innerHTML = BULK_FIELDS.map((f) => `
+        <div>
+          <label class="block text-[11px] font-bold text-[#243a32] mb-1">${f.label}</label>
+          <select id="bulk-map-${f.key}" onchange="recomputeBulkPreview()"
+            class="w-full rounded-lg border border-[#dfe4dc] bg-white px-2 py-1.5 text-xs">
+            ${colOptionsHtml(autoMap[f.key])}
+          </select>
+        </div>
+      `).join('');
+
       document.getElementById('bulkMappingSection').classList.remove('hidden');
       document.getElementById('bulkPreviewSection').classList.remove('hidden');
       recomputeBulkPreview();
     }
 
-    function renderBulkColumnMappingSelectors(maxCols) {
-      const headerRow = bulkRawGrid[0] || [];
-      const colOptionsHtml = (selectedIdx, required = false) => {
-        let opts = `<option value="-1" ${selectedIdx === -1 ? 'selected' : ''}>${required ? '（請選擇欄位）' : '（不匯入／自動預設）'}</option>`;
-        for (let i = 0; i < maxCols; i++) {
-          const sample = headerRow[i] ? `：${escapeHtml(headerRow[i].slice(0, 14))}` : '';
-          opts += `<option value="${i}" ${selectedIdx === i ? 'selected' : ''}>第 ${i + 1} 欄${sample}</option>`;
-        }
-        return opts;
-      };
-
-      const fields = [
-        { key: 'no', label: '序號', req: false },
-        { key: 'className', label: '班級 *', req: true },
-        { key: 'seat', label: '座號 *', req: true },
-        { key: 'id', label: '學號 *', req: true },
-        { key: 'name', label: '姓名 *', req: true },
-        { key: 'session', label: '錄取梯次', req: false },
-        { key: 'email', label: '校園信箱', req: false },
-        { key: 'confirmed', label: '正取確認', req: false }
-      ];
-
-      document.getElementById('bulkColumnMappingGrid').innerHTML = fields.map((f) => `
-        <div>
-          <label class="block font-bold text-[#243a32] mb-1">${f.label}</label>
-          <select onchange="bulkColMap['${f.key}'] = Number(this.value); recomputeBulkPreview();"
-            class="w-full rounded-lg border border-[#dfe4dc] bg-white px-2 py-1.5 text-xs">
-            ${colOptionsHtml(bulkColMap[f.key], f.req)}
-          </select>
-        </div>
-      `).join('');
-    }
-
-    function normalizeSessionLabel(raw, fallback) {
-      const s = String(raw || '').trim();
-      if (!s) return fallback;
-      if (/上午\s*A|AM-?A/i.test(s)) return '上午A';
-      if (/上午\s*B|AM-?B/i.test(s)) return '上午B';
-      if (/上午|AM/i.test(s)) return '上午A';
-      if (/下午|PM/i.test(s)) return '下午';
-      return fallback;
+    function normalizeImportedSession(rawVal, fallbackSession) {
+      const s = String(rawVal || '').trim().toUpperCase();
+      if (!s) return { type: 'regular', session: fallbackSession };
+      if (s.includes('備取') || s.includes('候補') || s.includes('WAIT')) {
+        return { type: 'waitlist', session: '備取' };
+      }
+      if (s.includes('上午A') || s === 'A' || s.includes('AMA')) {
+        return { type: 'regular', session: '上午A' };
+      }
+      if (s.includes('上午B') || s === 'B' || s.includes('AMB')) {
+        return { type: 'regular', session: '上午B' };
+      }
+      if (s.includes('上午')) {
+        return { type: 'regular', session: '上午A' };
+      }
+      if (s.includes('下午') || s.includes('PM')) {
+        return { type: 'regular', session: '下午' };
+      }
+      return { type: 'regular', session: fallbackSession };
     }
 
     function recomputeBulkPreview() {
+      if (!bulkRawRows.length) return;
       const hasHeader = document.getElementById('bulkHasHeaderChk').checked;
       const mode = document.getElementById('bulkImportModeSelect').value;
       const defaultSession = document.getElementById('bulkDefaultSessionSelect').value;
 
       document.getElementById('bulkReplaceWarningBox').classList.toggle('hidden', mode !== 'replace');
 
+      const mapIdx = {};
+      BULK_FIELDS.forEach((f) => {
+        const el = document.getElementById(`bulk-map-${f.key}`);
+        mapIdx[f.key] = el ? Number(el.value) : -1;
+      });
+
       const startIdx = hasHeader ? 1 : 0;
-      const seenIdsInBatch = new Set();
-      bulkValidatedRecords = [];
+      const seenIdsInFile = new Set();
+      bulkMappedRecords = [];
 
       let validNewCount = 0;
       let validUpdateCount = 0;
+      let waitlistCount = 0;
       let skipCount = 0;
       let errorCount = 0;
 
-      const previewRowsHtml = [];
+      for (let r = startIdx; r < bulkRawRows.length; r++) {
+        const row = bulkRawRows[r];
+        const getVal = (k) => (mapIdx[k] >= 0 && row[mapIdx[k]] !== undefined) ? String(row[mapIdx[k]]).trim() : '';
 
-      for (let r = startIdx; r < bulkRawGrid.length; r++) {
-        const row = bulkRawGrid[r] || [];
-        const getCell = (colIdx) => (colIdx >= 0 && colIdx < row.length) ? String(row[colIdx] || '').trim() : '';
+        const rawNo = getVal('no');
+        const className = getVal('className');
+        const seatRaw = getVal('seat');
+        const id = getVal('id').toUpperCase();
+        const name = getVal('name');
+        const rawSession = getVal('session');
+        const rawEmail = getVal('email');
+        const pref = getVal('pref') || '上午/下午皆可';
 
-        const rawNo = getCell(bulkColMap.no);
-        const className = getCell(bulkColMap.className);
-        const seatNum = Number(getCell(bulkColMap.seat));
-        const stuId = getCell(bulkColMap.id).toUpperCase();
-        const name = getCell(bulkColMap.name);
-        const session = normalizeSessionLabel(getCell(bulkColMap.session), defaultSession);
-        const rawEmail = getCell(bulkColMap.email);
-        const rawConf = getCell(bulkColMap.confirmed);
+        if (!className && !id && !name) continue;
 
-        const isTeacherTest = className === '教師測試' || stuId === 'CHUNYICHOU' || stuId === 'YIYUNCHEN';
-        const finalId = isTeacherTest ? stuId.toLowerCase() : stuId;
-        const email = rawEmail || (isTeacherTest ? `${finalId}@kcislk.ntpc.edu.tw` : `${finalId}@stu.kcislk.ntpc.edu.tw`);
-        const confirmed = /已確認|true|yes|1|✓|是/i.test(rawConf);
+        let status = 'valid';
+        let statusNote = '';
 
-        let statusType = 'new';
-        let statusLabel = '＋ 新增正取';
-        let statusBadgeCls = 'bg-[#e7eddf] text-[#234c3c]';
-
-        if (!finalId || !name || !className || Number.isNaN(seatNum) || seatNum <= 0) {
-          statusType = 'error';
-          statusLabel = '✕ 欄位缺漏';
-          statusBadgeCls = 'bg-[#fdf0f1] text-[#992634]';
+        if (!id || !name) {
+          status = 'error';
+          statusNote = '缺少學號或姓名';
           errorCount++;
-        } else if (seenIdsInBatch.has(finalId.toLowerCase())) {
-          statusType = 'error';
-          statusLabel = '✕ 檔內重複';
-          statusBadgeCls = 'bg-[#fdf0f1] text-[#992634]';
+        } else if (seenIdsInFile.has(id)) {
+          status = 'error';
+          statusNote = '檔案內學號重複';
           errorCount++;
         } else {
-          seenIdsInBatch.add(finalId.toLowerCase());
-          const existsInSystem = appState.students.some((s) => s.id.toLowerCase() === finalId.toLowerCase());
+          seenIdsInFile.add(id);
+          const normSess = normalizeImportedSession(rawSession, defaultSession);
+          const existingStu = appState.students.find((s) => s.id.toLowerCase() === id.toLowerCase());
 
-          if (existsInSystem && mode === 'append') {
-            statusType = 'skip';
-            statusLabel = '↷ 已存在略過';
-            statusBadgeCls = 'bg-[#f3f5f1] text-[#52625a]';
+          if (normSess.type === 'waitlist') {
+            status = 'waitlist';
+            statusNote = '匯入為備取名單';
+            waitlistCount++;
+          } else if (mode === 'append' && existingStu) {
+            status = 'skip';
+            statusNote = '已存在（略過）';
             skipCount++;
-          } else if (existsInSystem && mode === 'upsert') {
-            statusType = 'update';
-            statusLabel = '↻ 更新資料';
-            statusBadgeCls = 'bg-[#eef4f8] text-[#244b63]';
+          } else if (mode === 'upsert' && existingStu) {
+            status = 'update';
+            statusNote = '更新基本資料';
             validUpdateCount++;
           } else {
-            statusType = 'new';
-            statusLabel = '＋ 新增正取';
-            statusBadgeCls = 'bg-[#e7eddf] text-[#234c3c]';
+            status = 'new';
+            statusNote = '新增為正取';
             validNewCount++;
           }
-        }
 
-        if (statusType === 'new' || statusType === 'update') {
-          bulkValidatedRecords.push({
-            statusType,
+          const isTeacherTest = className === '教師測試';
+          const email = rawEmail || (isTeacherTest ? `${id}@kcislk.ntpc.edu.tw` : `${id}@stu.kcislk.ntpc.edu.tw`);
+
+          bulkMappedRecords.push({
+            rowNum: r + 1,
+            status,
+            statusNote,
             no: Number(rawNo) || 0,
-            className,
-            seat: seatNum,
-            id: finalId,
+            className: className || '未填',
+            seat: Number(seatRaw) || 0,
+            id,
             name,
-            session,
-            isTeacherTest,
+            sessionType: normSess.type,
+            session: normSess.session,
             email,
-            confirmed
+            pref
           });
+          continue;
         }
 
-        previewRowsHtml.push(`
-          <tr class="${statusType === 'error' ? 'bg-[#fdf0f1]/50' : ''}">
-            <td class="px-3 py-2 text-[#52625a]">第 ${r + 1} 列</td>
-            <td class="px-3 py-2"><span class="rounded px-2 py-0.5 text-[11px] font-bold ${statusBadgeCls}">${statusLabel}</span></td>
-            <td class="px-3 py-2">${escapeHtml(rawNo || '自動')}</td>
-            <td class="px-3 py-2 font-medium">${escapeHtml(className || '—')}</td>
-            <td class="px-3 py-2">${Number.isNaN(seatNum) || seatNum <= 0 ? '—' : seatNum}</td>
-            <td class="px-3 py-2 font-bold">${escapeHtml(finalId || '—')}</td>
-            <td class="px-3 py-2 font-bold text-[#243a32]">${escapeHtml(name || '—')}</td>
-            <td class="px-3 py-2">${escapeHtml(session)}</td>
-            <td class="px-3 py-2 text-[#52625a]">${escapeHtml(email || '—')}</td>
-          </tr>
-        `);
+        bulkMappedRecords.push({
+          rowNum: r + 1,
+          status,
+          statusNote,
+          no: Number(rawNo) || 0,
+          className: className || '—',
+          seat: Number(seatRaw) || 0,
+          id: id || '（缺）',
+          name: name || '（缺）',
+          sessionType: 'regular',
+          session: rawSession || defaultSession,
+          email: rawEmail || '—',
+          pref
+        });
       }
 
-      document.getElementById('bulkPreviewTableBody').innerHTML = previewRowsHtml.join('');
       document.getElementById('bulkPreviewSummaryBadges').innerHTML = `
-        <span class="rounded bg-[#e7eddf] px-2.5 py-1 font-bold text-[#234c3c]">新增 ${validNewCount} 筆</span>
-        <span class="rounded bg-[#eef4f8] px-2.5 py-1 font-bold text-[#244b63]">更新 ${validUpdateCount} 筆</span>
-        <span class="rounded bg-[#f3f5f1] px-2.5 py-1 font-bold text-[#52625a]">略過 ${skipCount} 筆</span>
-        <span class="rounded bg-[#fdf0f1] px-2.5 py-1 font-bold text-[#992634]">錯誤 ${errorCount} 筆</span>
+        <span class="rounded bg-[#e7eddf] px-2.5 py-1 font-bold text-[#234c3c]">新增正取：${validNewCount}</span>
+        <span class="rounded bg-[#eef4f8] px-2.5 py-1 font-bold text-[#244b63]">更新正取：${validUpdateCount}</span>
+        <span class="rounded bg-[#fdf6e7] px-2.5 py-1 font-bold text-[#825612]">匯入備取：${waitlistCount}</span>
+        ${skipCount > 0 ? `<span class="rounded bg-[#f4f7f1] px-2.5 py-1 font-bold text-[#52625a]">略過重複：${skipCount}</span>` : ''}
+        ${errorCount > 0 ? `<span class="rounded bg-[#fdf0f1] px-2.5 py-1 font-bold text-[#992634]">異常略過：${errorCount}</span>` : ''}
       `;
 
-      const totalReady = bulkValidatedRecords.length;
-      const confirmBtn = document.getElementById('bulkConfirmImportBtn');
-      confirmBtn.disabled = totalReady === 0;
-      confirmBtn.textContent = totalReady > 0 ? `確認匯入總名單（共 ${totalReady} 筆有效）` : '確認匯入總名單';
-      document.getElementById('bulkFooterHint').textContent = totalReady > 0
-        ? `已準備寫入 ${totalReady} 筆有效名單（錯誤或略過列不會寫入）`
-        : '無可匯入的有效資料列，請檢查欄位對應與必填欄位';
+      document.getElementById('bulkPreviewTableBody').innerHTML = bulkMappedRecords.slice(0, 150).map((rec) => {
+        let badgeCls = 'bg-[#e7eddf] text-[#234c3c]';
+        if (rec.status === 'update') badgeCls = 'bg-[#eef4f8] text-[#244b63]';
+        else if (rec.status === 'waitlist') badgeCls = 'bg-[#fdf6e7] text-[#825612]';
+        else if (rec.status === 'skip') badgeCls = 'bg-[#f4f7f1] text-[#52625a]';
+        else if (rec.status === 'error') badgeCls = 'bg-[#fdf0f1] text-[#992634]';
+
+        return `
+          <tr>
+            <td class="px-3 py-2 text-[#52625a]">${rec.rowNum}</td>
+            <td class="px-3 py-2"><span class="rounded px-2 py-0.5 text-[11px] font-bold ${badgeCls}">${rec.statusNote}</span></td>
+            <td class="px-3 py-2">${rec.no || '自動'}</td>
+            <td class="px-3 py-2 font-bold">${escapeHtml(rec.className)}</td>
+            <td class="px-3 py-2">${rec.seat || '—'}</td>
+            <td class="px-3 py-2 font-bold">${escapeHtml(rec.id)}</td>
+            <td class="px-3 py-2 font-bold text-[#243a32]">${escapeHtml(rec.name)}</td>
+            <td class="px-3 py-2">${escapeHtml(rec.session)}</td>
+            <td class="px-3 py-2 text-[#52625a]">${escapeHtml(rec.email)}</td>
+          </tr>
+        `;
+      }).join('');
+
+      const actionableCount = validNewCount + validUpdateCount + waitlistCount;
+      const btn = document.getElementById('bulkConfirmImportBtn');
+      btn.disabled = actionableCount === 0;
+      document.getElementById('bulkFooterHint').textContent = actionableCount > 0
+        ? `共檢核 ${bulkMappedRecords.length} 列，可匯入 ${actionableCount} 筆有效學生資料`
+        : '無可匯入的有效資料列，請檢查欄位對應或檔案內容';
     }
 
     function executeBulkImport() {
-      if (bulkValidatedRecords.length === 0) return;
       const mode = document.getElementById('bulkImportModeSelect').value;
+      const actionable = bulkMappedRecords.filter((r) => ['new', 'update', 'waitlist'].includes(r.status));
+      if (actionable.length === 0) return;
 
       if (mode === 'replace') {
         appState.students = [];
+        appState.waitlist = [];
       }
 
-      let maxNo = appState.students.reduce((m, s) => Math.max(m, Number(s.no || 0)), 0);
-      let added = 0;
-      let updated = 0;
+      let nextNo = appState.students.reduce((m, s) => Math.max(m, Number(s.no || 0)), 0) + 1;
+      let addedCount = 0;
+      let updatedCount = 0;
+      let waitAddedCount = 0;
 
-      bulkValidatedRecords.forEach((rec) => {
+      actionable.forEach((rec) => {
+        if (rec.sessionType === 'waitlist') {
+          appState.waitlist = appState.waitlist.filter((w) => w.id.toLowerCase() !== rec.id.toLowerCase());
+          appState.waitlist.push({
+            rank: appState.waitlist.length + 1,
+            className: rec.className,
+            seat: rec.seat,
+            id: rec.id,
+            name: rec.name,
+            pref: rec.pref
+          });
+          waitAddedCount++;
+          return;
+        }
+
         const existing = appState.students.find((s) => s.id.toLowerCase() === rec.id.toLowerCase());
         if (existing) {
           existing.className = rec.className;
@@ -5063,15 +5154,11 @@ function appendMailLog(type, studentId, name, email, subject, status) {
           existing.name = rec.name;
           existing.session = rec.session;
           existing.email = rec.email;
-          existing.isTeacherTest = rec.isTeacherTest;
           if (rec.no > 0) existing.no = rec.no;
-          if (rec.confirmed && !existing.confirmed) {
-            existing.confirmed = true;
-            existing.confirmedAt = nowFullTimestamp();
-          }
-          updated++;
+          updatedCount++;
         } else {
-          const assignedNo = rec.no > 0 ? rec.no : (++maxNo);
+          const assignedNo = rec.no > 0 ? rec.no : nextNo++;
+          if (rec.no >= nextNo) nextNo = rec.no + 1;
           appState.students.push({
             no: assignedNo,
             className: rec.className,
@@ -5079,11 +5166,11 @@ function appendMailLog(type, studentId, name, email, subject, status) {
             id: rec.id,
             name: rec.name,
             session: rec.session,
-            isTeacherTest: rec.isTeacherTest,
+            isTeacherTest: rec.className === '教師測試',
             email: rec.email,
             password: rec.id,
-            confirmed: rec.confirmed,
-            confirmedAt: rec.confirmed ? nowFullTimestamp() : '',
+            confirmed: false,
+            confirmedAt: '',
             shifts: [],
             shiftsLocked: false,
             shiftsLockedAt: '',
@@ -5103,17 +5190,19 @@ function appendMailLog(type, studentId, name, email, subject, status) {
             urgentAlert: false,
             teacherNote: ''
           });
-          added++;
+          addedCount++;
         }
       });
+
+      appState.waitlist.forEach((w, idx) => { w.rank = idx + 1; });
 
       saveAppState();
       closeBulkImportModal();
       renderRosterAdminTable();
-      showToast(`總名單匯入完成！新增 ${added} 筆、更新 ${updated} 筆（目前總計 ${appState.students.length} 筆）`, '✓');
+      showToast(`✓ 總名單匯入完成：新增正取 ${addedCount} 筆、更新 ${updatedCount} 筆、備取 ${waitAddedCount} 筆`, '✓');
     }
 
-    /* --- TAB ④: CMS, VIDEO & 10-QUESTION QUIZ EDITOR --- */
+    /* --- TAB ④: FULL-SITE CMS, VIDEO PATH & LOCKED QUIZ EDITOR --- */
     function renderCmsEditorSection() {
       const cfg = appState.siteConfig;
       document.getElementById('cmsHeroMetaInput').value = cfg.heroMeta;
@@ -5123,32 +5212,32 @@ function appendMailLog(type, studentId, name, email, subject, status) {
 
       document.getElementById('cmsAnnouncementsList').innerHTML = cfg.announcements.map((a, idx) => `
         <div class="grid grid-cols-1 gap-2 rounded-xl border border-[#dfe4dc] bg-[#fafaf5] p-3 sm:grid-cols-12 items-center">
-          <input type="text" data-ann-title="${idx}" value="${escapeAttr(a.title)}" class="sm:col-span-4 rounded-lg border border-[#dfe4dc] bg-white px-2.5 py-1.5 text-xs font-bold" />
-          <input type="text" data-ann-desc="${idx}" value="${escapeAttr(a.desc)}" class="sm:col-span-7 rounded-lg border border-[#dfe4dc] bg-white px-2.5 py-1.5 text-xs" />
-          <button type="button" onclick="removeCmsAnnouncement(${idx})" class="sm:col-span-1 rounded border border-[#ecc4c8] bg-[#fdf0f1] py-1.5 text-xs font-bold text-[#992634]">刪</button>
+          <input type="text" data-cms-ann-title="${idx}" value="${escapeAttr(a.title)}" class="sm:col-span-4 rounded border border-[#dfe4dc] bg-white px-2.5 py-1.5 text-xs font-bold" />
+          <input type="text" data-cms-ann-desc="${idx}" value="${escapeAttr(a.desc)}" class="sm:col-span-7 rounded border border-[#dfe4dc] bg-white px-2.5 py-1.5 text-xs" />
+          <button type="button" onclick="removeCmsAnnouncement(${idx})" class="sm:col-span-1 text-xs font-bold text-[#992634]">刪除</button>
         </div>
       `).join('');
 
       document.getElementById('cmsAmAgendaList').innerHTML = cfg.amAgenda.map((r, idx) => `
-        <div class="flex gap-1.5">
-          <input type="text" data-am-time="${idx}" value="${escapeAttr(r.time)}" class="w-28 rounded border border-[#dfe4dc] bg-white px-2 py-1 text-xs font-bold" />
-          <input type="text" data-am-desc="${idx}" value="${escapeAttr(r.desc)}" class="flex-1 rounded border border-[#dfe4dc] bg-white px-2 py-1 text-xs" />
-          <button type="button" onclick="removeCmsAgendaRow('am', ${idx})" class="rounded border border-[#ecc4c8] bg-[#fdf0f1] px-2 text-xs font-bold text-[#992634]">✕</button>
+        <div class="flex items-center gap-1.5">
+          <input type="text" data-cms-am-time="${idx}" value="${escapeAttr(r.time)}" class="tabular-nums w-28 rounded border border-[#dfe4dc] bg-white px-2 py-1 text-xs font-bold" />
+          <input type="text" data-cms-am-desc="${idx}" value="${escapeAttr(r.desc)}" class="flex-1 rounded border border-[#dfe4dc] bg-white px-2 py-1 text-xs" />
+          <button type="button" onclick="removeCmsAgendaRow('am', ${idx})" class="text-xs font-bold text-[#992634] px-1">✕</button>
         </div>
       `).join('');
 
       document.getElementById('cmsPmAgendaList').innerHTML = cfg.pmAgenda.map((r, idx) => `
-        <div class="flex gap-1.5">
-          <input type="text" data-pm-time="${idx}" value="${escapeAttr(r.time)}" class="w-28 rounded border border-[#dfe4dc] bg-white px-2 py-1 text-xs font-bold" />
-          <input type="text" data-pm-desc="${idx}" value="${escapeAttr(r.desc)}" class="flex-1 rounded border border-[#dfe4dc] bg-white px-2 py-1 text-xs" />
-          <button type="button" onclick="removeCmsAgendaRow('pm', ${idx})" class="rounded border border-[#ecc4c8] bg-[#fdf0f1] px-2 text-xs font-bold text-[#992634]">✕</button>
+        <div class="flex items-center gap-1.5">
+          <input type="text" data-cms-pm-time="${idx}" value="${escapeAttr(r.time)}" class="tabular-nums w-28 rounded border border-[#dfe4dc] bg-white px-2 py-1 text-xs font-bold" />
+          <input type="text" data-cms-pm-desc="${idx}" value="${escapeAttr(r.desc)}" class="flex-1 rounded border border-[#dfe4dc] bg-white px-2 py-1 text-xs" />
+          <button type="button" onclick="removeCmsAgendaRow('pm', ${idx})" class="text-xs font-bold text-[#992634] px-1">✕</button>
         </div>
       `).join('');
 
       document.getElementById('cmsMilestonesList').innerHTML = cfg.milestones.map((m, idx) => `
         <div class="rounded-xl border border-[#dfe4dc] bg-[#fafaf5] p-3 space-y-1.5">
-          <input type="text" data-ms-title="${idx}" value="${escapeAttr(m.title)}" class="w-full rounded border border-[#dfe4dc] bg-white px-2.5 py-1 text-xs font-bold" />
-          <textarea rows="2" data-ms-desc="${idx}" class="w-full rounded border border-[#dfe4dc] bg-white px-2.5 py-1 text-xs">${escapeHtml(m.desc)}</textarea>
+          <input type="text" data-cms-ms-title="${idx}" value="${escapeAttr(m.title)}" class="w-full rounded border border-[#dfe4dc] bg-white px-2.5 py-1 text-xs font-bold" />
+          <textarea rows="2" data-cms-ms-desc="${idx}" class="w-full rounded border border-[#dfe4dc] bg-white px-2.5 py-1 text-xs">${escapeHtml(m.desc)}</textarea>
         </div>
       `).join('');
 
@@ -5158,32 +5247,43 @@ function appendMailLog(type, studentId, name, email, subject, status) {
       document.getElementById('cmsPassScoreInput').value = vCfg.passScore;
       document.getElementById('cmsVideoUrlInput').disabled = vCfg.locked;
       document.getElementById('cmsVideoUrlInput').classList.toggle('locked-field', vCfg.locked);
-      document.getElementById('cmsVideoLockBtn').textContent = vCfg.locked ? '🔒 影片鎖定指定路徑（點此解除）' : '🔓 影片路徑可編輯（點此鎖定）';
+      document.getElementById('cmsVideoLockBtn').textContent = vCfg.locked
+        ? '🔒 影片鎖定指定路徑（點此解鎖修改）'
+        : '🔓 已解鎖影片路徑（編輯後請點儲存）';
 
       const qLocked = appState.quizLocked;
-      document.getElementById('cmsQuizLockBtn').textContent = qLocked ? '🔒 問題題目鎖定（點此解除鎖定）' : '🔓 題庫編輯已解鎖（點此鎖定題目）';
-      document.getElementById('cmsQuizLockBtn').className = qLocked
-        ? 'rounded-lg border border-[#234c3c] bg-[#edf1e7] px-3.5 py-2 text-xs font-bold text-[#234c3c]'
-        : 'rounded-lg border border-[#e9d5ae] bg-[#fdf6e7] px-3.5 py-2 text-xs font-bold text-[#825612]';
+      document.getElementById('cmsQuizLockBtn').textContent = qLocked
+        ? '🔒 問題題目鎖定（點此解除鎖定）'
+        : '🔓 題目編輯已解鎖（完成請點儲存）';
 
       document.getElementById('cmsQuestionsEditorWrap').innerHTML = appState.questions.map((q, idx) => `
-        <div class="rounded-xl border border-[#dfe4dc] bg-[#fafaf5] p-4 space-y-2 text-xs">
-          <div class="flex flex-wrap items-center justify-between gap-2">
-            <span class="font-bold text-[#234c3c]">第 ${q.num} 題【${escapeHtml(q.type)}】（${q.points} 分）</span>
-            <span class="text-[#52625a]">${qLocked ? '🔒 已鎖定唯讀' : '✏️ 可編輯'}</span>
+        <div class="rounded-xl border border-[#dfe4dc] ${qLocked ? 'bg-[#fafaf5]' : 'bg-white'} p-4 space-y-2.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-[#234c3c]">第 ${q.num} 題（${escapeHtml(q.type)}｜${q.points} 分）</span>
+            <span class="text-xs text-[#52625a]">${qLocked ? '🔒 題目已鎖定' : '✏️ 可編輯模式'}</span>
           </div>
-          <textarea rows="2" data-q-text="${idx}" ${qLocked ? 'disabled' : ''}
-            class="w-full rounded-lg border border-[#dfe4dc] bg-white px-3 py-1.5 text-xs sm:text-sm ${qLocked ? 'locked-field' : ''}">${escapeHtml(q.text)}</textarea>
+          <div>
+            <label class="block text-[11px] font-bold text-[#52625a] mb-1">題目題幹</label>
+            <textarea rows="2" data-q-text="${idx}" ${qLocked ? 'disabled' : ''}
+              class="w-full rounded-lg border border-[#dfe4dc] px-3 py-1.5 text-xs sm:text-sm ${qLocked ? 'locked-field' : ''}">${escapeHtml(q.text)}</textarea>
+          </div>
+          ${Array.isArray(q.options) && q.options.length > 0 ? `
+            <div>
+              <label class="block text-[11px] font-bold text-[#52625a] mb-1">單選選項（每行一個選項）</label>
+              <textarea rows="4" data-q-opts="${idx}" ${qLocked ? 'disabled' : ''}
+                class="w-full rounded-lg border border-[#dfe4dc] px-3 py-1.5 text-xs ${qLocked ? 'locked-field' : ''}">${escapeHtml(q.options.join('\n'))}</textarea>
+            </div>
+          ` : ''}
           <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
             <div>
-              <label class="block text-[11px] font-bold text-[#52625a] mb-0.5">參考答案</label>
-              <input type="text" data-q-ref="${idx}" ${qLocked ? 'disabled' : ''} value="${escapeAttr(q.refAnswer || '')}"
-                class="w-full rounded border border-[#dfe4dc] bg-white px-2.5 py-1 text-xs ${qLocked ? 'locked-field' : ''}" />
+              <label class="block text-[11px] font-bold text-[#52625a] mb-1">參考答案</label>
+              <input type="text" data-q-ref="${idx}" value="${escapeAttr(q.refAnswer)}" ${qLocked ? 'disabled' : ''}
+                class="w-full rounded-lg border border-[#dfe4dc] px-3 py-1.5 text-xs ${qLocked ? 'locked-field' : ''}" />
             </div>
             <div>
-              <label class="block text-[11px] font-bold text-[#52625a] mb-0.5">教師給分依據</label>
-              <input type="text" data-q-rubric="${idx}" ${qLocked ? 'disabled' : ''} value="${escapeAttr(q.rubric || '')}"
-                class="w-full rounded border border-[#dfe4dc] bg-white px-2.5 py-1 text-xs ${qLocked ? 'locked-field' : ''}" />
+              <label class="block text-[11px] font-bold text-[#52625a] mb-1">評分標準</label>
+              <input type="text" data-q-rubric="${idx}" value="${escapeAttr(q.rubric)}" ${qLocked ? 'disabled' : ''}
+                class="w-full rounded-lg border border-[#dfe4dc] px-3 py-1.5 text-xs ${qLocked ? 'locked-field' : ''}" />
             </div>
           </div>
         </div>
@@ -5192,27 +5292,23 @@ function appendMailLog(type, studentId, name, email, subject, status) {
 
     function addCmsAnnouncement() {
       appState.siteConfig.announcements.push({ title: '新公告標題', desc: '請輸入公告內容說明' });
-      saveAppState();
       renderCmsEditorSection();
     }
 
     function removeCmsAnnouncement(idx) {
       appState.siteConfig.announcements.splice(idx, 1);
-      saveAppState();
       renderCmsEditorSection();
     }
 
-    function addCmsAgendaRow(which) {
-      const list = which === 'am' ? appState.siteConfig.amAgenda : appState.siteConfig.pmAgenda;
-      list.push({ time: '00:00–00:30', desc: '新增行程說明' });
-      saveAppState();
+    function addCmsAgendaRow(half) {
+      if (half === 'am') appState.siteConfig.amAgenda.push({ time: '12:00–12:30', desc: '新增行程內容' });
+      else appState.siteConfig.pmAgenda.push({ time: '16:30–17:00', desc: '新增行程內容' });
       renderCmsEditorSection();
     }
 
-    function removeCmsAgendaRow(which, idx) {
-      const list = which === 'am' ? appState.siteConfig.amAgenda : appState.siteConfig.pmAgenda;
-      list.splice(idx, 1);
-      saveAppState();
+    function removeCmsAgendaRow(half, idx) {
+      if (half === 'am') appState.siteConfig.amAgenda.splice(idx, 1);
+      else appState.siteConfig.pmAgenda.splice(idx, 1);
       renderCmsEditorSection();
     }
 
@@ -5224,35 +5320,24 @@ function appendMailLog(type, studentId, name, email, subject, status) {
       cfg.contactInfo = document.getElementById('cmsContactInput').value.trim();
 
       cfg.announcements.forEach((a, idx) => {
-        const t = document.querySelector(`[data-ann-title="${idx}"]`);
-        const d = document.querySelector(`[data-ann-desc="${idx}"]`);
-        if (t) a.title = t.value.trim();
-        if (d) a.desc = d.value.trim();
+        a.title = document.querySelector(`[data-cms-ann-title="${idx}"]`).value.trim();
+        a.desc = document.querySelector(`[data-cms-ann-desc="${idx}"]`).value.trim();
       });
-
       cfg.amAgenda.forEach((r, idx) => {
-        const t = document.querySelector(`[data-am-time="${idx}"]`);
-        const d = document.querySelector(`[data-am-desc="${idx}"]`);
-        if (t) r.time = t.value.trim();
-        if (d) r.desc = d.value.trim();
+        r.time = document.querySelector(`[data-cms-am-time="${idx}"]`).value.trim();
+        r.desc = document.querySelector(`[data-cms-am-desc="${idx}"]`).value.trim();
       });
-
       cfg.pmAgenda.forEach((r, idx) => {
-        const t = document.querySelector(`[data-pm-time="${idx}"]`);
-        const d = document.querySelector(`[data-pm-desc="${idx}"]`);
-        if (t) r.time = t.value.trim();
-        if (d) r.desc = d.value.trim();
+        r.time = document.querySelector(`[data-cms-pm-time="${idx}"]`).value.trim();
+        r.desc = document.querySelector(`[data-cms-pm-desc="${idx}"]`).value.trim();
       });
-
       cfg.milestones.forEach((m, idx) => {
-        const t = document.querySelector(`[data-ms-title="${idx}"]`);
-        const d = document.querySelector(`[data-ms-desc="${idx}"]`);
-        if (t) m.title = t.value.trim();
-        if (d) m.desc = d.value.trim();
+        m.title = document.querySelector(`[data-cms-ms-title="${idx}"]`).value.trim();
+        m.desc = document.querySelector(`[data-cms-ms-desc="${idx}"]`).value.trim();
       });
 
       saveAppState();
-      showToast('已儲存活動總覽首頁內容與行程設定！', '✓');
+      showToast('已儲存活動總覽首頁公告與行程設定！', '✓');
     }
 
     function toggleVideoPathLock() {
@@ -5274,147 +5359,110 @@ function appendMailLog(type, studentId, name, email, subject, status) {
 
       if (!appState.quizLocked) {
         appState.questions.forEach((q, idx) => {
-          const t = document.querySelector(`[data-q-text="${idx}"]`);
-          const r = document.querySelector(`[data-q-ref="${idx}"]`);
-          const rb = document.querySelector(`[data-q-rubric="${idx}"]`);
-          if (t) q.text = t.value.trim();
-          if (r) q.refAnswer = r.value.trim();
-          if (rb) q.rubric = rb.value.trim();
+          q.text = document.querySelector(`[data-q-text="${idx}"]`).value.trim();
+          const optEl = document.querySelector(`[data-q-opts="${idx}"]`);
+          if (optEl) {
+            q.options = optEl.value.split('\n').map((x) => x.trim()).filter(Boolean);
+          }
+          q.refAnswer = document.querySelector(`[data-q-ref="${idx}"]`).value.trim();
+          q.rubric = document.querySelector(`[data-q-rubric="${idx}"]`).value.trim();
         });
+        appState.quizLocked = true;
       }
 
+      appState.videoConfig.locked = true;
       saveAppState();
-      showToast('已儲存行前影片路徑與 10 題題庫設定！', '✓');
+      renderCmsEditorSection();
+      showToast('已儲存影片指定路徑與 10 題題庫並重新鎖定！', '🔒');
     }
 
-    /* --- TAB ⑤: ADMIN ACCOUNTS, REAL MAIL ENGINE & GOOGLE SHEETS SYNC --- */
+    /* --- TAB ⑤: LIVE EMAIL ENGINE, SHEETS SYNC & ADMIN MANAGEMENT --- */
     function renderSystemAdminSection() {
-      document.getElementById('sysGasUrlInput').value = appState.gasWebAppUrl || '';
-      updateTeacherMailEngineBanner();
-      renderMailLogsTable();
+      document.getElementById('sysGasUrlInput').value = getActiveGasUrl();
 
-      const curAdm = appState.admins.find((a) => a.id === authSession?.adminId);
-      const testEmailEl = document.getElementById('sysTestEmailInput');
-      if (testEmailEl && !testEmailEl.value && curAdm) {
-        testEmailEl.value = curAdm.email;
-      }
+      const logs = Array.isArray(appState.mailLogs) ? appState.mailLogs : [];
+      document.getElementById('sysMailLogsBody').innerHTML = logs.length === 0
+        ? `<tr><td colspan="5" class="px-3 py-4 text-center text-[#52625a]">尚無發信紀錄</td></tr>`
+        : logs.slice(0, 30).map((l) => `
+            <tr>
+              <td class="px-3 py-2 text-[#52625a]">${escapeHtml(l.time)}</td>
+              <td class="px-3 py-2 font-bold text-[#234c3c]">${escapeHtml(l.type)}</td>
+              <td class="px-3 py-2">${escapeHtml(l.recipient)}</td>
+              <td class="px-3 py-2">${escapeHtml(l.subject)}</td>
+              <td class="px-3 py-2 font-bold text-[#234c3c]">✓ ${escapeHtml(l.status)}</td>
+            </tr>
+          `).join('');
 
       document.getElementById('sysAdminsList').innerHTML = appState.admins.map((a, idx) => `
-        <div class="rounded-xl border border-[#dfe4dc] bg-[#fafaf5] p-4 space-y-2.5 text-xs">
+        <div class="rounded-xl border border-[#dfe4dc] bg-[#fafaf5] p-4 space-y-2.5">
           <div class="flex items-center justify-between">
-            <span class="font-bold text-sm text-[#243a32]">${escapeHtml(a.name)}</span>
-            <span class="rounded bg-[#edf1e7] px-2 py-0.5 font-bold text-[#234c3c]">${a.role === 'admin' ? '系統管理員' : '現場點名人員'}</span>
+            <div>
+              <div class="text-sm font-bold text-[#243a32]">${escapeHtml(a.name)}</div>
+              <div class="tabular-nums text-xs text-[#52625a]">${escapeHtml(a.email)}</div>
+            </div>
+            <span class="rounded bg-[#234c3c] px-2 py-0.5 text-[11px] font-bold text-white">
+              ${a.role === 'admin' ? '管理員' : '點名工作人員'}
+            </span>
           </div>
-          <div class="tabular-nums text-[#52625a]">帳號信箱：${escapeHtml(a.email)}</div>
-          <div class="flex gap-2">
-            <input type="text" id="sysAdmPass-${idx}" value="${escapeAttr(a.password)}" class="tabular-nums flex-1 rounded-lg border border-[#dfe4dc] bg-white px-2.5 py-1.5 text-xs" />
-            <button type="button" onclick="updateAdminPassword(${idx})" class="btn-outline rounded-lg px-3 py-1.5 text-xs font-bold">更新密碼</button>
+          <div class="flex items-center gap-2">
+            <input type="text" id="adm-pass-${idx}" value="${escapeAttr(a.password)}"
+              class="tabular-nums flex-1 rounded-lg border border-[#dfe4dc] bg-white px-2.5 py-1.5 text-xs" />
+            <button type="button" onclick="updateAdminPassword(${idx})" class="btn-outline rounded-lg px-3 py-1.5 text-xs font-bold">
+              變更密碼
+            </button>
           </div>
         </div>
       `).join('');
     }
 
-    function renderMailLogsTable() {
-      const tbody = document.getElementById('sysMailLogsBody');
-      if (!tbody) return;
-      const logs = Array.isArray(appState.mailLogs) ? appState.mailLogs : [];
-      if (logs.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="px-3 py-4 text-center text-[#52625a]">尚無本機發信紀錄（正式寄出之紀錄亦會同步寫入 Google 試算表「系統發信紀錄」分頁）</td></tr>';
-        return;
-      }
-      tbody.innerHTML = logs.slice(0, 30).map((lg) => `
-        <tr>
-          <td class="px-3 py-2 text-[#52625a]">${escapeHtml(lg.time)}</td>
-          <td class="px-3 py-2 font-bold text-[#234c3c]">${escapeHtml(lg.type)}</td>
-          <td class="px-3 py-2">${escapeHtml(lg.recipient)}</td>
-          <td class="px-3 py-2">${escapeHtml(lg.subject)}</td>
-          <td class="px-3 py-2 font-bold ${lg.status.includes('失敗') ? 'text-[#992634]' : 'text-[#234c3c]'}">${escapeHtml(lg.status)}</td>
-        </tr>
-      `).join('');
-    }
-
-    function clearMailDispatchLogs() {
-      appState.mailLogs = [];
-      saveAppState();
-      renderMailLogsTable();
-      showToast('已清空本機發信紀錄', '✓');
-    }
-
-    function updateAdminPassword(idx) {
-      const inp = document.getElementById(`sysAdmPass-${idx}`);
-      if (!inp || !inp.value.trim()) return;
-      appState.admins[idx].password = inp.value.trim();
-      saveAppState();
-      showToast(`已更新 ${appState.admins[idx].name} 的登入密碼！`, '✓');
-    }
-
-    function addAdminStaffAccount() {
-      const name = document.getElementById('sysNewAdminName').value.trim();
-      const email = document.getElementById('sysNewAdminEmail').value.trim().toLowerCase();
-      const pass = document.getElementById('sysNewAdminPass').value.trim();
-      if (!name || !email || !pass) {
-        showToast('請完整填寫姓名、學校信箱與密碼！', '⚠️');
-        return;
-      }
-      if (email.endsWith('@stu.kcislk.ntpc.edu.tw')) {
-        showToast('學生信箱不可設為教師／工作人員帳號！', '⚠️');
-        return;
-      }
-      const id = email.split('@')[0];
-      appState.admins.push({ id, name, email, password: pass, role: 'staff' });
-      saveAppState();
-      document.getElementById('sysNewAdminName').value = '';
-      document.getElementById('sysNewAdminEmail').value = '';
-      document.getElementById('sysNewAdminPass').value = '';
-      renderSystemAdminSection();
-      showToast(`已新增工作人員帳號：${name}！`, '✓');
-    }
-
     async function saveGasEndpoint() {
       const url = document.getElementById('sysGasUrlInput').value.trim();
+      if (url && !url.startsWith('https://script.google.com/macros/')) {
+        showToast('請輸入正確的 Google Apps Script Web App 網址（https://script.google.com/macros/s/.../exec）', '⚠️');
+        return;
+      }
       appState.gasWebAppUrl = url;
       saveAppState();
       updateTeacherMailEngineBanner();
 
-      if (!isLiveMailBackendAvailable()) {
-        document.getElementById('sysMailQuotaInfo').textContent = '已清除 Apps Script Web App 網址。';
-        showToast('已儲存設定', '✓');
+      if (!url && !isAppsScriptHosted()) {
+        document.getElementById('sysMailQuotaInfo').textContent = '已清除 Apps Script 網址。';
+        showToast('已清除發信引擎網址', '✓');
         return;
       }
 
-      showToast('正在驗證 Apps Script 發信與試算表連線...', '⏳');
+      document.getElementById('sysSyncStatusText').textContent = '連線測試中...';
       try {
         const res = await callMailBackendApi({ action: 'ping' });
         if (res && res.ok) {
-          const quotaText = `✓ 連線成功！發信帳號：${res.senderEmail || '已授權 Google 帳號'}｜今日剩餘可寄信額度：${res.remainingQuota} 封（伺服器時間：${res.serverTime || ''}）`;
-          document.getElementById('sysMailQuotaInfo').textContent = quotaText;
-          document.getElementById('sysSyncStatusText').textContent = `已連線發信引擎（剩餘額度 ${res.remainingQuota} 封）`;
-          showToast('✓ Apps Script 發信引擎連線驗證成功！', '✓');
+          document.getElementById('sysSyncStatusText').textContent = `已連線 (${res.serverTime || nowClockTime()})`;
+          document.getElementById('sysMailQuotaInfo').textContent =
+            `✓ 連線成功！發信帳號：${res.senderEmail || '學校 Google 帳號'}｜今日剩餘可寄信額度：${res.remainingQuota ?? '正常'} 封`;
+          showToast('✓ 校內信箱發信引擎連線驗證成功！', '✓');
         } else {
-          throw new Error((res && res.error) ? res.error : '連線回應異常');
+          throw new Error((res && res.error) || '連線失敗');
         }
       } catch (err) {
-        document.getElementById('sysMailQuotaInfo').textContent = `⚠️ 連線失敗：${err.message}（請確認部署時「誰可以存取」已設為「所有人」）`;
+        document.getElementById('sysSyncStatusText').textContent = '連線異常';
+        document.getElementById('sysMailQuotaInfo').textContent = `⚠️ 連線測試失敗：${err.message}`;
         showToast(`連線驗證失敗：${err.message}`, '⚠️');
       }
     }
 
     async function sendLiveTestEmail() {
-      const targetEmail = document.getElementById('sysTestEmailInput').value.trim();
+      const to = document.getElementById('sysTestEmailInput').value.trim();
       const btn = document.getElementById('sysSendTestMailBtn');
-      if (!targetEmail || !targetEmail.includes('@')) {
-        showToast('請輸入有效的收件學校信箱', '⚠️');
+      if (!to || !to.includes('@')) {
+        showToast('請輸入正確的測試收件信箱', '⚠️');
         return;
       }
       if (!isLiveMailBackendAvailable()) {
-        showToast('請先於上方貼入並儲存 Apps Script Web App 網址！', '⚠️');
+        showToast('請先在上方欄位貼入並儲存 Apps Script Web App 網址！', '⚠️');
         return;
       }
 
       btn.disabled = true;
-      btn.textContent = '正在寄送測試信...';
-
-      const subject = '【康橋 × 舊鞋救命】系統正式上線發信測試通知';
+      btn.textContent = '寄送測試信中...';
       try {
         const res = await callMailBackendApi({
           action: 'sendNotice',
@@ -5422,24 +5470,22 @@ function appendMailLog(type, studentId, name, email, subject, status) {
           recipients: [{
             id: 'TEST',
             name: '測試收件人',
-            email: targetEmail,
+            email: to,
             category: '系統發信測試',
-            subject,
-            message: '這是一封來自「康橋 × 舊鞋救命 2026 服務學習平台」的正式上線發信測試通知。\n\n收到此信件即代表學生信箱驗證碼（OTP）與教師任務通知信功能皆已正常運作！'
+            subject: '【康橋 × 舊鞋救命】校內信箱發信引擎測試信',
+            message: '這是一封來自「康橋 × 舊鞋救命 2026 服務學習管理系統」的正式發信測試信件。若您收到此信，代表學生 6 位數驗證碼與教師批次通知信箱功能已正常運作！'
           }]
         });
 
         if (res && res.ok && res.sentCount > 0) {
-          recordLocalMailLog('系統發信測試', targetEmail, subject, '已寄出');
-          renderMailLogsTable();
-          showToast(`✓ 測試信已實際寄出至 ${targetEmail}，請前往信箱確認！`, '✉');
+          recordLocalMailLog('系統發信測試', to, '校內信箱發信引擎測試信', '已寄出');
+          renderSystemAdminSection();
+          showToast(`✓ 測試信已實際寄送至 ${to}，請前往信箱查收！`, '✉');
         } else {
-          const reason = (res && res.failedList && res.failedList[0]) ? res.failedList[0].reason : ((res && res.error) || '寄送失敗');
+          const reason = (res && res.failedList && res.failedList[0]?.reason) || (res && res.error) || '寄送失敗';
           throw new Error(reason);
         }
       } catch (err) {
-        recordLocalMailLog('系統發信測試', targetEmail, subject, '失敗：' + err.message);
-        renderMailLogsTable();
         showToast(`測試信寄送失敗：${err.message}`, '⚠️');
       } finally {
         btn.disabled = false;
@@ -5447,45 +5493,53 @@ function appendMailLog(type, studentId, name, email, subject, status) {
       }
     }
 
+    function clearMailDispatchLogs() {
+      appState.mailLogs = [];
+      saveAppState();
+      renderSystemAdminSection();
+      showToast('已清空本機發信紀錄', '✓');
+    }
+
     async function pullFromCloudSheet() {
-      showToast('正在從 Google 試算表載入最新進度...', '⏳');
-      const ok = await syncFullStateFromCloud(false);
-      if (ok) {
-        const statusEl = document.getElementById('sysSyncStatusText');
-        if (statusEl) statusEl.textContent = `已從雲端載入最新資料庫（${nowClockTime()}）`;
+      if (!isLiveMailBackendAvailable()) {
+        showToast('請先綁定 Apps Script Web App 網址後即可與 Google 試算表雙向同步！', '⚠️');
+        return;
       }
+      document.getElementById('sysSyncStatusText').textContent = '正在從試算表載入進度...';
+      const ok = await syncFullStateFromCloud(false);
+      document.getElementById('sysSyncStatusText').textContent = ok
+        ? `已從雲端載入（${nowClockTime()}）`
+        : '雲端尚無資料或載入失敗';
+      if (ok) renderSystemAdminSection();
     }
 
     async function runFourLayerSheetsSync() {
-      const statusEl = document.getElementById('sysSyncStatusText');
-      saveAppState(true);
-
       if (!isLiveMailBackendAvailable()) {
-        statusEl.textContent = `已儲存至本機（${nowClockTime()}｜尚未綁定 Apps Script 網址）`;
-        showToast('已儲存至本機（貼入 Apps Script 網址後可寫回 Google 試算表）', '✓');
+        showToast('請先綁定 Apps Script Web App 網址後即可同步至試算表！', '⚠️');
         return;
       }
-
-      statusEl.textContent = '正在同步寫回 Google 試算表...';
+      document.getElementById('sysSyncStatusText').textContent = '正在寫回 Google 試算表...';
       try {
-        const res = await callMailBackendApi({ action: 'pushFullState', state: appState });
+        const res = await callMailBackendApi({
+          action: 'pushFullState',
+          state: appState
+        });
         if (res && res.ok) {
-          statusEl.textContent = `已完成全站雲端同步（${res.syncedAt}）`;
-          showToast('✓ 已將完整資料與名單寫回 Google 試算表！', '✓');
+          document.getElementById('sysSyncStatusText').textContent = `已寫回試算表（${res.syncedAt || nowClockTime()}）`;
+          showToast(`✓ 已將全部學生與設定資料寫回 Google 試算表！`, '✓');
         } else {
-          throw new Error((res && res.error) ? res.error : '寫回失敗');
+          throw new Error((res && res.error) || '同步失敗');
         }
       } catch (err) {
-        statusEl.textContent = `同步失敗（${err.message}）`;
-        showToast(`試算表寫回失敗：${err.message}`, '⚠️');
+        document.getElementById('sysSyncStatusText').textContent = '同步失敗';
+        showToast(`試算表同步失敗：${err.message}`, '⚠️');
       }
     }
 
     function copyGasScriptToClipboard() {
       const code = document.getElementById('sysGasCodePre').textContent;
-      navigator.clipboard.writeText(code).then(() => {
-        showToast('已複製 Code.gs 完整程式碼至剪貼簿！', '📋');
-      });
+      navigator.clipboard?.writeText(code);
+      showToast('已複製 Code.gs 完整程式碼至剪貼簿！', '✓');
     }
 
     function downloadCodeGsFile() {
@@ -5495,20 +5549,51 @@ function appendMailLog(type, studentId, name, email, subject, status) {
       const a = document.createElement('a');
       a.href = url;
       a.download = 'Code.gs';
-      document.body.appendChild(a);
       a.click();
-      document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      showToast('已下載後端程式檔案 Code.gs！', '⬇');
+      showToast('已下載 Code.gs 檔案', '✓');
     }
 
-    /* ========================================================================
-       J. INITIAL BOOTSTRAP
-       ======================================================================== */
+    function updateAdminPassword(idx) {
+      const val = document.getElementById(`adm-pass-${idx}`).value.trim();
+      if (val.length < 4) {
+        showToast('管理員密碼請至少 4 個字元', '⚠️');
+        return;
+      }
+      appState.admins[idx].password = val;
+      saveAppState();
+      showToast(`已更新 ${appState.admins[idx].name} 的登入密碼`, '✓');
+    }
+
+    function addAdminStaffAccount() {
+      const name = document.getElementById('sysNewAdminName').value.trim();
+      const email = document.getElementById('sysNewAdminEmail').value.trim().toLowerCase();
+      const password = document.getElementById('sysNewAdminPass').value.trim();
+      if (!name || !email || !password) {
+        showToast('請完整填寫姓名、校內信箱與登入密碼', '⚠️');
+        return;
+      }
+      appState.admins.push({
+        id: email.split('@')[0],
+        name,
+        email,
+        password,
+        role: 'staff'
+      });
+      saveAppState();
+      document.getElementById('sysNewAdminName').value = '';
+      document.getElementById('sysNewAdminEmail').value = '';
+      document.getElementById('sysNewAdminPass').value = '';
+      renderSystemAdminSection();
+      showToast(`已新增工作人員帳號：${name}`, '✓');
+    }
+
+    // Boot Application & Auto-Pull Cloud State
     document.addEventListener('DOMContentLoaded', () => {
       renderRootByRole();
       syncFullStateFromCloud(true);
     });
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js" defer></script>
 </body>
 </html>
