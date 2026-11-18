@@ -1054,69 +1054,34 @@
               </div>
             </div>
             <pre id="sysGasCodePre" class="tabular-nums overflow-x-auto rounded-xl border border-[#dfe4dc] bg-[#1e2823] p-4 text-xs text-[#e7eddf] leading-relaxed max-h-72">/**
- * 康橋 × 舊鞋救命｜2026 服務學習 正式上線後端服務 (Google Apps Script)
+ * 康橋 × 舊鞋救命｜2026 服務學習 正式上線雲端同步後端 (Google Apps Script)
  * 功能：
- * 1. 實際寄送 6 位數登入驗證碼 (OTP) 至學生學校信箱 (@stu.kcislk.ntpc.edu.tw) 並進行伺服器端驗證
- * 2. 教師管理專區實際寄送個別／批次通知信（正取確認提醒、退件補件警示、任務催繳通知）
- * 3. Google 試算表雙向資料同步（讀寫 舊鞋救命錄取名單 與 自動建立 發信紀錄 工作表）
- * 4. 支援直接作為正式上線網頁應用程式 (Web App) 託管前端 index.html
+ * 1. 跨裝置完整資料庫同步（讀寫「系統雲端狀態庫」JSON 資料庫 + 自動更新「舊鞋救命錄取名單」可讀分頁）
+ * 2. LockService 併發鎖定 + 學生端原子更新 (upsertStudent)，避免多人同時填寫互相覆蓋
+ * 3. 實際寄送 6 位數登入驗證碼 (OTP) 至學生學校信箱 (@stu.kcislk.ntpc.edu.tw)
+ * 4. 教師管理專區實際寄送個別／批次通知信並記錄於「系統發信紀錄」
  */
 
-const SPREADSHEET_ID = '1hOyDHewvzfxvnq3xioxO8KkBtogRZ2ypBI6wy1yabfk';
-const MAIN_SHEET_NAME = '舊鞋救命錄取名單';
-const LOG_SHEET_NAME = '系統發信紀錄';
+const SPREADSHEET_ID = &#x27;1hOyDHewvzfxvnq3xioxO8KkBtogRZ2ypBI6wy1yabfk&#x27;;
+const MAIN_SHEET_NAME = &#x27;舊鞋救命錄取名單&#x27;;
+const STATE_SHEET_NAME = &#x27;系統雲端狀態庫&#x27;;
+const LOG_SHEET_NAME = &#x27;系統發信紀錄&#x27;;
+const CHUNK_SIZE = 40000;
 
 function doGet(e) {
   const params = (e &amp;&amp; e.parameter) ? e.parameter : {};
   if (!params.action) {
-    return HtmlService.createHtmlOutputFromFile('index')
-      .setTitle('康橋 × 舊鞋救命｜2026 服務學習')
+    return HtmlService.createHtmlOutputFromFile(&#x27;index&#x27;)
+      .setTitle(&#x27;康橋 × 舊鞋救命｜2026 服務學習&#x27;)
       .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)
-      .addMetaTag('viewport', 'width=device-width, initial-scale=1.0');
+      .addMetaTag(&#x27;viewport&#x27;, &#x27;width=device-width, initial-scale=1.0&#x27;);
   }
 
-  let result = { ok: false, error: '未知的請求動作' };
+  let result = { ok: false, error: &#x27;未知的請求動作&#x27; };
   try {
-    if (params.action === 'ping') {
-      result = handlePing();
-    } else if (params.action === 'syncPull') {
-      result = handleSyncPull();
-    }
-  } catch (err) {
-    result = { ok: false, error: err.message || String(err) };
-  }
-
-  const jsonStr = JSON.stringify(result);
-  if (params.callback) {
-    return ContentService.createTextOutput(params.callback + '(' + jsonStr + ');')
-      .setMimeType(ContentService.MimeType.JAVASCRIPT);
-  }
-  return ContentService.createTextOutput(jsonStr)
-    .setMimeType(ContentService.MimeType.JSON);
-}
-
-function doPost(e) {
-  let result = { ok: false, error: '無效的請求內容' };
-  try {
-    const raw = (e &amp;&amp; e.postData &amp;&amp; e.postData.contents) ? e.postData.contents : '{}';
-    const payload = JSON.parse(raw);
-    const action = payload.action || '';
-
-    if (action === 'ping') {
-      result = handlePing();
-    } else if (action === 'sendOtp') {
-      result = handleSendOtp(payload);
-    } else if (action === 'verifyOtp') {
-      result = handleVerifyOtp(payload);
-    } else if (action === 'sendNotice') {
-      result = handleSendNotice(payload);
-    } else if (action === 'syncPull') {
-      result = handleSyncPull();
-    } else if (action === 'syncPush') {
-      result = handleSyncPush(payload);
-    } else {
-      result = { ok: false, error: '不支援的操作類型：' + action };
-    }
+    if (params.action === &#x27;ping&#x27;) result = handlePing();
+    else if (params.action === &#x27;pullFullState&#x27;) result = handlePullFullState();
+    else if (params.action === &#x27;syncPull&#x27;) result = handleSyncPull();
   } catch (err) {
     result = { ok: false, error: err.message || String(err) };
   }
@@ -1125,300 +1090,277 @@ function doPost(e) {
     .setMimeType(ContentService.MimeType.JSON);
 }
 
-/**
- * 供 Apps Script 內嵌網頁直接呼叫的橋接函式
- */
-function serverApiBridge(payload) {
-  const action = (payload &amp;&amp; payload.action) ? payload.action : '';
-  if (action === 'ping') return handlePing();
-  if (action === 'sendOtp') return handleSendOtp(payload);
-  if (action === 'verifyOtp') return handleVerifyOtp(payload);
-  if (action === 'sendNotice') return handleSendNotice(payload);
-  if (action === 'syncPull') return handleSyncPull();
-  if (action === 'syncPush') return handleSyncPush(payload);
-  return { ok: false, error: '未知的操作類型' };
+function doPost(e) {
+  let result = { ok: false, error: &#x27;無效的請求內容&#x27; };
+  try {
+    const raw = (e &amp;&amp; e.postData &amp;&amp; e.postData.contents) ? e.postData.contents : &#x27;{}&#x27;;
+    const payload = JSON.parse(raw);
+    result = serverApiBridge(payload);
+  } catch (err) {
+    result = { ok: false, error: err.message || String(err) };
+  }
+
+  return ContentService.createTextOutput(JSON.stringify(result))
+    .setMimeType(ContentService.MimeType.JSON);
 }
 
-function handlePing() {
-  let senderEmail = '';
+function serverApiBridge(payload) {
+  const action = (payload &amp;&amp; payload.action) ? payload.action : &#x27;&#x27;;
+  if (action === &#x27;ping&#x27;) return handlePing();
+  if (action === &#x27;sendOtp&#x27;) return handleSendOtp(payload);
+  if (action === &#x27;verifyOtp&#x27;) return handleVerifyOtp(payload);
+  if (action === &#x27;sendNotice&#x27;) return handleSendNotice(payload);
+  if (action === &#x27;pullFullState&#x27;) return handlePullFullState();
+  if (action === &#x27;pushFullState&#x27;) return handlePushFullState(payload);
+  if (action === &#x27;upsertStudent&#x27;) return handleUpsertStudent(payload);
+  if (action === &#x27;syncPull&#x27;) return handleSyncPull();
+  if (action === &#x27;syncPush&#x27;) return handleSyncPush(payload);
+  return { ok: false, error: &#x27;不支援的操作類型：&#x27; + action };
+}
+
+/* ================= 完整雲端狀態讀寫（跨裝置核心） ================= */
+
+function readMasterStateFromSheet(ss) {
+  const sheet = ss.getSheetByName(STATE_SHEET_NAME);
+  if (!sheet) return null;
+  const lastRow = sheet.getLastRow();
+  if (lastRow &lt; 2) return null;
+  const values = sheet.getRange(2, 1, lastRow - 1, 2).getValues();
+  let jsonStr = &#x27;&#x27;;
+  for (let i = 0; i &lt; values.length; i++) {
+    jsonStr += String(values[i][1] || &#x27;&#x27;);
+  }
+  if (!jsonStr) return null;
+  return JSON.parse(jsonStr);
+}
+
+function writeMasterStateToSheet(ss, stateObj) {
+  let sheet = ss.getSheetByName(STATE_SHEET_NAME);
+  if (!sheet) {
+    sheet = ss.insertSheet(STATE_SHEET_NAME);
+  }
+  const cleanState = JSON.parse(JSON.stringify(stateObj));
+  const jsonStr = JSON.stringify(cleanState);
+  const rows = [];
+  for (let i = 0; i &lt; jsonStr.length; i += CHUNK_SIZE) {
+    rows.push([rows.length + 1, jsonStr.slice(i, i + CHUNK_SIZE)]);
+  }
+  sheet.clearContents();
+  sheet.getRange(1, 1, 1, 3).setValues([[&#x27;區塊序號&#x27;, &#x27;JSON資料庫內容（請勿手動修改）&#x27;, &#x27;最後同步時間&#x27;]]);
+  if (rows.length &gt; 0) {
+    sheet.getRange(2, 1, rows.length, 2).setValues(rows);
+    sheet.getRange(2, 3).setValue(Utilities.formatDate(new Date(), &#x27;Asia/Taipei&#x27;, &#x27;yyyy/MM/dd HH:mm:ss&#x27;));
+  }
+  updateReadableRosterSheet(ss, cleanState.students || []);
+}
+
+function updateReadableRosterSheet(ss, students) {
+  if (!Array.isArray(students) || students.length === 0) return;
+  const sheet = ss.getSheetByName(MAIN_SHEET_NAME) || ss.getSheets()[0];
+  const data = sheet.getDataRange().getValues();
+  if (data.length &gt; 0 &amp;&amp; data[0].length &lt; 13) {
+    sheet.getRange(1, 8, 1, 6).setValues([[&#x27;正取確認&#x27;, &#x27;校內排班&#x27;, &#x27;學習單分數&#x27;, &#x27;11/21出席狀態&#x27;, &#x27;核發總時數&#x27;, &#x27;最後更新時間&#x27;]]);
+  }
+  const idRowMap = {};
+  for (let i = 1; i &lt; data.length; i++) {
+    const rowId = String(data[i][3] || &#x27;&#x27;).trim().toUpperCase();
+    if (rowId) idRowMap[rowId] = i + 1;
+  }
+  const attMap = { pending: &#x27;未點名&#x27;, present: &#x27;有出席&#x27;, late: &#x27;遲到&#x27;, early: &#x27;早退&#x27;, absent: &#x27;缺席&#x27; };
+  const nowStr = Utilities.formatDate(new Date(), &#x27;Asia/Taipei&#x27;, &#x27;yyyy/MM/dd HH:mm&#x27;);
+
+  students.forEach(function(s) {
+    const key = String(s.id || &#x27;&#x27;).trim().toUpperCase();
+    const targetRow = idRowMap[key];
+    if (targetRow) {
+      const preApp = (s.wsLocked &amp;&amp; Number(s.wsScore || 0) &gt;= 80 &amp;&amp; s.reviews &amp;&amp; s.reviews.pre === &#x27;passed&#x27;) ? 1.0 : 0.0;
+      const whApp = (s.attendance === &#x27;present&#x27;) ? 3.0 : (s.attendance === &#x27;late&#x27; ? 2.5 : (s.attendance === &#x27;early&#x27; ? Number(s.attHours || 2.0) : 0.0));
+      const campApp = (s.shiftsLocked &amp;&amp; s.reviews &amp;&amp; s.reviews.campus === &#x27;passed&#x27;) ? (Array.isArray(s.shifts) ? s.shifts.length * 0.5 : 0) : 0.0;
+      const refApp = (s.refLocked &amp;&amp; s.reviews &amp;&amp; s.reviews.reflection === &#x27;passed&#x27;) ? 1.0 : 0.0;
+      const totalApp = preApp + whApp + campApp + refApp;
+
+      sheet.getRange(targetRow, 8, 1, 6).setValues([[
+        s.confirmed ? &#x27;已確認&#x27; : &#x27;未確認&#x27;,
+        Array.isArray(s.shifts) ? s.shifts.join(&#x27;、&#x27;) : &#x27;&#x27;,
+        Number(s.wsScore || 0),
+        attMap[s.attendance] || &#x27;未點名&#x27;,
+        totalApp,
+        nowStr
+      ]]);
+    }
+  });
+}
+
+function handlePullFullState() {
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const state = readMasterStateFromSheet(ss);
+  if (!state) {
+    return { ok: true, empty: true, syncedAt: Utilities.formatDate(new Date(), &#x27;Asia/Taipei&#x27;, &#x27;yyyy/MM/dd HH:mm:ss&#x27;) };
+  }
+  return {
+    ok: true,
+    empty: false,
+    state: state,
+    syncedAt: Utilities.formatDate(new Date(), &#x27;Asia/Taipei&#x27;, &#x27;yyyy/MM/dd HH:mm:ss&#x27;)
+  };
+}
+
+function handlePushFullState(payload) {
+  if (!payload || !payload.state) return { ok: false, error: &#x27;缺少狀態資料&#x27; };
+  const lock = LockService.getScriptLock();
+  lock.waitLock(15000);
   try {
-    senderEmail = Session.getActiveUser().getEmail() || Session.getEffectiveUser().getEmail() || '';
+    const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+    writeMasterStateToSheet(ss, payload.state);
+    return {
+      ok: true,
+      syncedAt: Utilities.formatDate(new Date(), &#x27;Asia/Taipei&#x27;, &#x27;yyyy/MM/dd HH:mm:ss&#x27;)
+    };
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+function handleUpsertStudent(payload) {
+  const incoming = payload &amp;&amp; payload.student;
+  if (!incoming || !incoming.id) return { ok: false, error: &#x27;無效的學生資料&#x27; };
+
+  const lock = LockService.getScriptLock();
+  lock.waitLock(15000);
+  try {
+    const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+    let master = readMasterStateFromSheet(ss);
+    if (!master &amp;&amp; payload.fallbackState) {
+      master = payload.fallbackState;
+    }
+    if (!master || !Array.isArray(master.students)) {
+      return { ok: false, error: &#x27;雲端資料庫尚未初始化，請通知教師先同步名單&#x27; };
+    }
+
+    const idx = master.students.findIndex(function(s) {
+      return String(s.id).toLowerCase() === String(incoming.id).toLowerCase();
+    });
+    if (idx &gt;= 0) {
+      master.students[idx] = incoming;
+    } else {
+      master.students.push(incoming);
+    }
+
+    writeMasterStateToSheet(ss, master);
+    return {
+      ok: true,
+      state: master,
+      syncedAt: Utilities.formatDate(new Date(), &#x27;Asia/Taipei&#x27;, &#x27;yyyy/MM/dd HH:mm:ss&#x27;)
+    };
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+/* ================= 發信與原有相容 API ================= */
+
+function handlePing() {
+  let senderEmail = &#x27;&#x27;;
+  try {
+    senderEmail = Session.getActiveUser().getEmail() || Session.getEffectiveUser().getEmail() || &#x27;&#x27;;
   } catch (e) {}
   return {
     ok: true,
     senderEmail: senderEmail,
     remainingQuota: MailApp.getRemainingDailyQuota(),
-    serverTime: Utilities.formatDate(new Date(), 'Asia/Taipei', 'yyyy/MM/dd HH:mm:ss')
+    serverTime: Utilities.formatDate(new Date(), &#x27;Asia/Taipei&#x27;, &#x27;yyyy/MM/dd HH:mm:ss&#x27;)
   };
 }
 
 function normalizeStudentEmail(studentId, providedEmail) {
-  const cleanEmail = String(providedEmail || '').trim().toLowerCase();
-  if (cleanEmail &amp;&amp; cleanEmail.indexOf('@') &gt; 0) {
-    return cleanEmail;
-  }
-  const cleanId = String(studentId || '').trim().toLowerCase();
-  if (!cleanId) return '';
-  if (cleanId === 'chunyichou' || cleanId === 'yiyunchen') {
-    return cleanId + '@kcislk.ntpc.edu.tw';
-  }
-  return cleanId + '@stu.kcislk.ntpc.edu.tw';
+  const cleanEmail = String(providedEmail || &#x27;&#x27;).trim().toLowerCase();
+  if (cleanEmail &amp;&amp; cleanEmail.indexOf(&#x27;@&#x27;) &gt; 0) return cleanEmail;
+  const cleanId = String(studentId || &#x27;&#x27;).trim().toLowerCase();
+  if (!cleanId) return &#x27;&#x27;;
+  if (cleanId === &#x27;chunyichou&#x27; || cleanId === &#x27;yiyunchen&#x27;) return cleanId + &#x27;@kcislk.ntpc.edu.tw&#x27;;
+  return cleanId + &#x27;@stu.kcislk.ntpc.edu.tw&#x27;;
 }
 
-function maskEmailAddress(email) {
-  const parts = String(email || '').split('@');
-  if (parts.length !== 2) return email;
-  const local = parts[0];
-  if (local.length &lt;= 3) return local.charAt(0) + '***@' + parts[1];
-  return local.slice(0, 3) + '***' + local.slice(-1) + '@' + parts[1];
-}
-
-/**
- * 1. 實際寄送 6 位數驗證碼至學生學校信箱
- */
 function handleSendOtp(payload) {
-  const studentId = String(payload.studentId || '').trim();
-  const studentName = String(payload.studentName || '').trim() || '同學';
+  const studentId = String(payload.studentId || &#x27;&#x27;).trim();
+  const studentName = String(payload.studentName || &#x27;&#x27;).trim() || &#x27;同學&#x27;;
   const recipientEmail = normalizeStudentEmail(studentId, payload.email);
-
-  if (!recipientEmail) {
-    return { ok: false, error: '無法辨識有效的學校信箱地址' };
+  if (!recipientEmail || !/@(stu\.)?kcislk\.ntpc\.edu\.tw$/i.test(recipientEmail)) {
+    return { ok: false, error: &#x27;僅允許寄送至康橋學校信箱 (@stu.kcislk.ntpc.edu.tw)&#x27; };
   }
-
-  // 限制僅能寄送至康橋校網網域，防止濫用
-  if (!/@(stu\.)?kcislk\.ntpc\.edu\.tw$/i.test(recipientEmail)) {
-    return { ok: false, error: '僅允許寄送至康橋學校信箱 (@stu.kcislk.ntpc.edu.tw)' };
-  }
-
   const cache = CacheService.getScriptCache();
-  const cooldownKey = 'OTP_CD_' + recipientEmail;
-  if (cache.get(cooldownKey)) {
-    return { ok: false, error: '驗證碼寄送過於頻繁，請稍候 60 秒後再試' };
+  if (cache.get(&#x27;OTP_CD_&#x27; + recipientEmail)) {
+    return { ok: false, error: &#x27;驗證碼寄送過於頻繁，請稍候 60 秒後再試&#x27; };
   }
-
   const code = String(Math.floor(100000 + Math.random() * 900000));
-  const otpRecord = JSON.stringify({
-    code: code,
-    attempts: 0,
-    expiresAt: Date.now() + 10 * 60 * 1000
-  });
+  cache.put(&#x27;OTP_DATA_&#x27; + recipientEmail, JSON.stringify({ code: code, attempts: 0, expiresAt: Date.now() + 600000 }), 600);
+  cache.put(&#x27;OTP_CD_&#x27; + recipientEmail, &#x27;1&#x27;, 60);
 
-  cache.put('OTP_DATA_' + recipientEmail, otpRecord, 600);
-  cache.put(cooldownKey, '1', 60);
-
-  const subject = '【康橋 × 舊鞋救命】學生專區登入驗證碼：' + code;
-  const htmlBody = [
-    '&lt;div style="font-family: \'Noto Sans TC\', \'Microsoft JhengHei\', sans-serif; max-width: 540px; margin: 0 auto; border: 1px solid #dfe4dc; border-radius: 10px; overflow: hidden; background: #fafaf5;"&gt;',
-    '  &lt;div style="background: #234c3c; color: #ffffff; padding: 18px 24px;"&gt;',
-    '    &lt;div style="font-size: 12px; opacity: 0.85;"&gt;康橋國際學校林口校區 × 舊鞋救命 Step30&lt;/div&gt;',
-    '    &lt;div style="font-size: 18px; font-weight: bold; margin-top: 4px;"&gt;學生專區一次性質詢驗證碼&lt;/div&gt;',
-    '  &lt;/div&gt;',
-    '  &lt;div style="padding: 24px; background: #ffffff; color: #243a32; line-height: 1.7;"&gt;',
-    '    &lt;p style="margin: 0 0 12px;"&gt;' + escapeHtmlGas(studentName) + ' 同學您好：&lt;/p&gt;',
-    '    &lt;p style="margin: 0 0 16px;"&gt;您正在登入「&lt;strong&gt;2026 舊鞋救命服務學習學生專區&lt;/strong&gt;」，請於登入視窗輸入以下 6 位數驗證碼：&lt;/p&gt;',
-    '    &lt;div style="background: #edf1e7; border: 1px solid #c5d2bd; border-radius: 8px; padding: 16px; text-align: center; margin: 16px 0;"&gt;',
-    '      &lt;span style="font-size: 30px; font-weight: bold; letter-spacing: 8px; color: #234c3c;"&gt;' + code + '&lt;/span&gt;',
-    '    &lt;/div&gt;',
-    '    &lt;p style="font-size: 13px; color: #52625a; margin: 0;"&gt;• 本驗證碼於 &lt;strong&gt;10 分鐘&lt;/strong&gt; 內有效，最多可嘗試輸入 5 次。&lt;/p&gt;',
-    '    &lt;p style="font-size: 13px; color: #52625a; margin: 4px 0 0;"&gt;• 若非您本人操作，請忽略此封信件，無需進行任何動作。&lt;/p&gt;',
-    '  &lt;/div&gt;',
-    '  &lt;div style="padding: 12px 24px; background: #f4f7f1; border-top: 1px solid #dfe4dc; font-size: 12px; color: #52625a;"&gt;',
-    '    活動聯繫｜中學部學務處永續組 陳逸芸老師｜02-8512-8210',
-    '  &lt;/div&gt;',
-    '&lt;/div&gt;'
-  ].join('\n');
-
-  const plainBody = studentName + ' 同學您好：\n\n您的「康橋 × 舊鞋救命 2026 服務學習學生專區」登入驗證碼為：' + code + '\n請於 10 分鐘內完成輸入（最多嘗試 5 次）。';
-
+  const subject = &#x27;【康橋 × 舊鞋救命】學生專區登入驗證碼：&#x27; + code;
   MailApp.sendEmail({
     to: recipientEmail,
     subject: subject,
-    body: plainBody,
-    htmlBody: htmlBody,
-    name: '康橋 × 舊鞋救命服務學習系統'
+    body: studentName + &#x27; 同學您好：\n\n您的登入驗證碼為：&#x27; + code + &#x27;（10 分鐘內有效）。&#x27;,
+    name: &#x27;康橋 × 舊鞋救命服務學習系統&#x27;
   });
-
-  appendMailLog('OTP驗證碼', studentId, studentName, recipientEmail, subject, '已寄出');
-
-  return {
-    ok: true,
-    sentTo: recipientEmail,
-    maskedEmail: maskEmailAddress(recipientEmail),
-    remainingQuota: MailApp.getRemainingDailyQuota()
-  };
+  appendMailLog(&#x27;OTP驗證碼&#x27;, studentId, studentName, recipientEmail, subject, &#x27;已寄出&#x27;);
+  return { ok: true, sentTo: recipientEmail, remainingQuota: MailApp.getRemainingDailyQuota() };
 }
 
-/**
- * 2. 伺服器端驗證學生輸入的 6 位數驗證碼
- */
 function handleVerifyOtp(payload) {
-  const studentId = String(payload.studentId || '').trim();
-  const recipientEmail = normalizeStudentEmail(studentId, payload.email);
-  const inputCode = String(payload.code || '').trim();
-
-  if (!recipientEmail || !inputCode) {
-    return { ok: false, error: '請輸入完整的 6 位數驗證碼' };
-  }
-
+  const recipientEmail = normalizeStudentEmail(payload.studentId, payload.email);
+  const inputCode = String(payload.code || &#x27;&#x27;).trim();
   const cache = CacheService.getScriptCache();
-  const key = 'OTP_DATA_' + recipientEmail;
+  const key = &#x27;OTP_DATA_&#x27; + recipientEmail;
   const raw = cache.get(key);
-  if (!raw) {
-    return { ok: false, error: '驗證碼尚未寄送或已超過 10 分鐘有效期限，請重新寄送驗證碼' };
-  }
-
+  if (!raw) return { ok: false, error: &#x27;驗證碼尚未寄送或已過期，請重新寄送&#x27; };
   const data = JSON.parse(raw);
-  if (Date.now() &gt; data.expiresAt) {
+  if (Date.now() &gt; data.expiresAt || data.attempts &gt;= 5) {
     cache.remove(key);
-    return { ok: false, error: '驗證碼已過期，請重新寄送驗證碼' };
+    return { ok: false, error: &#x27;驗證碼已失效，請重新寄送&#x27; };
   }
-
-  if (data.attempts &gt;= 5) {
-    cache.remove(key);
-    return { ok: false, error: '驗證碼錯誤已達 5 次上限，請重新寄送新的驗證碼' };
-  }
-
   if (inputCode !== data.code) {
     data.attempts += 1;
-    const rem = Math.max(0, 5 - data.attempts);
-    if (rem === 0) {
-      cache.remove(key);
-      return { ok: false, error: '驗證碼錯誤已達 5 次上限，請重新寄送新的驗證碼' };
-    }
     cache.put(key, JSON.stringify(data), 600);
-    return { ok: false, error: '6 位數驗證碼不正確，尚可嘗試 ' + rem + ' 次' };
+    return { ok: false, error: &#x27;驗證碼不正確&#x27; };
   }
-
   cache.remove(key);
   return { ok: true, verified: true };
 }
 
-/**
- * 3. 教師管理專區實際發送個別或批次通知信至學生信箱
- */
 function handleSendNotice(payload) {
   const recipients = Array.isArray(payload.recipients) ? payload.recipients : [];
-  const portalUrl = String(payload.portalUrl || '').trim();
-  if (recipients.length === 0) {
-    return { ok: false, error: '未指定任何收件學生' };
-  }
-
+  const portalUrl = String(payload.portalUrl || &#x27;&#x27;).trim();
   let sentCount = 0;
   const failedList = [];
 
   recipients.forEach(function(rec) {
     const email = normalizeStudentEmail(rec.id, rec.email);
-    const name = String(rec.name || '同學').trim();
-    const subject = String(rec.subject || '【康橋 × 舊鞋救命】2026 服務學習重要通知').trim();
-    const message = String(rec.message || '').trim();
-
+    const name = String(rec.name || &#x27;同學&#x27;).trim();
+    const subject = String(rec.subject || &#x27;【康橋 × 舊鞋救命】2026 服務學習重要通知&#x27;).trim();
+    const message = String(rec.message || &#x27;&#x27;).trim();
     if (!email || !/@(stu\.)?kcislk\.ntpc\.edu\.tw$/i.test(email)) {
-      failedList.push({ id: rec.id, name: name, reason: '信箱格式非康橋校網網域' });
+      failedList.push({ id: rec.id, name: name, reason: &#x27;信箱格式非康橋校網網域&#x27; });
       return;
     }
-
-    const linkBlock = portalUrl
-      ? '&lt;p style="margin: 18px 0 0;"&gt;&lt;a href="' + escapeHtmlGas(portalUrl) + '" style="display: inline-block; background: #234c3c; color: #ffffff; text-decoration: none; font-weight: bold; padding: 10px 20px; border-radius: 8px;"&gt;前往學生服務學習專區 ↗&lt;/a&gt;&lt;/p&gt;'
-      : '';
-
-    const htmlBody = [
-      '&lt;div style="font-family: \'Noto Sans TC\', \'Microsoft JhengHei\', sans-serif; max-width: 580px; margin: 0 auto; border: 1px solid #dfe4dc; border-radius: 10px; overflow: hidden; background: #fafaf5;"&gt;',
-      '  &lt;div style="background: #234c3c; color: #ffffff; padding: 18px 24px;"&gt;',
-      '    &lt;div style="font-size: 12px; opacity: 0.85;"&gt;康橋國際學校林口校區 × 舊鞋救命 Step30&lt;/div&gt;',
-      '    &lt;div style="font-size: 18px; font-weight: bold; margin-top: 4px;"&gt;' + escapeHtmlGas(subject) + '&lt;/div&gt;',
-      '  &lt;/div&gt;',
-      '  &lt;div style="padding: 24px; background: #ffffff; color: #243a32; line-height: 1.75; font-size: 14px;"&gt;',
-      '    &lt;p style="margin: 0 0 12px;"&gt;&lt;strong&gt;' + escapeHtmlGas(name) + '（' + escapeHtmlGas(rec.id || '') + '）&lt;/strong&gt; 同學您好：&lt;/p&gt;',
-      '    &lt;div style="background: #fafaf5; border: 1px solid #dfe4dc; border-radius: 8px; padding: 16px; white-space: pre-line;"&gt;' + escapeHtmlGas(message) + '&lt;/div&gt;',
-      '    ' + linkBlock,
-      '  &lt;/div&gt;',
-      '  &lt;div style="padding: 12px 24px; background: #f4f7f1; border-top: 1px solid #dfe4dc; font-size: 12px; color: #52625a;"&gt;',
-      '    活動聯繫｜中學部學務處永續組 陳逸芸老師｜02-8512-8210',
-      '  &lt;/div&gt;',
-      '&lt;/div&gt;'
-    ].join('\n');
-
     try {
       MailApp.sendEmail({
         to: email,
         subject: subject,
-        body: name + ' 同學您好：\n\n' + message + (portalUrl ? '\n\n專區網址：' + portalUrl : ''),
-        htmlBody: htmlBody,
-        name: '康橋 × 舊鞋救命服務學習系統'
+        body: name + &#x27; 同學您好：\n\n&#x27; + message + (portalUrl ? &#x27;\n\n專區網址：&#x27; + portalUrl : &#x27;&#x27;),
+        name: &#x27;康橋 × 舊鞋救命服務學習系統&#x27;
       });
       sentCount++;
-      appendMailLog(rec.category || '任務通知', rec.id, name, email, subject, '已寄出');
+      appendMailLog(rec.category || &#x27;任務通知&#x27;, rec.id, name, email, subject, &#x27;已寄出&#x27;);
     } catch (err) {
       failedList.push({ id: rec.id, name: name, reason: err.message || String(err) });
-      appendMailLog(rec.category || '任務通知', rec.id, name, email, subject, '失敗：' + (err.message || err));
     }
   });
-
-  return {
-    ok: true,
-    sentCount: sentCount,
-    failedList: failedList,
-    remainingQuota: MailApp.getRemainingDailyQuota()
-  };
+  return { ok: true, sentCount: sentCount, failedList: failedList, remainingQuota: MailApp.getRemainingDailyQuota() };
 }
 
-/**
- * 4. 試算表雙向同步：讀取與寫回
- */
-function handleSyncPull() {
-  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-  const sheet = ss.getSheetByName(MAIN_SHEET_NAME) || ss.getSheets()[0];
-  const values = sheet.getDataRange().getValues();
-  return {
-    ok: true,
-    sheetName: sheet.getName(),
-    rows: values,
-    syncedAt: Utilities.formatDate(new Date(), 'Asia/Taipei', 'yyyy/MM/dd HH:mm:ss')
-  };
-}
-
-function handleSyncPush(payload) {
-  const records = Array.isArray(payload.records) ? payload.records : [];
-  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-  const sheet = ss.getSheetByName(MAIN_SHEET_NAME) || ss.getSheets()[0];
-  const data = sheet.getDataRange().getValues();
-
-  // 確保第 8~13 欄標題存在
-  if (data.length &gt; 0 &amp;&amp; data[0].length &lt; 13) {
-    sheet.getRange(1, 8, 1, 6).setValues([['正取確認', '校內排班', '學習單分數', '11/21出席狀態', '核發總時數', '最後更新時間']]);
-  }
-
-  const idRowMap = {};
-  for (let i = 1; i &lt; data.length; i++) {
-    const rowId = String(data[i][3] || '').trim().toUpperCase();
-    if (rowId) idRowMap[rowId] = i + 1;
-  }
-
-  const nowStr = Utilities.formatDate(new Date(), 'Asia/Taipei', 'yyyy/MM/dd HH:mm');
-  let updatedRows = 0;
-
-  records.forEach(function(rec) {
-    const key = String(rec.id || '').trim().toUpperCase();
-    const targetRow = idRowMap[key];
-    if (targetRow) {
-      sheet.getRange(targetRow, 8, 1, 6).setValues([[
-        rec.confirmed ? '已確認' : '未確認',
-        rec.shiftsText || '',
-        Number(rec.wsScore || 0),
-        rec.attendanceLabel || '未點名',
-        Number(rec.totalApprovedHours || 0),
-        nowStr
-      ]]);
-      updatedRows++;
-    }
-  });
-
-  return {
-    ok: true,
-    updatedRows: updatedRows,
-    syncedAt: nowStr
-  };
-}
+function handleSyncPull() { return handlePullFullState(); }
+function handleSyncPush(payload) { return handlePushFullState(payload); }
 
 function appendMailLog(type, studentId, name, email, subject, status) {
   try {
@@ -1426,19 +1368,10 @@ function appendMailLog(type, studentId, name, email, subject, status) {
     let logSheet = ss.getSheetByName(LOG_SHEET_NAME);
     if (!logSheet) {
       logSheet = ss.insertSheet(LOG_SHEET_NAME);
-      logSheet.appendRow(['寄送時間', '信件類型', '學號', '姓名', '收件學校信箱', '信件主旨', '發送狀態']);
+      logSheet.appendRow([&#x27;寄送時間&#x27;, &#x27;信件類型&#x27;, &#x27;學號&#x27;, &#x27;姓名&#x27;, &#x27;收件學校信箱&#x27;, &#x27;信件主旨&#x27;, &#x27;發送狀態&#x27;]);
     }
-    const ts = Utilities.formatDate(new Date(), 'Asia/Taipei', 'yyyy/MM/dd HH:mm:ss');
-    logSheet.appendRow([ts, type, studentId || '', name || '', email, subject, status]);
+    logSheet.appendRow([Utilities.formatDate(new Date(), &#x27;Asia/Taipei&#x27;, &#x27;yyyy/MM/dd HH:mm:ss&#x27;), type, studentId || &#x27;&#x27;, name || &#x27;&#x27;, email, subject, status]);
   } catch (e) {}
-}
-
-function escapeHtmlGas(str) {
-  return String(str || '')
-    .replace(/&amp;/g, '&amp;amp;')
-    .replace(/&lt;/g, '&amp;lt;')
-    .replace(/&gt;/g, '&amp;gt;')
-    .replace(/"/g, '&amp;quot;');
 }
 </pre>
           </div>
@@ -1950,7 +1883,7 @@ function escapeHtmlGas(str) {
     const SHEET_GID = '1380079061';
 
     // 教師部署 Code.gs 後，亦可直接將正式 /exec 網址填入此常數，所有學生裝置開啟網頁即自動連線發信
-    const DEFAULT_PRODUCTION_GAS_URL = '';
+    const DEFAULT_PRODUCTION_GAS_URL = 'https://script.google.com/macros/s/AKfycbzrEyDg4VQEOu1wyQG0wdQOFdnpuREXj68_1xfSEiJI4AvV-H7hqZafxutEHZtG4FgK/exec';
 
     const DEFAULT_ADMINS = [
       { id: 'chunyichou', name: '周俊逸老師', email: 'chunyichou@kcislk.ntpc.edu.tw', password: '1108', role: 'admin' }
@@ -2320,6 +2253,8 @@ function escapeHtmlGas(str) {
     let otpCountdownInterval = null;
     let otpCooldownInterval = null;
 
+    let cloudPushTimer = null;
+
     function loadAppState() {
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
@@ -2327,7 +2262,7 @@ function escapeHtmlGas(str) {
           const parsed = JSON.parse(raw);
           if (parsed && Array.isArray(parsed.students) && parsed.students.length > 0) {
             if (!Array.isArray(parsed.mailLogs)) parsed.mailLogs = [];
-            if (!parsed.gasWebAppUrl && DEFAULT_PRODUCTION_GAS_URL) parsed.gasWebAppUrl = DEFAULT_PRODUCTION_GAS_URL;
+            if (DEFAULT_PRODUCTION_GAS_URL) parsed.gasWebAppUrl = DEFAULT_PRODUCTION_GAS_URL;
             return parsed;
           }
         }
@@ -2335,10 +2270,54 @@ function escapeHtmlGas(str) {
       return buildDefaultState();
     }
 
-    function saveAppState() {
+    function saveAppState(skipCloud = false) {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
       } catch (e) {}
+
+      if (skipCloud || !isLiveMailBackendAvailable()) return;
+
+      if (authSession && authSession.role === 'student') {
+        const stu = appState.students.find((s) => s.id === authSession.studentId);
+        if (stu) {
+          callMailBackendApi({
+            action: 'upsertStudent',
+            student: stu,
+            fallbackState: appState
+          }).then((res) => {
+            if (res && res.ok && res.state) {
+              appState = res.state;
+              if (DEFAULT_PRODUCTION_GAS_URL) appState.gasWebAppUrl = DEFAULT_PRODUCTION_GAS_URL;
+              localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+            }
+          }).catch(() => {});
+        }
+        return;
+      }
+
+      clearTimeout(cloudPushTimer);
+      cloudPushTimer = setTimeout(() => {
+        callMailBackendApi({ action: 'pushFullState', state: appState }).catch(() => {});
+      }, 600);
+    }
+
+    async function syncFullStateFromCloud(silent = true) {
+      if (!isLiveMailBackendAvailable()) return false;
+      try {
+        const res = await callMailBackendApi({ action: 'pullFullState' });
+        if (res && res.ok && !res.empty && res.state && Array.isArray(res.state.students)) {
+          const keepGasUrl = getActiveGasUrl();
+          appState = res.state;
+          if (keepGasUrl) appState.gasWebAppUrl = keepGasUrl;
+          saveAppState(true);
+          renderRootByRole();
+          if (!silent) showToast(`✓ 已從雲端試算表載入最新進度（${res.syncedAt || ''}）`, '✓');
+          return true;
+        }
+      } catch (err) {
+        if (!silent) showToast(`雲端載入失敗：${err.message}`, '⚠️');
+      }
+      return false;
     }
 
     function loadAuthSession() {
@@ -3205,17 +3184,16 @@ function escapeHtmlGas(str) {
 
     function silentPushStudentToCloud(stu) {
       if (!isLiveMailBackendAvailable() || !stu) return;
-      const attMap = { pending: '未點名', present: '有出席', late: '遲到', early: '早退', absent: '缺席' };
       callMailBackendApi({
-        action: 'syncPush',
-        records: [{
-          id: stu.id,
-          confirmed: stu.confirmed,
-          shiftsText: stu.shifts.map(getShiftDisplayName).join('、'),
-          wsScore: stu.wsScore,
-          attendanceLabel: attMap[stu.attendance] || '未點名',
-          totalApprovedHours: computeStudentHours(stu).totalApp
-        }]
+        action: 'upsertStudent',
+        student: stu,
+        fallbackState: appState
+      }).then((res) => {
+        if (res && res.ok && res.state) {
+          appState = res.state;
+          if (DEFAULT_PRODUCTION_GAS_URL) appState.gasWebAppUrl = DEFAULT_PRODUCTION_GAS_URL;
+          saveAppState(true);
+        }
       }).catch(() => {});
     }
 
@@ -5470,41 +5448,17 @@ function escapeHtmlGas(str) {
     }
 
     async function pullFromCloudSheet() {
-      if (!isLiveMailBackendAvailable()) {
-        showToast('請先綁定 Apps Script Web App 網址後再執行雲端載入', '⚠️');
-        return;
-      }
       showToast('正在從 Google 試算表載入最新進度...', '⏳');
-      try {
-        const res = await callMailBackendApi({ action: 'syncPull' });
-        if (!res || !res.ok || !Array.isArray(res.rows)) {
-          throw new Error((res && res.error) ? res.error : '無法讀取試算表資料');
-        }
-        let matched = 0;
-        for (let i = 1; i < res.rows.length; i++) {
-          const r = res.rows[i];
-          const rowId = String(r[3] || '').trim().toLowerCase();
-          if (!rowId) continue;
-          const stu = appState.students.find((s) => s.id.toLowerCase() === rowId);
-          if (stu) {
-            if (String(r[7] || '').includes('已確認')) stu.confirmed = true;
-            if (r[9] !== '' && r[9] !== undefined && !Number.isNaN(Number(r[9]))) {
-              stu.wsScore = Number(r[9]);
-            }
-            matched++;
-          }
-        }
-        saveAppState();
-        document.getElementById('sysSyncStatusText').textContent = `已從雲端載入 ${matched} 筆（${res.syncedAt || nowClockTime()}）`;
-        showToast(`✓ 已從 Google 試算表同步載入 ${matched} 筆學生資料！`, '✓');
-      } catch (err) {
-        showToast(`載入失敗：${err.message}`, '⚠️');
+      const ok = await syncFullStateFromCloud(false);
+      if (ok) {
+        const statusEl = document.getElementById('sysSyncStatusText');
+        if (statusEl) statusEl.textContent = `已從雲端載入最新資料庫（${nowClockTime()}）`;
       }
     }
 
     async function runFourLayerSheetsSync() {
       const statusEl = document.getElementById('sysSyncStatusText');
-      saveAppState();
+      saveAppState(true);
 
       if (!isLiveMailBackendAvailable()) {
         statusEl.textContent = `已儲存至本機（${nowClockTime()}｜尚未綁定 Apps Script 網址）`;
@@ -5514,20 +5468,10 @@ function escapeHtmlGas(str) {
 
       statusEl.textContent = '正在同步寫回 Google 試算表...';
       try {
-        const attMap = { pending: '未點名', present: '有出席', late: '遲到', early: '早退', absent: '缺席' };
-        const records = appState.students.map((s) => ({
-          id: s.id,
-          confirmed: s.confirmed,
-          shiftsText: s.shifts.map(getShiftDisplayName).join('、'),
-          wsScore: s.wsScore,
-          attendanceLabel: attMap[s.attendance] || '未點名',
-          totalApprovedHours: computeStudentHours(s).totalApp
-        }));
-
-        const res = await callMailBackendApi({ action: 'syncPush', records });
+        const res = await callMailBackendApi({ action: 'pushFullState', state: appState });
         if (res && res.ok) {
-          statusEl.textContent = `已寫回 Google 試算表 ${res.updatedRows} 筆（${res.syncedAt}）`;
-          showToast(`✓ 已完成 Google 試算表雙向同步（更新 ${res.updatedRows} 筆）！`, '✓');
+          statusEl.textContent = `已完成全站雲端同步（${res.syncedAt}）`;
+          showToast('✓ 已將完整資料與名單寫回 Google 試算表！', '✓');
         } else {
           throw new Error((res && res.error) ? res.error : '寫回失敗');
         }
@@ -5563,6 +5507,7 @@ function escapeHtmlGas(str) {
        ======================================================================== */
     document.addEventListener('DOMContentLoaded', () => {
       renderRootByRole();
+      syncFullStateFromCloud(true);
     });
   </script>
 </body>
