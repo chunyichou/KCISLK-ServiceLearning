@@ -408,12 +408,12 @@
             <div class="font-bold text-[#234c3c]">校內募集值勤排班說明：</div>
             <ul class="list-disc pl-5 space-y-0.5 text-[#374a42]">
               <li>服務期間：<span class="tabular-nums">11/23（一）– 12/10（四）</span>平日，分為 <strong>早休 09:40–10:10</strong> 與 <strong>午休 14:45–15:15</strong>。</li>
-              <li>每班上限 <strong>4 人</strong>（達 <span class="tabular-nums font-bold">4/4</span> 人即鎖定為「🔒 已額滿」）；每位同學最多可選 <strong>2 班</strong>（每班實際值勤核發 <strong>0.5 小時</strong>）。</li>
+              <li>每班上限 <strong>4 人</strong>（達 <span class="tabular-nums font-bold">4/4</span> 人即鎖定為「🔒 已額滿」）；每位同學須選滿 <strong>2 班</strong>（每班實際值勤核發 <strong>0.5 小時</strong>，共 <strong>1.0 小時</strong>）。</li>
             </ul>
           </div>
 
           <div class="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-[#dfe4dc] bg-[#fafaf5] px-4 py-2.5 text-xs sm:text-sm tabular-nums">
-            <div>已勾選時段：<strong id="stuStep2SelectedCount" class="text-[#234c3c]">0</strong> / 2 班（預計 <strong id="stuStep2EstHours" class="text-[#234c3c]">0.0</strong> 小時）</div>
+            <div>已勾選時段：<strong id="stuStep2SelectedCount" class="text-[#234c3c]">0</strong> / 2 班（須選滿 2 班，預計 <strong id="stuStep2EstHours" class="text-[#234c3c]">0.0</strong> 小時）</div>
             <div class="text-[#52625a]">為保護同學隱私，僅顯示各時段名額狀態</div>
           </div>
 
@@ -433,9 +433,9 @@
           <div id="stuStep2Action" class="flex flex-wrap items-center justify-between gap-3">
             <button type="button" id="stuStep2ConfirmBtn" onclick="confirmStudentStep2()" disabled
               class="btn-primary rounded-lg px-5 py-2.5 text-sm font-bold">
-              確認鎖定排班時段
+              確認鎖定排班時段（須選滿 2 班）
             </button>
-            <span class="text-xs text-[#52625a]">鎖定後即占名額並解鎖「步驟 3｜行前影片觀看與線上題測」</span>
+            <span class="text-xs text-[#52625a]">選滿 2 個班次並鎖定後即占名額，並解鎖「步驟 3｜行前影片觀看與線上題測」</span>
           </div>
 
           <div id="stuStep2LockedBox" class="hidden rounded-xl border border-[#b9c9b2] bg-[#e7eddf] p-4 space-y-1">
@@ -831,7 +831,7 @@
                   <th class="px-3 py-2.5 font-bold">參加者資訊</th>
                   <th class="px-3 py-2.5 font-bold">① 行前學習 (1.0h)</th>
                   <th class="px-3 py-2.5 font-bold">② 11/21 倉庫 (3.0h)</th>
-                  <th class="px-3 py-2.5 font-bold">③ 校內募集 (0.5h/班)</th>
+                  <th class="px-3 py-2.5 font-bold">③ 校內募集 (1.0h)</th>
                   <th class="px-3 py-2.5 font-bold">④ 活動反思 (1.0h)</th>
                   <th class="px-3 py-2.5 font-bold text-right">已核發總時數</th>
                   <th class="px-3 py-2.5 font-bold text-center">操作</th>
@@ -2061,20 +2061,20 @@ function appendMailLog(type, studentId, name, email, subject, status) {
     ];
 
     const CAMPUS_SHIFTS = [
-      { date: '11/23（一）', amId: '1123-AM', amBase: 4, pmId: '1123-PM', pmBase: 2 },
-      { date: '11/24（二）', amId: '1124-AM', amBase: 3, pmId: '1124-PM', pmBase: 1 },
-      { date: '11/25（三）', amId: '1125-AM', amBase: 2, pmId: '1125-PM', pmBase: 4 },
-      { date: '11/26（四）', amId: '1126-AM', amBase: 4, pmId: '1126-PM', pmBase: 1 },
-      { date: '11/27（五）', amId: '1127-AM', amBase: 1, pmId: '1127-PM', pmBase: 3 },
-      { date: '11/30（一）', amId: '1130-AM', amBase: 2, pmId: '1130-PM', pmBase: 2 },
-      { date: '12/01（二）', amId: '1201-AM', amBase: 1, pmId: '1201-PM', pmBase: 4 },
-      { date: '12/02（三）', amId: '1202-AM', amBase: 4, pmId: '1202-PM', pmBase: 2 },
-      { date: '12/03（四）', amId: '1203-AM', amBase: 1, pmId: '1203-PM', pmBase: 3 },
-      { date: '12/04（五）', amId: '1204-AM', amBase: 2, pmId: '1204-PM', pmBase: 1 },
-      { date: '12/07（一）', amId: '1207-AM', amBase: 3, pmId: '1207-PM', pmBase: 4 },
-      { date: '12/08（二）', amId: '1208-AM', amBase: 1, pmId: '1208-PM', pmBase: 2 },
-      { date: '12/09（三）', amId: '1209-AM', amBase: 2, pmId: '1209-PM', pmBase: 3 },
-      { date: '12/10（四）', amId: '1210-AM', amBase: 2, pmId: '1210-PM', pmBase: 2 }
+      { date: '11/23（一）', amId: '1123-AM', amBase: 0, pmId: '1123-PM', pmBase: 0 },
+      { date: '11/24（二）', amId: '1124-AM', amBase: 0, pmId: '1124-PM', pmBase: 0 },
+      { date: '11/25（三）', amId: '1125-AM', amBase: 0, pmId: '1125-PM', pmBase: 0 },
+      { date: '11/26（四）', amId: '1126-AM', amBase: 0, pmId: '1126-PM', pmBase: 0 },
+      { date: '11/27（五）', amId: '1127-AM', amBase: 0, pmId: '1127-PM', pmBase: 0 },
+      { date: '11/30（一）', amId: '1130-AM', amBase: 0, pmId: '1130-PM', pmBase: 0 },
+      { date: '12/01（二）', amId: '1201-AM', amBase: 0, pmId: '1201-PM', pmBase: 0 },
+      { date: '12/02（三）', amId: '1202-AM', amBase: 0, pmId: '1202-PM', pmBase: 0 },
+      { date: '12/03（四）', amId: '1203-AM', amBase: 0, pmId: '1203-PM', pmBase: 0 },
+      { date: '12/04（五）', amId: '1204-AM', amBase: 0, pmId: '1204-PM', pmBase: 0 },
+      { date: '12/07（一）', amId: '1207-AM', amBase: 0, pmId: '1207-PM', pmBase: 0 },
+      { date: '12/08（二）', amId: '1208-AM', amBase: 0, pmId: '1208-PM', pmBase: 0 },
+      { date: '12/09（三）', amId: '1209-AM', amBase: 0, pmId: '1209-PM', pmBase: 0 },
+      { date: '12/10（四）', amId: '1210-AM', amBase: 0, pmId: '1210-PM', pmBase: 0 }
     ];
 
     const VERBATIM_QUESTIONS = [
@@ -2270,7 +2270,7 @@ function appendMailLog(type, studentId, name, email, subject, status) {
           milestones: [
             { title: '行前學習', desc: '觀看官方指定行前影片並完成 10 題線上學習單（總分達 80 分以上認列 1 小時）。' },
             { title: '倉庫服務與體驗', desc: '11/21（六）依錄取梯次至伯利恆倉庫（新北市林口區南勢四街 48 號）進行二手鞋整理與生命教育體驗（全程認列 3 小時）。' },
-            { title: '募集與整理', desc: '11/23–12/10 平日早休 09:40–10:10 或午休 14:45–15:15 校內募集值勤（每班上限 4 人，每人最多登記 2 班，每班認列 0.5 小時）。' },
+            { title: '募集與整理', desc: '11/23–12/10 平日早休 09:40–10:10 或午休 14:45–15:15 校內募集值勤（每班上限 4 人，每人須登記 2 班，每班 0.5 小時，共認列 1 小時）。' },
             { title: '活動反思', desc: '完成服務後撰寫中文 300–500 字或英文 200 字以上心得反思（審核通過認列 1 小時）。' }
           ]
         },
@@ -2544,7 +2544,7 @@ function appendMailLog(type, studentId, name, email, subject, status) {
       const whApp = (stu.attendance !== 'pending' && stu.attendance !== 'absent') ? whEst : 0.0;
 
       const shiftCnt = Array.isArray(stu.shifts) ? stu.shifts.length : 0;
-      const campusEst = stu.shiftsLocked ? shiftCnt * 0.5 : 0.0;
+      const campusEst = stu.shiftsLocked ? shiftCnt * 0.5 : 1.0;
       const campusApp = (stu.shiftsLocked && stu.reviews.campus === 'passed') ? shiftCnt * 0.5 : 0.0;
 
       const refEst = 1.0;
@@ -3037,14 +3037,18 @@ function appendMailLog(type, studentId, name, email, subject, status) {
       // STEP 2
       document.getElementById('stuStep2Gate').classList.toggle('hidden', s2Open);
       document.getElementById('stuStep2Content').classList.toggle('hidden', !s2Open);
-      document.getElementById('stuStep2Badge').textContent = stu.shiftsLocked ? `已鎖定 ${stu.shifts.length} 班 ✓` : (s2Open ? '待選擇排班' : '尚未解鎖');
+      document.getElementById('stuStep2Badge').textContent = stu.shiftsLocked ? `已鎖定 ${stu.shifts.length} 班（1.0h）✓` : (s2Open ? '待選擇排班（須選 2 班）' : '尚未解鎖');
       document.getElementById('stuStep2Badge').className = stu.shiftsLocked
         ? 'rounded-full bg-[#234c3c] px-3 py-0.5 text-xs font-bold text-white'
         : 'rounded-full border border-[#e9d5ae] bg-[#fdf6e7] px-3 py-0.5 text-xs font-bold text-[#825612]';
 
       document.getElementById('stuStep2SelectedCount').textContent = stu.shifts.length;
       document.getElementById('stuStep2EstHours').textContent = (stu.shifts.length * 0.5).toFixed(1);
-      document.getElementById('stuStep2ConfirmBtn').disabled = stu.shifts.length === 0 || stu.shiftsLocked;
+      const step2ConfirmBtn = document.getElementById('stuStep2ConfirmBtn');
+      step2ConfirmBtn.disabled = stu.shifts.length !== 2 || stu.shiftsLocked;
+      step2ConfirmBtn.textContent = stu.shifts.length === 2
+        ? '確認鎖定排班時段（已選滿 2 班，共 1.0 小時）'
+        : `確認鎖定排班時段（尚差 ${2 - stu.shifts.length} 班）`;
 
       document.getElementById('stuStep2TableBody').innerHTML = CAMPUS_SHIFTS.map((row) => {
         const renderCell = (sid) => {
@@ -3186,7 +3190,7 @@ function appendMailLog(type, studentId, name, email, subject, status) {
           app: hrs.whApp
         },
         {
-          task: '3. 校內募集與整理排班',
+          task: '3. 校內募集與整理排班（2 班）',
           detail: stu.shifts.length ? stu.shifts.map(getShiftDisplayName).join('、') : '尚未排班',
           status: stu.shiftsLocked ? formatTaskReviewLabel(stu.reviews.campus) : '待鎖定排班',
           est: hrs.campusEst,
@@ -3288,13 +3292,17 @@ function appendMailLog(type, studentId, name, email, subject, status) {
 
     function confirmStudentStep2() {
       const stu = appState.students.find((s) => s.id === authSession?.studentId);
-      if (!stu || stu.shiftsLocked || stu.shifts.length === 0) return;
+      if (!stu || stu.shiftsLocked) return;
+      if (stu.shifts.length !== 2) {
+        showToast('請選滿 2 個校內募集班次（共 1.0 小時）後再鎖定！', '⚠️');
+        return;
+      }
       stu.shiftsLocked = true;
       stu.shiftsLockedAt = nowFullTimestamp();
       saveAppState();
       silentPushStudentToCloud(stu);
       renderStudentWorkspace(stu);
-      showToast('校內募集排班已寫入鎖定！', '🔒');
+      showToast('校內募集排班（2 班共 1.0 小時）已寫入鎖定！', '🔒');
     }
 
     function toggleStudentEmbeddedPlayer() {
@@ -3739,156 +3747,134 @@ function appendMailLog(type, studentId, name, email, subject, status) {
             <td class="px-3 py-2.5">${escapeHtml(w.id)}</td>
             <td class="px-3 py-2.5 font-bold text-[#243a32]">${escapeHtml(w.name)}</td>
             <td class="px-3 py-2.5 text-[#825612] font-bold">${escapeHtml(w.pref)}</td>
-            <td class="px-3.5 py-2.5 text-right space-x-1.5">
-              <button type="button" onclick="promoteWaitlistFromAttendance('${w.id}', '上午A')"
-                class="rounded-lg border border-[#234c3c] bg-[#e7eddf] px-3 py-1.5 text-xs font-bold text-[#234c3c] hover:bg-[#d8e3cd]">
-                遞補上午A
-              </button>
-              <button type="button" onclick="promoteWaitlistFromAttendance('${w.id}', '上午B')"
-                class="rounded-lg border border-[#234c3c] bg-[#e7eddf] px-3 py-1.5 text-xs font-bold text-[#234c3c] hover:bg-[#d8e3cd]">
-                遞補上午B
-              </button>
-              <button type="button" onclick="promoteWaitlistFromAttendance('${w.id}', '下午')"
-                class="rounded-lg border border-[#244b63] bg-[#eef4f8] px-3 py-1.5 text-xs font-bold text-[#244b63] hover:bg-[#dce8f0]">
-                遞補下午梯
-              </button>
+            <td class="px-3.5 py-2.5 text-right">
+              <div class="inline-flex items-center gap-1.5">
+                <button type="button" onclick="promoteWaitlistFromAttendance('${w.id}', '上午A')"
+                  class="rounded-md border border-[#234c3c] bg-[#e7eddf] px-2.5 py-1 text-xs font-bold text-[#234c3c] hover:bg-[#234c3c] hover:text-white">
+                  遞補上午A
+                </button>
+                <button type="button" onclick="promoteWaitlistFromAttendance('${w.id}', '上午B')"
+                  class="rounded-md border border-[#234c3c] bg-[#e7eddf] px-2.5 py-1 text-xs font-bold text-[#234c3c] hover:bg-[#234c3c] hover:text-white">
+                  遞補上午B
+                </button>
+                <button type="button" onclick="promoteWaitlistFromAttendance('${w.id}', '下午')"
+                  class="rounded-md border border-[#244b63] bg-[#eef4f8] px-2.5 py-1 text-xs font-bold text-[#244b63] hover:bg-[#244b63] hover:text-white">
+                  遞補下午梯
+                </button>
+              </div>
             </td>
           </tr>
-        `).join('');
+        `).join('') || `<tr><td colspan="7" class="px-4 py-8 text-center text-[#52625a]">無符合條件的備取名單資料</td></tr>`;
         return;
       }
 
-      // ================= MODE: REGULAR SESSION ROLL CALL (AM / PM) =================
-      const base = getAttendanceSessionStudents();
+      // ================= MODE: REGULAR SESSION (AM / PM) =================
+      const allInSession = getAttendanceSessionStudents();
 
-      const cPres = base.filter((s) => s.attendance === 'present').length;
-      const cLate = base.filter((s) => s.attendance === 'late').length;
-      const cEarly = base.filter((s) => s.attendance === 'early').length;
-      const cAbs = base.filter((s) => s.attendance === 'absent').length;
-      const cPend = base.filter((s) => s.attendance === 'pending').length;
+      const kpi = {
+        total: allInSession.length,
+        present: allInSession.filter((s) => s.attendance === 'present').length,
+        late: allInSession.filter((s) => s.attendance === 'late').length,
+        early: allInSession.filter((s) => s.attendance === 'early').length,
+        absent: allInSession.filter((s) => s.attendance === 'absent').length
+      };
 
       document.getElementById('attKpiSummary').innerHTML = [
-        { label: '本梯總人數', val: `${base.length} 人`, cls: 'bg-white border-[#dfe4dc] text-[#243a32]' },
-        { label: '✓ 出席 (3.0h)', val: `${cPres} 人`, cls: 'bg-[#e7eddf] border-[#b9c9b2] text-[#234c3c]' },
-        { label: '⏰ 遲到 (2.5h)', val: `${cLate} 人`, cls: 'bg-[#fdf6e7] border-[#e9d5ae] text-[#825612]' },
-        { label: '🏃 早退', val: `${cEarly} 人`, cls: 'bg-[#eef4f8] border-[#c4d7e3] text-[#244b63]' },
-        { label: '✕ 缺席 / 待點', val: `${cAbs}缺 / ${cPend}待`, cls: 'bg-[#fdf0f1] border-[#ecc4c8] text-[#992634]' }
-      ].map((k) => `
-        <div class="rounded-xl border px-2.5 py-2 sm:px-3.5 sm:py-2.5 ${k.cls}">
-          <div class="text-[11px] font-medium opacity-85 truncate">${k.label}</div>
-          <div class="mt-0.5 text-sm sm:text-base font-bold">${k.val}</div>
+        { label: '本梯總人數', val: kpi.total, cls: 'bg-white border-[#c5d2bd] text-[#243a32]', span: 'col-span-3 sm:col-span-1' },
+        { label: '✓ 有出席 (3.0h)', val: kpi.present, cls: 'bg-[#e7eddf] border-[#234c3c] text-[#234c3c]', span: '' },
+        { label: '⏰ 遲到 (2.5h)', val: kpi.late, cls: 'bg-[#fdf6e7] border-[#e9d5ae] text-[#825612]', span: '' },
+        { label: '🏃 早退', val: kpi.early, cls: 'bg-[#eef4f8] border-[#c4d7e3] text-[#244b63]', span: '' },
+        { label: '✕ 缺席 (0h)', val: kpi.absent, cls: 'bg-[#fdf0f1] border-[#ecc4c8] text-[#992634]', span: 'col-span-2 sm:col-span-1' }
+      ].map((c) => `
+        <div class="rounded-xl border px-3 py-2 ${c.cls} ${c.span}">
+          <div class="text-[11px] font-bold opacity-85">${c.label}</div>
+          <div class="text-lg sm:text-xl font-bold mt-0.5">${c.val} 人</div>
         </div>
       `).join('');
 
-      const filtered = base.filter((s) => {
+      const filtered = allInSession.filter((s) => {
         if (attStatusFilter === 'pending' && s.attendance !== 'pending') return false;
         if (attStatusFilter === 'present' && s.attendance !== 'present') return false;
         if (attStatusFilter === 'late_early' && s.attendance !== 'late' && s.attendance !== 'early') return false;
         if (attStatusFilter === 'absent' && s.attendance !== 'absent') return false;
-
         if (!kw) return true;
         return s.name.toLowerCase().includes(kw) ||
           s.id.toLowerCase().includes(kw) ||
           s.className.toLowerCase().includes(kw) ||
-          String(s.seat) === kw;
+          String(s.seat) === kw ||
+          String(s.no) === kw;
       });
 
-      const overCutoff = checkAutoAbsentActive();
-
-      // 1. Render Mobile Thumb-Friendly Cards
+      // Mobile Thumb-Friendly Cards
       if (filtered.length === 0) {
-        mobileContainer.innerHTML = `<div class="rounded-xl border border-[#dfe4dc] bg-[#fafaf5] p-6 text-center text-sm font-bold text-[#52625a]">無符合搜尋或篩選條件的學生</div>`;
+        mobileContainer.innerHTML = `<div class="rounded-xl border border-[#dfe4dc] bg-[#fafaf5] p-6 text-center text-sm font-bold text-[#52625a]">無符合條件的學生資料</div>`;
       } else {
         mobileContainer.innerHTML = filtered.map((s) => {
-          let hrs = 0;
-          let borderAccent = 'border-l-4 border-l-[#dfe4dc]';
-          let hrsBadgeCls = 'bg-[#fafaf5] text-[#52625a] border-[#dfe4dc]';
+          const isP = s.attendance === 'present';
+          const isL = s.attendance === 'late';
+          const isE = s.attendance === 'early';
+          const isA = s.attendance === 'absent';
 
-          if (s.attendance === 'present') {
-            hrs = 3.0;
-            borderAccent = 'border-l-4 border-l-[#234c3c]';
-            hrsBadgeCls = 'bg-[#e7eddf] text-[#234c3c] border-[#b9c9b2]';
-          } else if (s.attendance === 'late') {
-            hrs = 2.5;
-            borderAccent = 'border-l-4 border-l-[#d99b26]';
-            hrsBadgeCls = 'bg-[#fdf6e7] text-[#825612] border-[#e9d5ae]';
-          } else if (s.attendance === 'early') {
-            hrs = Number(s.attHours || 2.0);
-            borderAccent = 'border-l-4 border-l-[#3a7ca5]';
-            hrsBadgeCls = 'bg-[#eef4f8] text-[#244b63] border-[#c4d7e3]';
-          } else if (s.attendance === 'absent') {
-            hrs = 0.0;
-            borderAccent = 'border-l-4 border-l-[#c93b4b]';
-            hrsBadgeCls = 'bg-[#fdf0f1] text-[#992634] border-[#ecc4c8]';
-          }
+          let cardAccent = 'border-[#dfe4dc] bg-white';
+          if (isP) cardAccent = 'border-[#b9c9b2] border-l-4 border-l-[#234c3c] bg-[#edf1e7]/50';
+          else if (isL) cardAccent = 'border-[#e9d5ae] border-l-4 border-l-[#825612] bg-[#fdf6e7]/50';
+          else if (isE) cardAccent = 'border-[#c4d7e3] border-l-4 border-l-[#244b63] bg-[#eef4f8]/50';
+          else if (isA) cardAccent = 'border-[#ecc4c8] border-l-4 border-l-[#992634] bg-[#fdf0f1]/50';
 
-          const earlyQuickBtns = (s.attendance === 'early') ? `
-            <div class="flex items-center justify-between gap-1.5 rounded-lg border border-[#c4d7e3] bg-[#eef4f8] px-2.5 py-1.5">
-              <span class="text-xs font-bold text-[#244b63]">早退時數：</span>
-              <div class="flex items-center gap-1">
-                ${[0.5, 1.0, 1.5, 2.0, 2.5].map((h) => `
-                  <button type="button" onclick="setEarlyDepartureHours('${s.id}', ${h})"
-                    class="rounded-md px-2 py-1 text-xs font-bold ${Number(s.attHours || 2.0) === h ? 'bg-[#244b63] text-white' : 'bg-white text-[#244b63] border border-[#c4d7e3]'}">
-                    ${h.toFixed(1)}h
-                  </button>
-                `).join('')}
-              </div>
+          const hrs = computeStudentHours(s).whApp;
+
+          const earlySelectHtml = isE ? `
+            <div class="flex items-center justify-between gap-2 rounded-lg border border-[#c4d7e3] bg-white px-3 py-1.5 text-xs">
+              <span class="font-bold text-[#244b63]">早退核發時數調整：</span>
+              <select onchange="updateEarlyLeaveHours('${s.id}', this.value)"
+                class="rounded border border-[#244b63] bg-[#eef4f8] px-2 py-1 text-xs font-bold text-[#244b63]">
+                ${[2.5, 2.0, 1.5, 1.0, 0.5].map((h) => `<option value="${h}" ${Number(s.attHours) === h ? 'selected' : ''}>${h.toFixed(1)} 小時</option>`).join('')}
+              </select>
             </div>
           ` : '';
 
-          const timeNote = s.attTimestamp
-            ? `<span class="text-xs font-medium text-[#234c3c]">${escapeHtml(s.attTimestamp)}</span>`
-            : (overCutoff && s.attendance === 'pending'
-              ? `<span class="text-xs font-bold text-[#992634]">⚠️ 已逾開訓20分鐘未報到</span>`
-              : `<span class="text-xs text-[#7a8780]">尚未點名</span>`);
-
           return `
-            <div class="rounded-xl border border-[#dfe4dc] ${borderAccent} bg-white p-3 space-y-2.5">
-              <!-- Top Row: No, Class/Seat, Name, Hours -->
-              <div class="flex items-center justify-between gap-2">
-                <div class="flex items-center gap-1.5 min-w-0">
-                  <span class="shrink-0 text-xs font-bold text-[#52625a]">#${s.no}</span>
-                  <span class="shrink-0 rounded-md bg-[#edf1e7] px-2 py-0.5 text-xs font-bold text-[#234c3c]">${escapeHtml(s.className)}-${s.seat}</span>
-                  <span class="text-base font-bold text-[#243a32] truncate">${escapeHtml(s.name)}</span>
+            <div class="rounded-xl border p-3.5 space-y-2.5 transition ${cardAccent}">
+              <div class="flex items-start justify-between gap-2">
+                <div class="min-w-0">
+                  <div class="flex items-center gap-1.5 flex-wrap">
+                    <span class="rounded bg-[#234c3c] px-2 py-0.5 text-xs font-bold text-white">${escapeHtml(s.className)}-${s.seat}</span>
+                    <span class="text-base font-bold text-[#243a32]">${escapeHtml(s.name)}</span>
+                    <span class="rounded border border-[#c5d2bd] bg-white px-1.5 py-0.5 text-[11px] font-bold text-[#234c3c]">${escapeHtml(s.session)}</span>
+                  </div>
+                  <div class="mt-0.5 text-xs text-[#52625a]">學號：${escapeHtml(s.id)}｜序號 #${s.no}</div>
                 </div>
-                <span class="shrink-0 rounded-lg border px-2 py-0.5 text-xs font-bold ${hrsBadgeCls}">
-                  ${hrs.toFixed(1)}h
-                </span>
+                <div class="text-right shrink-0">
+                  <div class="text-sm font-bold ${hrs > 0 ? 'text-[#234c3c]' : 'text-[#52625a]'}">${hrs.toFixed(1)} h</div>
+                  <div class="text-[11px] text-[#52625a]">${escapeHtml(s.attTimestamp || '未點名')}</div>
+                </div>
               </div>
 
-              <!-- Middle Row: Student ID, Group & Check-in Timestamp -->
-              <div class="flex items-center justify-between gap-2 text-xs">
-                <span class="text-[#52625a]">${escapeHtml(s.id)} · <strong class="text-[#234c3c]">${escapeHtml(s.session)}</strong></span>
-                <div class="truncate text-right">${timeNote}</div>
-              </div>
-
-              <!-- Bottom Row: 4-Button One-Tap Status Bar -->
-              <div class="grid grid-cols-4 gap-1.5 pt-0.5">
-                <button type="button" onclick="setAttendanceState('${s.id}', 'present')"
-                  class="rounded-lg border py-2 text-xs font-bold transition active:scale-[0.97] ${s.attendance === 'present' ? 'border-[#234c3c] bg-[#234c3c] text-white' : 'border-[#dfe4dc] bg-[#fafaf5] text-[#234c3c]'}">
+              <div class="grid grid-cols-4 gap-1.5">
+                <button type="button" onclick="setStudentAttendanceStatus('${s.id}', 'present')"
+                  class="rounded-lg border py-2.5 text-xs font-bold transition active:scale-[0.98] ${isP ? 'border-[#234c3c] bg-[#234c3c] text-white' : 'border-[#dfe4dc] bg-white text-[#243a32]'}">
                   ✓ 出席
                 </button>
-                <button type="button" onclick="setAttendanceState('${s.id}', 'late')"
-                  class="rounded-lg border py-2 text-xs font-bold transition active:scale-[0.97] ${s.attendance === 'late' ? 'border-[#825612] bg-[#825612] text-white' : 'border-[#dfe4dc] bg-[#fafaf5] text-[#825612]'}">
+                <button type="button" onclick="setStudentAttendanceStatus('${s.id}', 'late')"
+                  class="rounded-lg border py-2.5 text-xs font-bold transition active:scale-[0.98] ${isL ? 'border-[#825612] bg-[#825612] text-white' : 'border-[#dfe4dc] bg-white text-[#243a32]'}">
                   ⏰ 遲到
                 </button>
-                <button type="button" onclick="setAttendanceState('${s.id}', 'early')"
-                  class="rounded-lg border py-2 text-xs font-bold transition active:scale-[0.97] ${s.attendance === 'early' ? 'border-[#244b63] bg-[#244b63] text-white' : 'border-[#dfe4dc] bg-[#fafaf5] text-[#244b63]'}">
+                <button type="button" onclick="setStudentAttendanceStatus('${s.id}', 'early')"
+                  class="rounded-lg border py-2.5 text-xs font-bold transition active:scale-[0.98] ${isE ? 'border-[#244b63] bg-[#244b63] text-white' : 'border-[#dfe4dc] bg-white text-[#243a32]'}">
                   🏃 早退
                 </button>
-                <button type="button" onclick="setAttendanceState('${s.id}', 'absent')"
-                  class="rounded-lg border py-2 text-xs font-bold transition active:scale-[0.97] ${s.attendance === 'absent' ? 'border-[#992634] bg-[#992634] text-white' : 'border-[#dfe4dc] bg-[#fafaf5] text-[#992634]'}">
+                <button type="button" onclick="setStudentAttendanceStatus('${s.id}', 'absent')"
+                  class="rounded-lg border py-2.5 text-xs font-bold transition active:scale-[0.98] ${isA ? 'border-[#992634] bg-[#992634] text-white' : 'border-[#dfe4dc] bg-white text-[#243a32]'}">
                   ✕ 缺席
                 </button>
               </div>
-
-              ${earlyQuickBtns}
+              ${earlySelectHtml}
             </div>
           `;
         }).join('');
       }
 
-      // 2. Render Desktop Table
+      // Desktop Table
       desktopHead.innerHTML = `
         <tr>
           <th class="sticky-col px-3.5 py-3 font-bold min-w-[330px]">出席狀況（一鍵點選）</th>
@@ -3904,139 +3890,183 @@ function appendMailLog(type, studentId, name, email, subject, status) {
       `;
 
       desktopBody.innerHTML = filtered.map((s) => {
-        let hrs = 0;
-        if (s.attendance === 'present') hrs = 3.0;
-        else if (s.attendance === 'late') hrs = 2.5;
-        else if (s.attendance === 'early') hrs = Number(s.attHours || 2.0);
-        else if (s.attendance === 'absent') hrs = 0.0;
+        const isP = s.attendance === 'present';
+        const isL = s.attendance === 'late';
+        const isE = s.attendance === 'early';
+        const isA = s.attendance === 'absent';
 
-        const earlySelect = (s.attendance === 'early') ? `
-          <select onchange="setEarlyDepartureHours('${s.id}', this.value)"
-            class="ml-1 rounded-lg border border-[#c4d7e3] bg-white px-2 py-1 text-xs font-bold text-[#244b63]">
-            ${[0.5, 1.0, 1.5, 2.0, 2.5].map((h) => `<option value="${h}" ${Number(s.attHours || 2.0) === h ? 'selected' : ''}>${h.toFixed(1)}h</option>`).join('')}
+        let rowBg = 'bg-white';
+        if (isP) rowBg = 'bg-[#edf1e7]/65';
+        else if (isL) rowBg = 'bg-[#fdf6e7]/65';
+        else if (isE) rowBg = 'bg-[#eef4f8]/65';
+        else if (isA) rowBg = 'bg-[#fdf0f1]/65';
+
+        const earlySelect = isE ? `
+          <select onchange="updateEarlyLeaveHours('${s.id}', this.value)"
+            class="ml-1 rounded border border-[#244b63] bg-white px-1.5 py-1 text-xs font-bold text-[#244b63]">
+            ${[2.5, 2.0, 1.5, 1.0, 0.5].map((h) => `<option value="${h}" ${Number(s.attHours) === h ? 'selected' : ''}>${h.toFixed(1)}h</option>`).join('')}
           </select>
         ` : '';
 
-        const autoAbsentTag = (overCutoff && s.attendance === 'pending')
-          ? `<span class="ml-1 rounded bg-[#fdf0f1] px-2 py-0.5 text-[11px] font-bold text-[#992634]">⚠️ 已逾開訓20分鐘</span>`
-          : '';
+        const hrs = computeStudentHours(s).whApp;
 
         return `
-          <tr>
-            <td class="sticky-col px-3.5 py-2.5">
-              <div class="inline-flex items-center gap-1">
-                <button type="button" onclick="setAttendanceState('${s.id}', 'present')"
-                  class="rounded-md border px-2 py-1 text-xs font-bold ${s.attendance === 'present' ? 'border-[#234c3c] bg-[#234c3c] text-white' : 'border-[#dfe4dc] bg-[#fafaf5] text-[#234c3c] hover:bg-[#e7eddf]'}">
-                  ✓ 出席
+          <tr class="${rowBg}">
+            <td class="sticky-col px-3.5 py-2.5 ${rowBg}">
+              <div class="inline-flex flex-wrap items-center gap-1">
+                <button type="button" onclick="setStudentAttendanceStatus('${s.id}', 'present')"
+                  class="rounded-md border px-2 py-1 text-xs font-bold ${isP ? 'border-[#234c3c] bg-[#234c3c] text-white' : 'border-[#dfe4dc] bg-white text-[#243a32] hover:border-[#234c3c]'}">
+                  ✓ 有出席
                 </button>
-                <button type="button" onclick="setAttendanceState('${s.id}', 'late')"
-                  class="rounded-md border px-2 py-1 text-xs font-bold ${s.attendance === 'late' ? 'border-[#825612] bg-[#825612] text-white' : 'border-[#dfe4dc] bg-[#fafaf5] text-[#825612] hover:bg-[#fdf6e7]'}">
+                <button type="button" onclick="setStudentAttendanceStatus('${s.id}', 'late')"
+                  class="rounded-md border px-2 py-1 text-xs font-bold ${isL ? 'border-[#825612] bg-[#825612] text-white' : 'border-[#dfe4dc] bg-white text-[#243a32] hover:border-[#825612]'}">
                   ⏰ 遲到
                 </button>
-                <button type="button" onclick="setAttendanceState('${s.id}', 'early')"
-                  class="rounded-md border px-2 py-1 text-xs font-bold ${s.attendance === 'early' ? 'border-[#244b63] bg-[#244b63] text-white' : 'border-[#dfe4dc] bg-[#fafaf5] text-[#244b63] hover:bg-[#eef4f8]'}">
+                <button type="button" onclick="setStudentAttendanceStatus('${s.id}', 'early')"
+                  class="rounded-md border px-2 py-1 text-xs font-bold ${isE ? 'border-[#244b63] bg-[#244b63] text-white' : 'border-[#dfe4dc] bg-white text-[#243a32] hover:border-[#244b63]'}">
                   🏃 早退
                 </button>
-                <button type="button" onclick="setAttendanceState('${s.id}', 'absent')"
-                  class="rounded-md border px-2 py-1 text-xs font-bold ${s.attendance === 'absent' ? 'border-[#992634] bg-[#992634] text-white' : 'border-[#dfe4dc] bg-[#fafaf5] text-[#992634] hover:bg-[#fdf0f1]'}">
+                <button type="button" onclick="setStudentAttendanceStatus('${s.id}', 'absent')"
+                  class="rounded-md border px-2 py-1 text-xs font-bold ${isA ? 'border-[#992634] bg-[#992634] text-white' : 'border-[#dfe4dc] bg-white text-[#243a32] hover:border-[#992634]'}">
                   ✕ 缺席
                 </button>
                 ${earlySelect}
               </div>
             </td>
             <td class="px-3 py-2.5 font-bold">${s.no}</td>
-            <td class="px-3 py-2.5">${escapeHtml(s.className)}</td>
+            <td class="px-3 py-2.5 font-bold">${escapeHtml(s.className)}</td>
             <td class="px-3 py-2.5">${s.seat}</td>
-            <td class="px-3 py-2.5 font-medium">${escapeHtml(s.id)}</td>
+            <td class="px-3 py-2.5">${escapeHtml(s.id)}</td>
             <td class="px-3 py-2.5 font-bold text-[#243a32]">${escapeHtml(s.name)}</td>
             <td class="px-3 py-2.5">
               <span class="rounded bg-[#edf1e7] px-2 py-0.5 text-xs font-bold text-[#234c3c]">${escapeHtml(s.session)}</span>
             </td>
-            <td class="px-3 py-2.5 text-xs text-[#52625a]">${escapeHtml(s.attTimestamp || '尚未點名')}${autoAbsentTag}</td>
+            <td class="px-3 py-2.5 text-xs text-[#52625a]">${escapeHtml(s.attTimestamp || '—')}</td>
             <td class="px-3 py-2.5 text-right font-bold text-[#234c3c]">${hrs.toFixed(1)} h</td>
           </tr>
         `;
-      }).join('');
+      }).join('') || `<tr><td colspan="9" class="px-4 py-8 text-center text-[#52625a]">無符合條件的學生資料</td></tr>`;
     }
 
-    function setAttendanceState(stuId, targetStatus) {
-      const s = appState.students.find((x) => x.id === stuId);
-      if (!s) return;
+    function promoteWaitlistFromAttendance(waitlistId, targetSession) {
+      const idx = appState.waitlist.findIndex((w) => w.id === waitlistId);
+      if (idx < 0) return;
+      const w = appState.waitlist[idx];
+      const autoPresent = document.getElementById('attWaitlistAutoPresentChk')?.checked ?? true;
 
-      // Tapping the already-active status resets back to pending
-      const next = (s.attendance === targetStatus) ? 'pending' : targetStatus;
-      s.attendance = next;
+      const maxNo = appState.students.reduce((m, s) => Math.max(m, Number(s.no) || 0), 0);
       const t = nowClockTime();
 
-      if (next === 'present') {
-        s.attHours = 3.0;
-        s.attTimestamp = `報到簽到 ${t}`;
-        s.reviews.warehouse = 'passed';
-      } else if (next === 'late') {
-        s.attHours = 2.5;
-        s.attTimestamp = `遲到報到 ${t}`;
-        s.reviews.warehouse = 'passed';
-      } else if (next === 'early') {
-        s.attHours = 2.0;
-        s.attTimestamp = `早退離場 ${t}`;
-        s.reviews.warehouse = 'passed';
-      } else if (next === 'absent') {
-        s.attHours = 0.0;
-        s.attTimestamp = `判定缺席 ${t}`;
-        s.reviews.warehouse = 'rejected';
+      const promotedStudent = {
+        no: maxNo + 1,
+        className: w.className,
+        seat: w.seat,
+        id: w.id,
+        name: w.name,
+        session: targetSession,
+        isTeacherTest: false,
+        email: `${w.id}@stu.kcislk.ntpc.edu.tw`,
+        password: w.id,
+        confirmed: true,
+        confirmedAt: nowFullTimestamp(),
+        shifts: [],
+        shiftsLocked: false,
+        shiftsLockedAt: '',
+        videoWatched: false,
+        answers: {},
+        qScores: {},
+        wsScore: 0,
+        wsLocked: false,
+        wsSubmittedAt: '',
+        attendance: autoPresent ? 'present' : 'pending',
+        attTimestamp: autoPresent ? `備取遞補報到 (${t})` : '備取現場遞補轉正取',
+        attHours: autoPresent ? 3.0 : 0,
+        reflectionText: '',
+        refLocked: false,
+        refSubmittedAt: '',
+        reviews: {
+          pre: 'pending',
+          warehouse: autoPresent ? 'passed' : 'pending',
+          campus: 'pending',
+          reflection: 'pending'
+        },
+        urgentAlert: false,
+        teacherNote: ''
+      };
+
+      appState.students.push(promotedStudent);
+      appState.waitlist.splice(idx, 1);
+      saveAppState();
+      renderAttendanceSection();
+      showToast(
+        autoPresent
+          ? `✓ 已將備取 #${w.rank} ${w.name} 遞補至「${targetSession}」並完成出席報到 (3.0h)！`
+          : `✓ 已將備取 #${w.rank} ${w.name} 遞補至「${targetSession}」正取名單！`,
+        '✓'
+      );
+    }
+
+    function setStudentAttendanceStatus(stuId, status) {
+      const stu = appState.students.find((s) => s.id === stuId);
+      if (!stu) return;
+
+      if (stu.attendance === status) {
+        stu.attendance = 'pending';
+        stu.attTimestamp = '';
+        stu.attHours = 0;
+        stu.reviews.warehouse = 'pending';
       } else {
-        s.attHours = 0.0;
-        s.attTimestamp = '';
-        s.reviews.warehouse = 'pending';
+        stu.attendance = status;
+        const t = nowClockTime();
+        if (status === 'present') {
+          stu.attTimestamp = `準時報到 (${t})`;
+          stu.attHours = 3.0;
+          stu.reviews.warehouse = 'passed';
+        } else if (status === 'late') {
+          stu.attTimestamp = `遲到報到 (${t})`;
+          stu.attHours = 2.5;
+          stu.reviews.warehouse = 'passed';
+        } else if (status === 'early') {
+          stu.attTimestamp = `早退離場 (${t})`;
+          stu.attHours = stu.attHours && stu.attHours < 3 ? stu.attHours : 2.0;
+          stu.reviews.warehouse = 'passed';
+        } else if (status === 'absent') {
+          stu.attTimestamp = `未報到缺席 (${t})`;
+          stu.attHours = 0;
+          stu.reviews.warehouse = 'rejected';
+        }
       }
 
       saveAppState();
-      silentPushStudentToCloud(s);
       renderAttendanceTable();
     }
 
-    function cycleAttendanceState(stuId) {
-      const s = appState.students.find((x) => x.id === stuId);
-      if (!s) return;
-      const order = ['pending', 'present', 'late', 'early', 'absent'];
-      const next = order[(order.indexOf(s.attendance) + 1) % order.length];
-      setAttendanceState(stuId, next);
-    }
-
-    function setEarlyDepartureHours(stuId, val) {
-      const s = appState.students.find((x) => x.id === stuId);
-      if (!s) return;
-      s.attHours = Number(val);
+    function updateEarlyLeaveHours(stuId, hrsVal) {
+      const stu = appState.students.find((s) => s.id === stuId);
+      if (!stu) return;
+      stu.attHours = Number(hrsVal);
       saveAppState();
-      silentPushStudentToCloud(s);
       renderAttendanceTable();
     }
 
-    function promoteWaitlistFromAttendance(waitId, targetSession) {
-      const autoPresent = document.getElementById('attWaitlistAutoPresentChk')?.checked ?? true;
-      promoteWaitlistStudent(waitId, targetSession, autoPresent);
-      renderAttendanceSection();
-    }
-
-    /* --- TAB ②: 4-TASK REVIEW, GRADING & TOTAL HOURS EXPORT --- */
+    /* --- TAB ②: TASK REVIEW, GRADING & TOTAL HOURS EXCEL/CSV EXPORT --- */
     function renderReviewSection() {
-      const passThresh = Number(appState.videoConfig.passScore || 80);
-      const totalCnt = appState.students.length;
-      const confCnt = appState.students.filter((s) => s.confirmed).length;
-      const wsDoneCnt = appState.students.filter((s) => s.wsLocked).length;
-      const wsPassCnt = appState.students.filter((s) => s.wsLocked && s.wsScore >= passThresh).length;
-      const refDoneCnt = appState.students.filter((s) => s.refLocked).length;
+      const total = appState.students.length;
+      const confirmedCnt = appState.students.filter((s) => s.confirmed).length;
+      const wsCnt = appState.students.filter((s) => s.wsLocked).length;
+      const refCnt = appState.students.filter((s) => s.refLocked).length;
+      const sumHours = appState.students.reduce((acc, s) => acc + computeStudentHours(s).totalApp, 0);
 
       document.getElementById('reviewKpiRow').innerHTML = [
-        { label: '總錄取人數', val: `${totalCnt} 人` },
-        { label: '正取已確認', val: `${confCnt} / ${totalCnt}` },
-        { label: '學習單已鎖定', val: `${wsDoneCnt} 份` },
-        { label: `達 ${passThresh} 分以上`, val: `${wsPassCnt} 人` },
-        { label: '活動反思已鎖定', val: `${refDoneCnt} 份` }
+        { title: '錄取總人數', val: `${total} 人` },
+        { title: '正取已確認', val: `${confirmedCnt} / ${total}` },
+        { title: '學習單已繳交', val: `${wsCnt} / ${total}` },
+        { title: '活動反思已繳交', val: `${refCnt} / ${total}` },
+        { title: '全體已核發總時數', val: `${sumHours.toFixed(1)} h` }
       ].map((k) => `
-        <div class="rounded-xl border border-[#dfe4dc] bg-white px-4 py-3">
-          <div class="text-xs text-[#52625a]">${k.label}</div>
-          <div class="mt-0.5 text-lg font-bold text-[#234c3c]">${k.val}</div>
+        <div class="rounded-xl border border-[#dfe4dc] bg-white p-3.5">
+          <div class="text-xs text-[#52625a]">${k.title}</div>
+          <div class="text-lg sm:text-xl font-bold text-[#234c3c] mt-0.5">${k.val}</div>
         </div>
       `).join('');
 
@@ -4044,20 +4074,24 @@ function appendMailLog(type, studentId, name, email, subject, status) {
     }
 
     function renderReviewTable() {
-      const kw = (document.getElementById('reviewSearchInput')?.value || '').trim().toLowerCase();
-      const st = document.getElementById('reviewStatusFilter')?.value || 'ALL';
+      const kw = (document.getElementById('reviewSearchInput').value || '').trim().toLowerCase();
+      const stFilter = document.getElementById('reviewStatusFilter').value;
 
       const list = appState.students.filter((s) => {
-        if (st === 'SUBMITTED' && !s.wsLocked && !s.refLocked) return false;
-        if (st === 'NEEDS_REVIEW' && !(s.wsLocked && s.reviews.pre !== 'passed') && !(s.refLocked && s.reviews.reflection !== 'passed')) return false;
+        if (stFilter === 'SUBMITTED' && !s.wsLocked && !s.refLocked) return false;
+        if (stFilter === 'NEEDS_REVIEW' && !(
+          (s.wsLocked && s.reviews.pre !== 'passed') ||
+          (s.refLocked && s.reviews.reflection !== 'passed') ||
+          s.urgentAlert
+        )) return false;
         if (!kw) return true;
         return s.name.toLowerCase().includes(kw) || s.id.toLowerCase().includes(kw) || s.className.toLowerCase().includes(kw);
       });
 
-      const badge = (status, extra = '') => {
-        if (status === 'passed') return `<span class="rounded bg-[#e7eddf] px-2 py-0.5 text-[11px] font-bold text-[#234c3c]">✓ 通過 ${extra}</span>`;
-        if (status === 'rejected') return `<span class="rounded bg-[#fdf0f1] px-2 py-0.5 text-[11px] font-bold text-[#992634]">✕ 退件 ${extra}</span>`;
-        return `<span class="rounded bg-[#fdf6e7] px-2 py-0.5 text-[11px] font-bold text-[#825612]">⏳ 待審 ${extra}</span>`;
+      const badge = (st, extra = '') => {
+        if (st === 'passed') return `<span class="rounded bg-[#e7eddf] px-2 py-0.5 text-xs font-bold text-[#234c3c]">✓ 通過 ${extra}</span>`;
+        if (st === 'rejected') return `<span class="rounded bg-[#fdf0f1] px-2 py-0.5 text-xs font-bold text-[#992634]">✕ 退件 ${extra}</span>`;
+        return `<span class="rounded bg-[#fdf6e7] px-2 py-0.5 text-xs font-bold text-[#825612]">⏳ 待審 ${extra}</span>`;
       };
 
       document.getElementById('reviewTableBody').innerHTML = list.map((s) => {
@@ -4068,22 +4102,11 @@ function appendMailLog(type, studentId, name, email, subject, status) {
               <div class="font-bold text-[#243a32]">${escapeHtml(s.name)} <span class="text-xs font-normal text-[#52625a]">(${escapeHtml(s.className)}-${s.seat})</span></div>
               <div class="text-xs text-[#52625a]">${escapeHtml(s.id)}｜${escapeHtml(s.session)}</div>
             </td>
-            <td class="px-3 py-2.5">
-              ${s.wsLocked ? badge(s.reviews.pre, `(${s.wsScore}分)`) : '<span class="text-xs text-[#7a8780]">未繳交</span>'}
-            </td>
-            <td class="px-3 py-2.5">
-              <span class="text-xs font-bold text-[#234c3c]">${hrs.whApp.toFixed(1)}h</span>
-              <span class="text-[11px] text-[#52625a]">(${s.attendance})</span>
-            </td>
-            <td class="px-3 py-2.5">
-              ${s.shiftsLocked ? badge(s.reviews.campus, `(${s.shifts.length}班)`) : '<span class="text-xs text-[#7a8780]">未排班</span>'}
-            </td>
-            <td class="px-3 py-2.5">
-              ${s.refLocked ? badge(s.reviews.reflection) : '<span class="text-xs text-[#7a8780]">未繳交</span>'}
-            </td>
-            <td class="px-3 py-2.5 text-right font-bold text-[#234c3c]">
-              ${hrs.totalApp.toFixed(1)} / ${hrs.totalEst.toFixed(1)} h
-            </td>
+            <td class="px-3 py-2.5">${s.wsLocked ? badge(s.reviews.pre, `(${s.wsScore}分)`) : '<span class="text-xs text-[#52625a]">未繳交</span>'}</td>
+            <td class="px-3 py-2.5 font-bold">${hrs.whApp.toFixed(1)}h <span class="text-xs font-normal text-[#52625a]">(${s.attendance})</span></td>
+            <td class="px-3 py-2.5">${s.shiftsLocked ? badge(s.reviews.campus, `(${s.shifts.length}班)`) : '<span class="text-xs text-[#52625a]">未排班</span>'}</td>
+            <td class="px-3 py-2.5">${s.refLocked ? badge(s.reviews.reflection) : '<span class="text-xs text-[#52625a]">未繳交</span>'}</td>
+            <td class="px-3 py-2.5 text-right font-bold text-[#234c3c]">${hrs.totalApp.toFixed(1)} / ${hrs.totalEst.toFixed(1)} h</td>
             <td class="px-3 py-2.5 text-center">
               <button type="button" onclick="openGradingModal('${s.id}')"
                 class="btn-outline rounded-lg px-3 py-1 text-xs font-bold">
@@ -4096,69 +4119,74 @@ function appendMailLog(type, studentId, name, email, subject, status) {
     }
 
     function openGradingModal(stuId) {
-      const s = appState.students.find((x) => x.id === stuId);
+      const s = appState.students.find((st) => st.id === stuId);
       if (!s) return;
       activeGradingStudentId = stuId;
 
       document.getElementById('gmStudentTitle').textContent =
-        `${s.name}（${s.className} ${s.seat}號｜${s.id}｜${s.session}）`;
+        `${s.name}（${s.className}-${s.seat}｜${s.id}｜${s.session}）`;
       document.getElementById('gmTeacherNoteInput').value = s.teacherNote || '';
       document.getElementById('gmPassThreshLabel').textContent = appState.videoConfig.passScore || 80;
 
-      const tasks = [
-        { key: 'pre', title: '1. 行前學習單 (1.0h)', sub: s.wsLocked ? `已送出（${s.wsScore} 分）` : '尚未送出' },
-        { key: 'warehouse', title: '2. 11/21 倉庫服務 (3.0h)', sub: `點名：${s.attendance} (${computeStudentHours(s).whApp.toFixed(1)}h)` },
-        { key: 'campus', title: '3. 校內募集排班 (0.5h/班)', sub: s.shiftsLocked ? `已鎖定 ${s.shifts.length} 班` : '尚未排班' },
-        { key: 'reflection', title: '4. 活動後心得反思 (1.0h)', sub: s.refLocked ? '已送出反思' : '尚未送出' }
+      const taskDefs = [
+        { key: 'pre', title: '1. 行前學習單 (1.0h)', sub: s.wsLocked ? `已送出（${s.wsScore} 分）` : '尚未繳交' },
+        { key: 'warehouse', title: '2. 11/21 倉庫服務 (3.0h)', sub: `點名：${s.attendance}` },
+        { key: 'campus', title: '3. 校內募集排班 (1.0h｜0.5h×2班)', sub: s.shiftsLocked ? `已鎖定 ${s.shifts.length} 班` : '尚未排班' },
+        { key: 'reflection', title: '4. 活動後心得反思 (1.0h)', sub: s.refLocked ? '已送出鎖定' : '尚未繳交' }
       ];
 
-      document.getElementById('gmFourTasksGrid').innerHTML = tasks.map((t) => `
+      document.getElementById('gmFourTasksGrid').innerHTML = taskDefs.map((t) => `
         <div class="rounded-lg border border-[#c5d2bd] bg-white p-3 space-y-1.5">
           <div class="font-bold text-[#243a32]">${t.title}</div>
           <div class="text-[11px] text-[#52625a]">${t.sub}</div>
-          <select id="gm-task-${t.key}" class="w-full rounded border border-[#dfe4dc] bg-[#fafaf5] px-2 py-1 text-xs font-bold">
+          <select id="gmTaskSel_${t.key}" class="w-full rounded border border-[#dfe4dc] bg-[#fafaf5] px-2 py-1 text-xs font-bold">
             <option value="pending" ${s.reviews[t.key] === 'pending' ? 'selected' : ''}>⏳ 待審核</option>
             <option value="passed" ${s.reviews[t.key] === 'passed' ? 'selected' : ''}>✓ 審核通過（核發時數）</option>
-            <option value="rejected" ${s.reviews[t.key] === 'rejected' ? 'selected' : ''}>✕ 退件重交（解除鎖定）</option>
+            <option value="rejected" ${s.reviews[t.key] === 'rejected' ? 'selected' : ''}>✕ 未通過（退件並解鎖補件）</option>
           </select>
         </div>
       `).join('');
 
-      const refInfo = analyzeReflectionText(s.reflectionText);
-      document.getElementById('gmReflectionWordInfo').textContent = s.refLocked ? refInfo.label : '學生尚未送出活動反思';
-      document.getElementById('gmReflectionText').textContent = s.reflectionText || '（無作答內容）';
+      const refInfo = analyzeReflectionText(s.reflectionText || '');
+      document.getElementById('gmReflectionWordInfo').textContent = s.reflectionText
+        ? refInfo.label
+        : '學生尚未撰寫反思';
+      document.getElementById('gmReflectionText').textContent = s.reflectionText || '（無內容）';
 
       document.getElementById('gmQuestionsContainer').innerHTML = appState.questions.map((q) => {
-        const stuAns = s.answers[q.num] || '（未作答）';
-        const curPt = Number(s.qScores[q.num] ?? 0);
-        const effInfo = q.minChars > 0 ? `｜有效字數：${countEffectiveChars(s.answers[q.num] || '')} 字` : '';
+        const ans = s.answers[q.num] || '（未作答）';
+        const pt = Number(s.qScores[q.num] ?? 0);
+        const eff = countEffectiveChars(s.answers[q.num] || '');
+        const minWarn = (q.minChars > 0)
+          ? `<span class="tabular-nums rounded px-2 py-0.5 text-[11px] font-bold ${eff >= q.minChars ? 'bg-[#e7eddf] text-[#234c3c]' : 'bg-[#fdf0f1] text-[#992634]'}">有效字數：${eff} / ${q.minChars} 字</span>`
+          : '';
 
         return `
           <div class="rounded-xl border border-[#dfe4dc] bg-white p-4 space-y-2.5">
             <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#dfe4dc] pb-2">
               <div class="text-xs sm:text-sm font-bold text-[#243a32]">
-                <span class="text-[#234c3c]">${q.num}.【${escapeHtml(q.type)}】</span>${escapeHtml(q.text)}
+                <span class="tabular-nums text-[#234c3c]">第 ${q.num} 題【${escapeHtml(q.type)}】</span>${escapeHtml(q.text)}
               </div>
-              <div class="flex items-center gap-1.5 tabular-nums">
-                <span class="text-xs font-bold text-[#52625a]">給分：</span>
-                <select data-qscore="${q.num}" onchange="recalcGradingModalTotal()"
-                  class="rounded border border-[#234c3c] bg-[#edf1e7] px-2 py-1 text-xs font-bold text-[#234c3c]">
-                  <option value="0" ${curPt === 0 ? 'selected' : ''}>0 分</option>
-                  <option value="5" ${curPt === 5 ? 'selected' : ''}>5 分（半對/未滿字數）</option>
-                  <option value="10" ${curPt === 10 ? 'selected' : ''}>10 分（滿分）</option>
-                </select>
+              <div class="flex items-center gap-2">
+                ${minWarn}
+                <label class="tabular-nums text-xs font-bold text-[#234c3c]">
+                  給分：
+                  <input type="number" min="0" max="${q.points}" step="1" value="${pt}"
+                    data-gmq="${q.num}" oninput="recalcGradingModalTotal()"
+                    class="w-16 rounded border border-[#234c3c] bg-[#edf1e7] px-2 py-1 text-right font-bold" /> / ${q.points} 分
+                </label>
               </div>
             </div>
 
             <div class="grid grid-cols-1 gap-3 md:grid-cols-2 text-xs">
               <div class="rounded-lg border border-[#dfe4dc] bg-[#fafaf5] p-3">
-                <div class="font-bold text-[#52625a] mb-1">學生作答內容${effInfo}</div>
-                <div class="text-[#243a32] whitespace-pre-wrap leading-relaxed">${escapeHtml(stuAns)}</div>
+                <div class="font-bold text-[#52625a] mb-1">學生作答內容：</div>
+                <div class="text-[#243a32] whitespace-pre-wrap leading-relaxed">${escapeHtml(ans)}</div>
               </div>
-              <div class="rounded-lg border border-[#c5d2bd] bg-[#edf1e7]/60 p-3">
-                <div class="font-bold text-[#234c3c] mb-1">參考答案與給分依據</div>
-                <div class="text-[#243a32] leading-relaxed"><strong>參考答案：</strong>${escapeHtml(q.refAnswer)}</div>
-                <div class="mt-1 text-[#52625a]"><strong>評分標準：</strong>${escapeHtml(q.rubric)}</div>
+              <div class="rounded-lg border border-[#c5d2bd] bg-[#edf1e7]/65 p-3">
+                <div class="font-bold text-[#234c3c] mb-1">標準答案與評分依據：</div>
+                <div class="text-[#243a32] leading-relaxed">${escapeHtml(q.refAnswer)}</div>
+                <div class="mt-1 text-[11px] text-[#52625a]">${escapeHtml(q.rubric)}</div>
               </div>
             </div>
           </div>
@@ -4172,8 +4200,8 @@ function appendMailLog(type, studentId, name, email, subject, status) {
 
     function recalcGradingModalTotal() {
       let sum = 0;
-      document.querySelectorAll('[data-qscore]').forEach((sel) => {
-        sum += Number(sel.value || 0);
+      document.querySelectorAll('[data-gmq]').forEach((inp) => {
+        sum += Number(inp.value || 0);
       });
       document.getElementById('gmScoreTotalText').textContent = sum;
     }
@@ -4185,51 +4213,68 @@ function appendMailLog(type, studentId, name, email, subject, status) {
     }
 
     function saveGradingModalChanges() {
-      const s = appState.students.find((x) => x.id === activeGradingStudentId);
+      const s = appState.students.find((st) => st.id === activeGradingStudentId);
       if (!s) return;
 
-      let total = 0;
-      document.querySelectorAll('[data-qscore]').forEach((sel) => {
-        const qNum = Number(sel.getAttribute('data-qscore'));
-        const pt = Number(sel.value || 0);
-        s.qScores[qNum] = pt;
-        total += pt;
+      let sum = 0;
+      document.querySelectorAll('[data-gmq]').forEach((inp) => {
+        const qNum = Number(inp.getAttribute('data-gmq'));
+        const val = Math.max(0, Math.min(10, Number(inp.value || 0)));
+        s.qScores[qNum] = val;
+        sum += val;
       });
-      s.wsScore = total;
+      s.wsScore = sum;
 
       ['pre', 'warehouse', 'campus', 'reflection'].forEach((k) => {
-        s.reviews[k] = document.getElementById(`gm-task-${k}`).value;
+        const sel = document.getElementById(`gmTaskSel_${k}`);
+        if (sel) s.reviews[k] = sel.value;
       });
 
       s.teacherNote = document.getElementById('gmTeacherNoteInput').value.trim();
 
       let hasReject = false;
-      if (s.reviews.pre === 'rejected') { s.wsLocked = false; hasReject = true; }
-      if (s.reviews.campus === 'rejected') { s.shiftsLocked = false; hasReject = true; }
-      if (s.reviews.reflection === 'rejected') { s.refLocked = false; hasReject = true; }
+      if (s.reviews.pre === 'rejected') {
+        s.wsLocked = false;
+        hasReject = true;
+      }
+      if (s.reviews.reflection === 'rejected') {
+        s.refLocked = false;
+        hasReject = true;
+      }
+      if (s.reviews.campus === 'rejected') {
+        s.shiftsLocked = false;
+        hasReject = true;
+      }
       s.urgentAlert = hasReject;
 
       saveAppState();
-      silentPushStudentToCloud(s);
       closeGradingModal();
       renderReviewSection();
-      showToast(`已儲存 ${s.name} 的閱卷與審核結果`, '✓');
+      showToast(
+        hasReject
+          ? `已儲存審核結果，並自動解除 ${s.name} 退件項目鎖定`
+          : `已儲存 ${s.name} 的閱卷給分與審核狀態！`,
+        '✓'
+      );
     }
 
     async function notifyStudentUrgentFromModal() {
-      const s = appState.students.find((x) => x.id === activeGradingStudentId);
+      const s = appState.students.find((st) => st.id === activeGradingStudentId);
       if (!s) return;
+
       const note = document.getElementById('gmTeacherNoteInput').value.trim();
       s.teacherNote = note;
       s.urgentAlert = true;
       saveAppState();
 
       if (!isLiveMailBackendAvailable()) {
-        showToast('已標記警示並解除鎖定；若要同步寄信請先於第 ⑤ 頁籤綁定 Apps Script 網址', '⚠️');
+        showToast('請先至「⑤ 帳號與雲端同步」綁定校內信箱發信引擎後即可實寄通知信！', '⚠️');
         return;
       }
 
       try {
+        const subject = `【康橋 × 舊鞋救命】服務學習任務補件通知（${s.name} 同學）`;
+        const msg = `您的服務學習任務尚需修正補件，系統已解除相關項目寫入鎖定，請登入學生專區完成修正並重新送出。${note ? '\n\n教師指導說明：' + note : ''}`;
         const res = await callMailBackendApi({
           action: 'sendNotice',
           portalUrl: getPortalPublicUrl(),
@@ -4238,51 +4283,46 @@ function appendMailLog(type, studentId, name, email, subject, status) {
             name: s.name,
             email: s.email,
             category: '退件補件通知',
-            subject: '【康橋 × 舊鞋救命】服務學習任務退件補件通知',
-            message: `指導教師已退回您的服務學習任務項目並解除寫入鎖定，請儘速登入學生專區修正後重新送出。${note ? '\n教師指導說明：' + note : ''}`
+            subject,
+            message: msg
           }]
         });
-        if (res && res.ok && res.sentCount > 0) {
-          recordLocalMailLog('退件補件通知', s.email, '服務學習任務退件補件通知', '已寄出');
-          showToast(`✓ 已實際寄送退件補件信至 ${s.email}`, '✉');
-        } else {
-          throw new Error((res && res.failedList && res.failedList[0]?.reason) || '寄信失敗');
+        if (!res || !res.ok || res.sentCount === 0) {
+          throw new Error((res && res.failedList && res.failedList[0]?.reason) || res?.error || '寄信失敗');
         }
+        recordLocalMailLog('退件補件通知', s.email, subject, '已寄出');
+        showToast(`✓ 已實際寄出補件通知信至 ${s.email}`, '✉️');
       } catch (err) {
         showToast(`寄信失敗：${err.message}`, '⚠️');
       }
     }
 
     async function batchNotifyIncomplete() {
-      const targets = appState.students.filter((s) => !s.isTeacherTest && (!s.confirmed || !s.wsLocked || !s.refLocked));
+      const targets = appState.students.filter((s) => !s.confirmed || !s.shiftsLocked || !s.wsLocked || !s.refLocked);
       if (targets.length === 0) {
-        showToast('所有學生皆已完成全部任務項目！', '✓');
+        showToast('全體參加者皆已完成所有步驟，無需催繳！', '✓');
         return;
       }
-
-      targets.forEach((s) => { s.urgentAlert = true; });
-      saveAppState();
-
       if (!isLiveMailBackendAvailable()) {
-        showToast(`已為 ${targets.length} 位學生開啟站內警示；請先於第 ⑤ 頁籤綁定 Apps Script 以啟用實際寄信`, '⚠️');
+        showToast('請先至「⑤ 帳號與雲端同步」綁定校內信箱發信引擎後即可批次寄信！', '⚠️');
         return;
       }
 
-      showToast(`正在透過校內信箱批次寄送通知給 ${targets.length} 位學生...`, '✉');
+      showToast(`正在寄送任務提醒信給 ${targets.length} 位尚未完成全部步驟的學生...`, '⏳');
       try {
         const recipients = targets.map((s) => {
           const missing = [];
-          if (!s.confirmed) missing.push('步驟1正取確認');
-          if (!s.shiftsLocked) missing.push('步驟2校內排班');
-          if (!s.wsLocked) missing.push('步驟3行前影片學習單');
-          if (!s.refLocked) missing.push('步驟5活動後心得反思');
+          if (!s.confirmed) missing.push('步驟 1 正取確認');
+          if (!s.shiftsLocked) missing.push('步驟 2 校內募集排班');
+          if (!s.wsLocked) missing.push('步驟 3 行前影片學習單');
+          if (!s.refLocked) missing.push('步驟 5 活動後心得反思');
           return {
             id: s.id,
             name: s.name,
             email: s.email,
-            category: '批次催繳通知',
-            subject: '【康橋 × 舊鞋救命】2026 服務學習未完成任務提醒',
-            message: `提醒您尚有以下服務學習任務尚未完成送出：${missing.join('、')}。\n請儘速登入學生專區完成並寫入鎖定。`
+            category: '進度提醒通知',
+            subject: '【康橋 × 舊鞋救命】2026 服務學習任務進度提醒',
+            message: `提醒您尚有以下服務學習步驟尚未完成送出：\n• ${missing.join('\n• ')}\n\n請儘速登入學生專區依序完成。`
           };
         });
 
@@ -4291,39 +4331,32 @@ function appendMailLog(type, studentId, name, email, subject, status) {
           portalUrl: getPortalPublicUrl(),
           recipients
         });
-
-        if (res && res.ok) {
-          recordLocalMailLog('批次催繳通知', `共 ${res.sentCount} 位未完成學生`, '2026 服務學習未完成任務提醒', '已寄出');
-          showToast(`✓ 已成功實際寄出 ${res.sentCount} 封提醒信至學生校內信箱！`, '✉');
-        } else {
-          throw new Error((res && res.error) || '批次寄信失敗');
-        }
+        if (!res || !res.ok) throw new Error(res?.error || '批次寄信失敗');
+        recordLocalMailLog('批次進度提醒', `共 ${res.sentCount} 位學生`, '服務學習任務進度提醒', '已寄出');
+        showToast(`✓ 已實際寄出 ${res.sentCount} 封任務提醒信至學生校內信箱！`, '✉️');
       } catch (err) {
         showToast(`批次寄信失敗：${err.message}`, '⚠️');
       }
     }
 
     async function batchSendAdmissionEmails() {
-      const targets = appState.students.filter((s) => !s.isTeacherTest && !s.confirmed);
-      if (targets.length === 0) {
-        showToast('所有錄取學生皆已完成正取確認！', '✓');
-        return;
-      }
+      const unconfirmed = appState.students.filter((s) => !s.confirmed);
+      const targets = unconfirmed.length > 0 ? unconfirmed : appState.students;
 
       if (!isLiveMailBackendAvailable()) {
-        showToast('請先至「⑤ 管理員帳號、信箱發信與試算表同步」綁定 Apps Script 網址後即可實際寄信！', '⚠️');
+        showToast('請先至「⑤ 帳號與雲端同步」綁定校內信箱發信引擎後即可寄發錄取通知信！', '⚠️');
         return;
       }
 
-      showToast(`正在寄送正取確認通知信給 ${targets.length} 位尚未確認學生...`, '✉');
+      showToast(`正在寄送正取確認通知信給 ${targets.length} 位錄取學生...`, '⏳');
       try {
         const recipients = targets.map((s) => ({
           id: s.id,
           name: s.name,
           email: s.email,
           category: '正取確認通知',
-          subject: `【康橋 × 舊鞋救命】2026 服務學習正取通知（${s.session}）`,
-          message: `恭喜您錄取「2026 康橋 × 舊鞋救命服務學習」，您的錄取梯次為【${s.session}】（服務日期：2026/11/21 週六，地點：伯利恆倉庫）。\n\n請於 11/16（一）中午 12:00 前登入學生專區完成「步驟 1｜正取確認」（初次登入帳號與預設密碼皆為您的學號 ${s.id}，亦可使用校內信箱 6 位數驗證碼登入）。`
+          subject: `【康橋 × 舊鞋救命】2026 服務學習正取錄取通知（梯次：${s.session}）`,
+          message: `恭喜您正取錄取「2026 康橋 × 舊鞋救命服務學習」，您的錄取梯次為【${s.session}】。\n\n請於 11/16（一）中午 12:00 前登入學生專區完成「步驟 1｜正取確認」（初次登入預設密碼為您的學號 ${s.id}，亦可使用校內信箱 6 位數驗證碼登入）。`
         }));
 
         const res = await callMailBackendApi({
@@ -4331,22 +4364,17 @@ function appendMailLog(type, studentId, name, email, subject, status) {
           portalUrl: getPortalPublicUrl(),
           recipients
         });
-
-        if (res && res.ok) {
-          recordLocalMailLog('正取確認通知', `共 ${res.sentCount} 位未確認學生`, '2026 服務學習正取通知', '已寄出');
-          showToast(`✓ 已成功寄出 ${res.sentCount} 封正取確認通知信！`, '✉');
-        } else {
-          throw new Error((res && res.error) || '寄信失敗');
-        }
+        if (!res || !res.ok) throw new Error(res?.error || '寄送錄取通知信失敗');
+        recordLocalMailLog('正取錄取通知', `共 ${res.sentCount} 位學生`, '服務學習正取錄取通知', '已寄出');
+        showToast(`✓ 已實際寄出 ${res.sentCount} 封正取錄取通知信！`, '✉️');
       } catch (err) {
-        showToast(`正取通知信寄送失敗：${err.message}`, '⚠️');
+        showToast(`寄送失敗：${err.message}`, '⚠️');
       }
     }
 
     function buildExportRows() {
       return appState.students.map((s) => {
-        const hrs = computeStudentHours(s);
-        const attMap = { pending: '未點名', present: '有出席', late: '遲到', early: '早退', absent: '缺席' };
+        const h = computeStudentHours(s);
         return {
           '序號': s.no,
           '班級': s.className,
@@ -4357,15 +4385,13 @@ function appendMailLog(type, studentId, name, email, subject, status) {
           '錄取梯次': s.session,
           '正取確認': s.confirmed ? '已確認' : '未確認',
           '行前學習單分數': s.wsScore,
-          '①行前學習核發時數': hrs.preApp,
-          '11/21出席狀態': attMap[s.attendance] || '未點名',
-          '②11/21倉庫核發時數': hrs.whApp,
-          '校內排班班次': s.shifts.map(getShiftDisplayName).join('、') || '無',
-          '③校內募集核發時數': hrs.campusApp,
-          '活動反思字數': analyzeReflectionText(s.reflectionText).count,
-          '④活動反思核發時數': hrs.refApp,
-          '已核發總時數': hrs.totalApp,
-          '預計總時數': hrs.totalEst
+          '行前學習核發時數': h.preApp,
+          '11/21出席狀態': s.attendance,
+          '11/21倉庫核發時數': h.whApp,
+          '校內排班班次': s.shifts.map(getShiftDisplayName).join('；'),
+          '校內募集核發時數': h.campusApp,
+          '活動反思核發時數': h.refApp,
+          '個人核發總時數': h.totalApp
         };
       });
     }
@@ -4373,85 +4399,89 @@ function appendMailLog(type, studentId, name, email, subject, status) {
     function exportAllParticipantsHoursCsv() {
       const rows = buildExportRows();
       const headers = Object.keys(rows[0]);
-      const csv = '\uFEFF' + [
+      const csvLines = [
         headers.join(','),
-        ...rows.map((r) => headers.map((h) => `"${String(r[h]).replace(/"/g, '""')}"`).join(','))
-      ].join('\n');
-
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `康橋舊鞋救命_全體參加者總時數表_${new Date().toISOString().slice(0, 10)}.csv`;
-      a.click();
-      URL.revokeObjectURL(url);
-      showToast('已匯出全體參加者總時數 CSV 檔案', '✓');
+        ...rows.map((r) => headers.map((h) => `"${String(r[h] ?? '').replace(/"/g, '""')}"`).join(','))
+      ];
+      const blob = new Blob(['\uFEFF' + csvLines.join('\r\n')], { type: 'text/csv;charset=utf-8;' });
+      triggerDownloadBlob(blob, `康橋舊鞋救命_全體參加者總時數_${new Date().toISOString().slice(0, 10)}.csv`);
+      showToast('已匯出全體參加者總時數 CSV 報表！', '✓');
     }
 
-    function exportAllParticipantsHoursXlsx() {
+    async function exportAllParticipantsHoursXlsx() {
       const rows = buildExportRows();
-      if (typeof XLSX !== 'undefined') {
-        const wb = XLSX.utils.book_new();
+      try {
+        if (!window.XLSX) {
+          await loadScriptOnce('https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js');
+        }
         const ws = XLSX.utils.json_to_sheet(rows);
+        const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, '全體參加者總時數');
-        XLSX.writeFile(wb, `康橋舊鞋救命_全體參加者總時數表_${new Date().toISOString().slice(0, 10)}.xlsx`);
-        showToast('已匯出所有參加者總時數 Excel (.xlsx)', '✓');
-      } else {
+        XLSX.writeFile(wb, `康橋舊鞋救命_全體參加者總時數_${new Date().toISOString().slice(0, 10)}.xlsx`);
+        showToast('已匯出全體參加者總時數 Excel (.xlsx) 檔案！', '✓');
+      } catch (e) {
         exportAllParticipantsHoursCsv();
       }
     }
 
-    /* --- TAB ③: STUDENT ROSTER CRUD & WAITLIST --- */
+    function loadScriptOnce(src) {
+      return new Promise((resolve, reject) => {
+        const s = document.createElement('script');
+        s.src = src;
+        s.onload = resolve;
+        s.onerror = reject;
+        document.head.appendChild(s);
+      });
+    }
+
+    function triggerDownloadBlob(blob, filename) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    /* --- TAB ③: STUDENT ROSTER CRUD --- */
     function renderRosterAdminTable() {
-      const kw = (document.getElementById('rosterSearchInput')?.value || '').trim().toLowerCase();
-      const batch = document.getElementById('rosterBatchFilter')?.value || 'ALL';
-      const conf = document.getElementById('rosterConfirmFilter')?.value || 'ALL';
+      const kw = (document.getElementById('rosterSearchInput').value || '').trim().toLowerCase();
+      const batch = document.getElementById('rosterBatchFilter').value;
+      const conf = document.getElementById('rosterConfirmFilter').value;
 
-      const rosterHeading = document.getElementById('rosterSectionHeading');
-      const batchAllOpt = document.getElementById('rosterBatchAllOpt');
-      const batchWaitOpt = document.getElementById('rosterBatchWaitOpt');
-      if (rosterHeading) {
-        rosterHeading.textContent = `學生報名名單管理（${appState.students.length} 筆錄取＋${appState.waitlist.length} 筆備取）`;
-      }
-      if (batchAllOpt) {
-        batchAllOpt.textContent = `錄取名單：全部（${appState.students.length} 筆）`;
-      }
-      if (batchWaitOpt) {
-        batchWaitOpt.textContent = `備取名單（${appState.waitlist.length} 筆）`;
-      }
-
-      const tbody = document.getElementById('rosterAdminTableBody');
+      const totalRegular = appState.students.length;
+      const totalWait = appState.waitlist.length;
+      document.getElementById('rosterSectionHeading').textContent =
+        `學生報名名單管理（${totalRegular} 筆錄取＋${totalWait} 筆備取）`;
+      document.getElementById('rosterBatchAllOpt').textContent = `錄取名單：全部（${totalRegular} 筆）`;
+      document.getElementById('rosterBatchWaitOpt').textContent = `備取名單（${totalWait} 筆）`;
 
       if (batch === 'WAITLIST') {
         const wList = appState.waitlist.filter((w) => {
           if (!kw) return true;
           return w.name.toLowerCase().includes(kw) || w.id.toLowerCase().includes(kw) || w.className.toLowerCase().includes(kw);
         });
-        document.getElementById('rosterCountLabel').textContent = `顯示備取 ${wList.length} 筆`;
-
-        tbody.innerHTML = wList.map((w) => `
+        document.getElementById('rosterCountLabel').textContent = `備取名單：顯示 ${wList.length} 筆`;
+        document.getElementById('rosterAdminTableBody').innerHTML = wList.map((w) => `
           <tr class="bg-[#fdf6e7]/40">
             <td class="px-3 py-2.5 font-bold text-[#825612]">備取 #${w.rank}</td>
-            <td class="px-3 py-2.5">${escapeHtml(w.className)} ${w.seat}號</td>
+            <td class="px-3 py-2.5 font-bold">${escapeHtml(w.className)}-${w.seat}</td>
             <td class="px-3 py-2.5">
-              <div class="font-bold text-[#243a32]">${escapeHtml(w.name)}</div>
+              <div class="font-bold">${escapeHtml(w.name)}</div>
               <div class="text-xs text-[#52625a]">${escapeHtml(w.id)}</div>
             </td>
-            <td class="px-3 py-2.5 text-xs font-bold text-[#825612]">${escapeHtml(w.pref)}</td>
-            <td colspan="3" class="px-3 py-2.5 text-xs text-[#52625a]">備取候補中，名額釋出時可點選右側遞補為正取</td>
-            <td class="px-3 py-2.5 text-center space-x-1">
-              <button type="button" onclick="promoteWaitlistStudent('${w.id}', '上午A', false)"
-                class="btn-outline rounded px-2 py-1 text-xs font-bold">
-                遞補上午A
-              </button>
-              <button type="button" onclick="promoteWaitlistStudent('${w.id}', '上午B', false)"
-                class="btn-outline rounded px-2 py-1 text-xs font-bold">
-                遞補上午B
-              </button>
-              <button type="button" onclick="promoteWaitlistStudent('${w.id}', '下午', false)"
-                class="btn-primary rounded px-2 py-1 text-xs font-bold">
-                遞補下午
-              </button>
+            <td class="px-3 py-2.5 text-xs text-[#825612] font-bold">${escapeHtml(w.pref)}</td>
+            <td class="px-3 py-2.5 text-xs text-[#52625a]">候補待通知</td>
+            <td class="px-3 py-2.5 text-xs text-[#52625a]">—</td>
+            <td class="px-3 py-2.5 text-right text-xs text-[#52625a]">0.0 h</td>
+            <td class="px-3 py-2.5 text-center">
+              <div class="inline-flex items-center gap-1">
+                <button type="button" onclick="promoteWaitlistStudent('${w.id}', '上午A')" class="rounded border border-[#234c3c] bg-white px-2 py-1 text-[11px] font-bold text-[#234c3c] hover:bg-[#e7eddf]">遞補上午A</button>
+                <button type="button" onclick="promoteWaitlistStudent('${w.id}', '上午B')" class="rounded border border-[#234c3c] bg-white px-2 py-1 text-[11px] font-bold text-[#234c3c] hover:bg-[#e7eddf]">遞補上午B</button>
+                <button type="button" onclick="promoteWaitlistStudent('${w.id}', '下午')" class="rounded border border-[#234c3c] bg-white px-2 py-1 text-[11px] font-bold text-[#234c3c] hover:bg-[#e7eddf]">遞補下午</button>
+              </div>
             </td>
           </tr>
         `).join('');
@@ -4466,66 +4496,57 @@ function appendMailLog(type, studentId, name, email, subject, status) {
         return s.name.toLowerCase().includes(kw) || s.id.toLowerCase().includes(kw) || s.className.toLowerCase().includes(kw);
       });
 
-      document.getElementById('rosterCountLabel').textContent = `顯示 ${list.length} 筆`;
+      document.getElementById('rosterCountLabel').textContent = `錄取名單：顯示 ${list.length} / ${appState.students.length} 筆`;
 
-      tbody.innerHTML = list.map((s) => {
+      document.getElementById('rosterAdminTableBody').innerHTML = list.map((s) => {
         const hrs = computeStudentHours(s);
         return `
           <tr>
             <td class="px-3 py-2.5 font-bold">${s.no}</td>
-            <td class="px-3 py-2.5">${escapeHtml(s.className)} ${s.seat}號</td>
+            <td class="px-3 py-2.5 font-bold">${escapeHtml(s.className)}-${s.seat}</td>
             <td class="px-3 py-2.5">
               <div class="font-bold text-[#243a32]">${escapeHtml(s.name)}</div>
               <div class="text-xs text-[#52625a]">${escapeHtml(s.id)}</div>
             </td>
-            <td class="px-3 py-2.5">
-              <span class="rounded bg-[#edf1e7] px-2 py-0.5 text-xs font-bold text-[#234c3c]">${escapeHtml(s.session)}</span>
-            </td>
-            <td class="px-3 py-2.5">
-              ${s.confirmed
-                ? '<span class="rounded bg-[#e7eddf] px-2 py-0.5 text-xs font-bold text-[#234c3c]">✓ 已確認</span>'
-                : '<span class="rounded bg-[#fdf6e7] px-2 py-0.5 text-xs font-bold text-[#825612]">尚未確認</span>'}
-            </td>
-            <td class="px-3 py-2.5 text-xs">
-              學習單：${s.wsLocked ? `🔒(${s.wsScore}分)` : '未鎖'}｜反思：${s.refLocked ? '🔒' : '未鎖'}
-            </td>
+            <td class="px-3 py-2.5"><span class="rounded bg-[#edf1e7] px-2 py-0.5 text-xs font-bold text-[#234c3c]">${escapeHtml(s.session)}</span></td>
+            <td class="px-3 py-2.5">${s.confirmed ? '<span class="text-xs font-bold text-[#234c3c]">✓ 已確認</span>' : '<span class="text-xs text-[#825612]">尚未確認</span>'}</td>
+            <td class="px-3 py-2.5 text-xs">${s.wsLocked ? '🔒學習單' : '未鎖'} / ${s.refLocked ? '🔒反思' : '未鎖'}</td>
             <td class="px-3 py-2.5 text-right font-bold text-[#234c3c]">${hrs.totalApp.toFixed(1)} h</td>
-            <td class="px-3 py-2.5 text-center space-x-1">
-              <button type="button" onclick="openStudentCrudModal('edit', '${s.id}')"
-                class="btn-outline rounded px-2.5 py-1 text-xs font-bold">
-                編輯
-              </button>
-              <button type="button" onclick="confirmDeleteStudent('${s.id}')"
-                class="rounded border border-[#ecc4c8] bg-[#fdf0f1] px-2.5 py-1 text-xs font-bold text-[#992634]">
-                刪除
-              </button>
+            <td class="px-3 py-2.5 text-center">
+              <div class="inline-flex items-center gap-1.5">
+                <button type="button" onclick="openStudentCrudModal('edit', '${s.id}')"
+                  class="rounded border border-[#234c3c] bg-white px-2.5 py-1 text-xs font-bold text-[#234c3c] hover:bg-[#edf1e7]">
+                  編輯
+                </button>
+                <button type="button" onclick="confirmDeleteStudent('${s.id}')"
+                  class="rounded border border-[#ecc4c8] bg-[#fdf0f1] px-2.5 py-1 text-xs font-bold text-[#992634]">
+                  刪除
+                </button>
+              </div>
             </td>
           </tr>
         `;
       }).join('');
     }
 
-    function promoteWaitlistStudent(waitId, chosenSession = null, autoCheckIn = false) {
-      const idx = appState.waitlist.findIndex((w) => w.id === waitId);
+    function promoteWaitlistStudent(waitlistId, targetSession) {
+      const idx = appState.waitlist.findIndex((w) => w.id === waitlistId);
       if (idx < 0) return;
-      const w = appState.waitlist.splice(idx, 1)[0];
-      const maxNo = appState.students.reduce((m, s) => Math.max(m, Number(s.no || 0)), 0);
-      const session = chosenSession || (w.pref.includes('上午') ? '上午A' : '下午');
-      const nowStr = nowFullTimestamp();
-      const clockStr = nowClockTime();
+      const w = appState.waitlist[idx];
+      const maxNo = appState.students.reduce((m, s) => Math.max(m, Number(s.no) || 0), 0);
 
-      const newStu = {
+      appState.students.push({
         no: maxNo + 1,
         className: w.className,
         seat: w.seat,
         id: w.id,
         name: w.name,
-        session,
+        session: targetSession,
         isTeacherTest: false,
         email: `${w.id}@stu.kcislk.ntpc.edu.tw`,
         password: w.id,
-        confirmed: true,
-        confirmedAt: nowStr,
+        confirmed: false,
+        confirmedAt: '',
         shifts: [],
         shiftsLocked: false,
         shiftsLockedAt: '',
@@ -4535,203 +4556,40 @@ function appendMailLog(type, studentId, name, email, subject, status) {
         wsScore: 0,
         wsLocked: false,
         wsSubmittedAt: '',
-        attendance: autoCheckIn ? 'present' : 'pending',
-        attTimestamp: autoCheckIn ? `備取遞補報到 ${clockStr}` : '',
-        attHours: autoCheckIn ? 3.0 : 0,
+        attendance: 'pending',
+        attTimestamp: '',
+        attHours: 0,
         reflectionText: '',
         refLocked: false,
         refSubmittedAt: '',
-        reviews: {
-          pre: 'pending',
-          warehouse: autoCheckIn ? 'passed' : 'pending',
-          campus: 'pending',
-          reflection: 'pending'
-        },
+        reviews: { pre: 'pending', warehouse: 'pending', campus: 'pending', reflection: 'pending' },
         urgentAlert: false,
         teacherNote: ''
-      };
+      });
 
-      appState.students.push(newStu);
+      appState.waitlist.splice(idx, 1);
       saveAppState();
-      silentPushStudentToCloud(newStu);
       renderRosterAdminTable();
-      showToast(
-        autoCheckIn
-          ? `已將備取 #${w.rank} ${w.name} 遞補至【${session}】並標記有出席報到！`
-          : `已將備取 #${w.rank} ${w.name} 遞補轉入【${session}】正取名單！`,
-        '✓'
-      );
+      showToast(`已將備取 #${w.rank} ${w.name} 遞補轉入「${targetSession}」正取名單！`, '✓');
     }
 
-    function openStudentCrudModal(mode, stuId = '') {
-      document.getElementById('crudMode').value = mode;
-      document.getElementById('crudTargetOrigId').value = stuId;
-
-      if (mode === 'edit') {
-        const s = appState.students.find((x) => x.id === stuId);
-        if (!s) return;
-        document.getElementById('crudModalHeading').textContent = `編輯學生資料：${s.name} (${s.id})`;
-        document.getElementById('crudClassInput').value = s.className;
-        document.getElementById('crudSeatInput').value = s.seat;
-        document.getElementById('crudSessionInput').value = s.session;
-        document.getElementById('crudIdInput').value = s.id;
-        document.getElementById('crudNameInput').value = s.name;
-        document.getElementById('crudEmailInput').value = s.email;
-        document.getElementById('crudConfirmedInput').value = String(s.confirmed);
-        document.getElementById('crudAttendanceInput').value = s.attendance;
-        document.getElementById('crudWsScoreInput').value = s.wsScore;
-        document.getElementById('crudWsLockedInput').value = String(s.wsLocked);
-        document.getElementById('crudRefLockedInput').value = String(s.refLocked);
-      } else {
-        document.getElementById('crudModalHeading').textContent = '新增學生報名資料';
-        document.getElementById('crudClassInput').value = '';
-        document.getElementById('crudSeatInput').value = '';
-        document.getElementById('crudSessionInput').value = '上午A';
-        document.getElementById('crudIdInput').value = '';
-        document.getElementById('crudNameInput').value = '';
-        document.getElementById('crudEmailInput').value = '';
-        document.getElementById('crudConfirmedInput').value = 'false';
-        document.getElementById('crudAttendanceInput').value = 'pending';
-        document.getElementById('crudWsScoreInput').value = '0';
-        document.getElementById('crudWsLockedInput').value = 'false';
-        document.getElementById('crudRefLockedInput').value = 'false';
-      }
-
-      document.getElementById('studentCrudModal').classList.remove('hidden');
-      document.getElementById('studentCrudModal').classList.add('flex');
-    }
-
-    function onCrudStudentIdInput(val) {
-      const clean = val.trim().toUpperCase();
-      document.getElementById('crudEmailInput').value = clean ? `${clean}@stu.kcislk.ntpc.edu.tw` : '';
-    }
-
-    function closeStudentCrudModal() {
-      document.getElementById('studentCrudModal').classList.add('hidden');
-      document.getElementById('studentCrudModal').classList.remove('flex');
-    }
-
-    function saveStudentCrudForm() {
-      const mode = document.getElementById('crudMode').value;
-      const origId = document.getElementById('crudTargetOrigId').value;
-      const className = document.getElementById('crudClassInput').value.trim();
-      const seat = Number(document.getElementById('crudSeatInput').value);
-      const session = document.getElementById('crudSessionInput').value;
-      const id = document.getElementById('crudIdInput').value.trim();
-      const name = document.getElementById('crudNameInput').value.trim();
-      const email = document.getElementById('crudEmailInput').value.trim();
-      const confirmed = document.getElementById('crudConfirmedInput').value === 'true';
-      const attendance = document.getElementById('crudAttendanceInput').value;
-      const wsScore = Number(document.getElementById('crudWsScoreInput').value || 0);
-      const wsLocked = document.getElementById('crudWsLockedInput').value === 'true';
-      const refLocked = document.getElementById('crudRefLockedInput').value === 'true';
-
-      if (mode === 'edit') {
-        const s = appState.students.find((x) => x.id === origId);
-        if (!s) return;
-        Object.assign(s, { className, seat, session, id, name, email, confirmed, attendance, wsScore, wsLocked, refLocked });
-        if (confirmed && !s.confirmedAt) s.confirmedAt = nowFullTimestamp();
-        if (attendance === 'present') s.attHours = 3.0;
-        else if (attendance === 'late') s.attHours = 2.5;
-        else if (attendance === 'early') s.attHours = 2.0;
-        else s.attHours = 0;
-        silentPushStudentToCloud(s);
-        showToast(`已更新 ${name} 的報名與任務資料`, '✓');
-      } else {
-        if (appState.students.some((x) => x.id.toLowerCase() === id.toLowerCase())) {
-          showToast(`學號 ${id} 已存在於名單中`, '⚠️');
-          return;
-        }
-        const maxNo = appState.students.reduce((m, s) => Math.max(m, Number(s.no || 0)), 0);
-        const created = {
-          no: maxNo + 1,
-          className,
-          seat,
-          id,
-          name,
-          session,
-          isTeacherTest: false,
-          email,
-          password: id,
-          confirmed,
-          confirmedAt: confirmed ? nowFullTimestamp() : '',
-          shifts: [],
-          shiftsLocked: false,
-          shiftsLockedAt: '',
-          videoWatched: false,
-          answers: {},
-          qScores: {},
-          wsScore,
-          wsLocked,
-          wsSubmittedAt: wsLocked ? nowFullTimestamp() : '',
-          attendance,
-          attTimestamp: attendance !== 'pending' ? `管理員設定 (${nowClockTime()})` : '',
-          attHours: attendance === 'present' ? 3.0 : (attendance === 'late' ? 2.5 : (attendance === 'early' ? 2.0 : 0)),
-          reflectionText: '',
-          refLocked,
-          refSubmittedAt: refLocked ? nowFullTimestamp() : '',
-          reviews: { pre: 'pending', warehouse: 'pending', campus: 'pending', reflection: 'pending' },
-          urgentAlert: false,
-          teacherNote: ''
-        };
-        appState.students.push(created);
-        silentPushStudentToCloud(created);
-        showToast(`已新增學生 ${name} (${id})`, '✓');
-      }
-
-      saveAppState();
-      closeStudentCrudModal();
-      renderRosterAdminTable();
-    }
-
-    let pendingDeleteStudentId = null;
-    function confirmDeleteStudent(stuId) {
-      const s = appState.students.find((x) => x.id === stuId);
-      if (!s) return;
-      pendingDeleteStudentId = stuId;
-      document.getElementById('deleteConfirmMessage').textContent =
-        `確定要從名單中刪除「${s.name}（${s.className} ${s.seat}號｜${s.id}）」嗎？刪除後將無法復原。`;
-      document.getElementById('deleteConfirmBtn').onclick = executeDeleteStudent;
-      document.getElementById('deleteConfirmModal').classList.remove('hidden');
-      document.getElementById('deleteConfirmModal').classList.add('flex');
-    }
-
-    function closeDeleteConfirmModal() {
-      document.getElementById('deleteConfirmModal').classList.add('hidden');
-      document.getElementById('deleteConfirmModal').classList.remove('flex');
-      pendingDeleteStudentId = null;
-    }
-
-    function executeDeleteStudent() {
-      if (!pendingDeleteStudentId) return;
-      appState.students = appState.students.filter((s) => s.id !== pendingDeleteStudentId);
-      saveAppState();
-      closeDeleteConfirmModal();
-      renderRosterAdminTable();
-      showToast('已從報名名單中刪除此筆資料', '✓');
-    }
-
-    function exportRosterFile(fmt) {
-      if (fmt === 'xlsx') exportAllParticipantsHoursXlsx();
-      else exportAllParticipantsHoursCsv();
-    }
-
-    /* --- BULK ROSTER IMPORT --- */
+    /* ========================================================================
+       BULK ROSTER IMPORT MODULE (.xlsx / .csv / Paste)
+       ======================================================================== */
     let bulkRawRows = [];
-    let bulkMappedRecords = [];
-    const BULK_FIELDS = [
-      { key: 'no', label: '序號（選填）', aliases: ['序號', '編號', 'no', 'index', '序'] },
-      { key: 'className', label: '班級 *', aliases: ['班級', '年班', 'class', '班別'] },
-      { key: 'seat', label: '座號 *', aliases: ['座號', '號碼', 'seat', 'seatno'] },
-      { key: 'id', label: '學號 *', aliases: ['學號', '帳號', 'studentid', 'id', '校園帳號'] },
-      { key: 'name', label: '姓名 *', aliases: ['姓名', '學生姓名', 'name', '名字'] },
-      { key: 'session', label: '錄取梯次', aliases: ['梯次', '錄取梯次', '分組', '梯次分組', 'session', '組別', '備取'] },
-      { key: 'email', label: '校園信箱（選填）', aliases: ['信箱', '電子信箱', 'email', 'mail', '學校信箱'] },
-      { key: 'pref', label: '備取志願（備取用）', aliases: ['志願', '備取志願', '志願梯次', 'pref', '希望梯次'] }
-    ];
+    let bulkColMap = { no: -1, className: -1, seat: -1, id: -1, name: -1, session: -1, email: -1 };
+    let bulkParsedRecords = [];
 
     function openBulkImportModal() {
-      clearBulkImportInput();
+      bulkRawRows = [];
+      bulkParsedRecords = [];
+      document.getElementById('bulkPasteTextarea').value = '';
+      document.getElementById('bulkFileInput').value = '';
+      document.getElementById('bulkFileStatusText').textContent = '';
+      document.getElementById('bulkMappingSection').classList.add('hidden');
+      document.getElementById('bulkPreviewSection').classList.add('hidden');
+      document.getElementById('bulkConfirmImportBtn').disabled = true;
+      document.getElementById('bulkFooterHint').textContent = '請先上傳檔案或貼上名單資料以檢視預覽';
       document.getElementById('bulkImportModal').classList.remove('hidden');
       document.getElementById('bulkImportModal').classList.add('flex');
     }
@@ -4743,130 +4601,102 @@ function appendMailLog(type, studentId, name, email, subject, status) {
 
     function clearBulkImportInput() {
       bulkRawRows = [];
-      bulkMappedRecords = [];
+      bulkParsedRecords = [];
+      document.getElementById('bulkPasteTextarea').value = '';
       document.getElementById('bulkFileInput').value = '';
       document.getElementById('bulkFileStatusText').textContent = '';
-      document.getElementById('bulkPasteTextarea').value = '';
       document.getElementById('bulkMappingSection').classList.add('hidden');
       document.getElementById('bulkPreviewSection').classList.add('hidden');
       document.getElementById('bulkConfirmImportBtn').disabled = true;
-      document.getElementById('bulkFooterHint').textContent = '請先上傳檔案或貼上名單資料以檢視預覽';
+      document.getElementById('bulkFooterHint').textContent = '已清空，請重新上傳檔案或貼上資料';
     }
 
-    function downloadImportTemplate(fmt) {
+    async function downloadImportTemplate(format) {
       const sampleRows = [
-        { '序號': 1, '班級': '701', '座號': 27, '學號': 'LJ15049', '姓名': '張文馨', '錄取梯次': '上午A', '校園信箱': 'LJ15049@stu.kcislk.ntpc.edu.tw', '備取志願': '' },
-        { '序號': 2, '班級': '704', '座號': 8, '學號': 'LJ15007', '姓名': '吳承恩', '錄取梯次': '上午B', '校園信箱': 'LJ15007@stu.kcislk.ntpc.edu.tw', '備取志願': '' },
-        { '序號': 3, '班級': '701', '座號': 40, '學號': 'LJ15313', '姓名': '陳秀姍', '錄取梯次': '下午', '校園信箱': 'LJ15313@stu.kcislk.ntpc.edu.tw', '備取志願': '' },
-        { '序號': 4, '班級': '9D', '座號': 6, '學號': 'LJ13322', '姓名': '趙修頡', '錄取梯次': '備取', '校園信箱': 'LJ13322@stu.kcislk.ntpc.edu.tw', '備取志願': '上午/下午皆可' }
+        { '序號': 1, '班級': '701', '座號': 27, '學號': 'LJ15049', '姓名': '張文馨', '錄取梯次': '上午A', '校園信箱': 'LJ15049@stu.kcislk.ntpc.edu.tw' },
+        { '序號': 2, '班級': '704', '座號': 8, '學號': 'LJ15007', '姓名': '吳承恩', '錄取梯次': '上午B', '校園信箱': 'LJ15007@stu.kcislk.ntpc.edu.tw' },
+        { '序號': 3, '班級': '701', '座號': 40, '學號': 'LJ15313', '姓名': '陳秀姍', '錄取梯次': '下午', '校園信箱': 'LJ15313@stu.kcislk.ntpc.edu.tw' }
       ];
-      if (fmt === 'xlsx' && typeof XLSX !== 'undefined') {
-        const wb = XLSX.utils.book_new();
-        const ws = XLSX.utils.json_to_sheet(sampleRows);
-        XLSX.utils.book_append_sheet(wb, ws, '總名單匯入範本');
-        XLSX.writeFile(wb, '康橋舊鞋救命_總名單匯入範本.xlsx');
-        showToast('已下載標準 Excel 匯入範本 (.xlsx)', '✓');
-      } else {
-        const headers = Object.keys(sampleRows[0]);
-        const csv = '\uFEFF' + [
-          headers.join(','),
-          ...sampleRows.map((r) => headers.map((h) => `"${r[h]}"`).join(','))
-        ].join('\n');
-        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = '康橋舊鞋救命_總名單匯入範本.csv';
-        a.click();
-        URL.revokeObjectURL(url);
-        showToast('已下載標準 CSV 匯入範本 (.csv)', '✓');
+
+      if (format === 'xlsx') {
+        try {
+          if (!window.XLSX) {
+            await loadScriptOnce('https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js');
+          }
+          const ws = XLSX.utils.json_to_sheet(sampleRows);
+          const wb = XLSX.utils.book_new();
+          XLSX.utils.book_append_sheet(wb, ws, '總名單匯入範本');
+          XLSX.writeFile(wb, '康橋舊鞋救命_總名單標準匯入範本.xlsx');
+          showToast('已下載標準匯入範本 (.xlsx)！', '✓');
+          return;
+        } catch (e) {}
       }
+
+      const headers = Object.keys(sampleRows[0]);
+      const csvLines = [
+        headers.join(','),
+        ...sampleRows.map((r) => headers.map((h) => `"${r[h]}"`).join(','))
+      ];
+      const blob = new Blob(['\uFEFF' + csvLines.join('\r\n')], { type: 'text/csv;charset=utf-8;' });
+      triggerDownloadBlob(blob, '康橋舊鞋救命_總名單標準匯入範本.csv');
+      showToast('已下載標準匯入範本 (.csv)！', '✓');
     }
 
-    function handleBulkFileDrop(event) {
-      event.preventDefault();
-      const zone = document.getElementById('bulkDropZone');
-      zone.classList.remove('border-[#234c3c]', 'bg-[#edf1e7]');
-      const file = event.dataTransfer?.files?.[0];
+    function handleBulkFileDrop(ev) {
+      ev.preventDefault();
+      ev.currentTarget.classList.remove('border-[#234c3c]', 'bg-[#edf1e7]');
+      const file = ev.dataTransfer?.files?.[0];
       if (file) handleBulkFileSelect(file);
     }
 
-    function handleBulkFileSelect(file) {
+    async function handleBulkFileSelect(file) {
       if (!file) return;
       const statusEl = document.getElementById('bulkFileStatusText');
-      statusEl.textContent = `正在解析檔案：${file.name}...`;
-      const ext = file.name.split('.').pop().toLowerCase();
+      statusEl.textContent = `正在讀取檔案：${file.name}...`;
 
-      if (ext === 'xlsx' || ext === 'xls') {
-        if (typeof XLSX === 'undefined') {
-          statusEl.textContent = '⚠️ 目前環境無法載入 Excel 解析器，請改存為 .csv 檔或直接從 Excel 複製貼上至右側文字框！';
-          return;
-        }
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          try {
-            const data = new Uint8Array(e.target.result);
-            const wb = XLSX.read(data, { type: 'array' });
-            const firstSheet = wb.Sheets[wb.SheetNames[0]];
-            const aoa = XLSX.utils.sheet_to_json(firstSheet, { header: 1, defval: '' });
-            const cleaned = aoa.filter((row) => Array.isArray(row) && row.some((c) => String(c).trim() !== ''));
-            if (cleaned.length === 0) {
-              statusEl.textContent = '⚠️ 檔案工作表中無有效資料列。';
-              return;
-            }
-            statusEl.textContent = `✓ 已讀取檔案「${file.name}」（共 ${cleaned.length} 列資料）`;
-            initializeBulkMapping(cleaned);
-          } catch (err) {
-            statusEl.textContent = `⚠️ Excel 解析失敗：${err.message}`;
+      try {
+        const ext = file.name.split('.').pop().toLowerCase();
+        if (ext === 'xlsx' || ext === 'xls') {
+          if (!window.XLSX) {
+            await loadScriptOnce('https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js');
           }
-        };
-        reader.readAsArrayBuffer(file);
-      } else {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const buf = e.target.result;
+          const buf = await file.arrayBuffer();
+          const wb = XLSX.read(buf, { type: 'array' });
+          const firstSheet = wb.Sheets[wb.SheetNames[0]];
+          const rows = XLSX.utils.sheet_to_json(firstSheet, { header: 1, defval: '' });
+          loadBulkRawMatrix(rows, `已讀取 Excel 工作表「${wb.SheetNames[0]}」（共 ${rows.length} 列）`);
+        } else {
+          const buf = await file.arrayBuffer();
           let text = new TextDecoder('utf-8').decode(buf);
           if (text.includes('\uFFFD')) {
-            try { text = new TextDecoder('big5').decode(buf); } catch (_) {}
+            text = new TextDecoder('big5').decode(buf);
           }
-          const rows = parseDelimitedTextToAoa(text);
-          if (rows.length === 0) {
-            statusEl.textContent = '⚠️ 檔案中無有效資料列。';
-            return;
-          }
-          statusEl.textContent = `✓ 已讀取檔案「${file.name}」（共 ${rows.length} 列資料）`;
-          initializeBulkMapping(rows);
-        };
-        reader.readAsArrayBuffer(file);
+          const rows = parseDelimitedTextToMatrix(text);
+          loadBulkRawMatrix(rows, `已讀取文字檔案「${file.name}」（共 ${rows.length} 列）`);
+        }
+      } catch (err) {
+        statusEl.textContent = `讀取失敗：${err.message || '檔案格式錯誤'}`;
+        showToast('檔案解析失敗，請確認檔案格式是否正確', '⚠️');
       }
     }
 
     function parseBulkPasteText(text) {
-      const trimmed = (text || '').trim();
-      if (!trimmed) {
+      if (!text.trim()) {
         document.getElementById('bulkMappingSection').classList.add('hidden');
         document.getElementById('bulkPreviewSection').classList.add('hidden');
         document.getElementById('bulkConfirmImportBtn').disabled = true;
         return;
       }
-      const rows = parseDelimitedTextToAoa(trimmed);
-      if (rows.length > 0) {
-        document.getElementById('bulkFileStatusText').textContent = `✓ 已從貼上內容解析 ${rows.length} 列資料`;
-        initializeBulkMapping(rows);
-      }
+      const rows = parseDelimitedTextToMatrix(text);
+      loadBulkRawMatrix(rows, `已偵測貼上資料（共 ${rows.length} 列）`);
     }
 
-    function parseDelimitedTextToAoa(text) {
-      const clean = text.replace(/^\uFEFF/, '').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-      const lines = clean.split('\n').filter((l) => l.trim() !== '');
+    function parseDelimitedTextToMatrix(text) {
+      const lines = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n').filter((l) => l.trim().length > 0);
       if (lines.length === 0) return [];
-      const firstLine = lines[0];
-      const delimiter = firstLine.includes('\t') ? '\t' : ',';
-
+      const delimiter = lines[0].includes('\t') ? '\t' : ',';
       return lines.map((line) => {
-        if (delimiter === '\t') {
-          return line.split('\t').map((c) => c.trim());
-        }
+        if (delimiter === '\t') return line.split('\t').map((c) => c.trim());
         const cells = [];
         let cur = '';
         let inQuotes = false;
@@ -4891,282 +4721,259 @@ function appendMailLog(type, studentId, name, email, subject, status) {
       });
     }
 
-    function initializeBulkMapping(aoa) {
-      bulkRawRows = aoa;
-      const firstRow = aoa[0] || [];
-      const colCount = Math.max(...aoa.map((r) => r.length));
-
-      const looksLikeHeader = firstRow.some((cell) => {
-        const s = String(cell).trim().toLowerCase();
-        return ['班級', '座號', '學號', '姓名', '梯次', '序號', 'class', 'seat', 'id', 'name'].some((k) => s.includes(k));
-      });
-      document.getElementById('bulkHasHeaderChk').checked = looksLikeHeader;
-
-      const autoMap = {};
-      BULK_FIELDS.forEach((f) => { autoMap[f.key] = -1; });
-
-      if (looksLikeHeader) {
-        firstRow.forEach((cell, idx) => {
-          const norm = String(cell).trim().toLowerCase().replace(/\s+/g, '');
-          BULK_FIELDS.forEach((f) => {
-            if (autoMap[f.key] === -1 && f.aliases.some((a) => norm === a.toLowerCase() || norm.includes(a.toLowerCase()))) {
-              autoMap[f.key] = idx;
-            }
-          });
-        });
-      } else {
-        if (colCount >= 6) {
-          autoMap.no = 0; autoMap.className = 1; autoMap.seat = 2; autoMap.id = 3; autoMap.name = 4; autoMap.session = 5;
-          if (colCount >= 7) autoMap.email = 6;
-        } else if (colCount === 5) {
-          autoMap.className = 0; autoMap.seat = 1; autoMap.id = 2; autoMap.name = 3; autoMap.session = 4;
-        } else if (colCount === 4) {
-          autoMap.className = 0; autoMap.seat = 1; autoMap.id = 2; autoMap.name = 3;
-        }
+    function loadBulkRawMatrix(matrix, sourceLabel) {
+      const cleaned = matrix.filter((r) => Array.isArray(r) && r.some((c) => String(c ?? '').trim() !== ''));
+      if (cleaned.length === 0) {
+        showToast('未偵測到有效資料列', '⚠️');
+        return;
       }
-
-      const colOptionsHtml = (selectedIdx) => {
-        let html = `<option value="-1" ${selectedIdx === -1 ? 'selected' : ''}>（略過／自動預設）</option>`;
-        for (let i = 0; i < colCount; i++) {
-          const sample = String(firstRow[i] ?? '').trim() || `第 ${i + 1} 欄`;
-          html += `<option value="${i}" ${selectedIdx === i ? 'selected' : ''}>欄 ${i + 1}（${escapeHtml(sample.slice(0, 14))}）</option>`;
-        }
-        return html;
-      };
-
-      document.getElementById('bulkColumnMappingGrid').innerHTML = BULK_FIELDS.map((f) => `
-        <div>
-          <label class="block text-[11px] font-bold text-[#243a32] mb-1">${f.label}</label>
-          <select id="bulk-map-${f.key}" onchange="recomputeBulkPreview()"
-            class="w-full rounded-lg border border-[#dfe4dc] bg-white px-2 py-1.5 text-xs">
-            ${colOptionsHtml(autoMap[f.key])}
-          </select>
-        </div>
-      `).join('');
-
+      bulkRawRows = cleaned;
+      document.getElementById('bulkFileStatusText').textContent = sourceLabel;
+      autoDetectBulkColumnMapping(cleaned);
+      renderBulkColumnMappingSelectors();
       document.getElementById('bulkMappingSection').classList.remove('hidden');
       document.getElementById('bulkPreviewSection').classList.remove('hidden');
       recomputeBulkPreview();
     }
 
-    function normalizeImportedSession(rawVal, fallbackSession) {
-      const s = String(rawVal || '').trim().toUpperCase();
-      if (!s) return { type: 'regular', session: fallbackSession };
-      if (s.includes('備取') || s.includes('候補') || s.includes('WAIT')) {
-        return { type: 'waitlist', session: '備取' };
-      }
-      if (s.includes('上午A') || s === 'A' || s.includes('AMA')) {
-        return { type: 'regular', session: '上午A' };
-      }
-      if (s.includes('上午B') || s === 'B' || s.includes('AMB')) {
-        return { type: 'regular', session: '上午B' };
-      }
-      if (s.includes('上午')) {
-        return { type: 'regular', session: '上午A' };
-      }
-      if (s.includes('下午') || s.includes('PM')) {
-        return { type: 'regular', session: '下午' };
-      }
-      return { type: 'regular', session: fallbackSession };
-    }
+    function autoDetectBulkColumnMapping(rows) {
+      const firstRow = rows[0].map((c) => String(c ?? '').trim().toLowerCase());
+      const map = { no: -1, className: -1, seat: -1, id: -1, name: -1, session: -1, email: -1 };
 
-    function recomputeBulkPreview() {
-      if (!bulkRawRows.length) return;
-      const hasHeader = document.getElementById('bulkHasHeaderChk').checked;
-      const mode = document.getElementById('bulkImportModeSelect').value;
-      const defaultSession = document.getElementById('bulkDefaultSessionSelect').value;
-
-      document.getElementById('bulkReplaceWarningBox').classList.toggle('hidden', mode !== 'replace');
-
-      const mapIdx = {};
-      BULK_FIELDS.forEach((f) => {
-        const el = document.getElementById(`bulk-map-${f.key}`);
-        mapIdx[f.key] = el ? Number(el.value) : -1;
+      firstRow.forEach((h, idx) => {
+        if (/^(序號|編號|no\.?|#)$/.test(h)) map.no = idx;
+        else if (/班級|class/.test(h)) map.className = idx;
+        else if (/座號|seat/.test(h)) map.seat = idx;
+        else if (/學號|帳號|id/.test(h)) map.id = idx;
+        else if (/姓名|名字|name/.test(h)) map.name = idx;
+        else if (/梯次|分組|組別|session/.test(h)) map.session = idx;
+        else if (/信箱|email|mail/.test(h)) map.email = idx;
       });
 
-      const startIdx = hasHeader ? 1 : 0;
-      const seenIdsInFile = new Set();
-      bulkMappedRecords = [];
+      const hasHeader = map.id !== -1 || map.name !== -1 || map.className !== -1;
+      document.getElementById('bulkHasHeaderChk').checked = hasHeader;
 
-      let validNewCount = 0;
-      let validUpdateCount = 0;
-      let waitlistCount = 0;
-      let skipCount = 0;
-      let errorCount = 0;
-
-      for (let r = startIdx; r < bulkRawRows.length; r++) {
-        const row = bulkRawRows[r];
-        const getVal = (k) => (mapIdx[k] >= 0 && row[mapIdx[k]] !== undefined) ? String(row[mapIdx[k]]).trim() : '';
-
-        const rawNo = getVal('no');
-        const className = getVal('className');
-        const seatRaw = getVal('seat');
-        const id = getVal('id').toUpperCase();
-        const name = getVal('name');
-        const rawSession = getVal('session');
-        const rawEmail = getVal('email');
-        const pref = getVal('pref') || '上午/下午皆可';
-
-        if (!className && !id && !name) continue;
-
-        let status = 'valid';
-        let statusNote = '';
-
-        if (!id || !name) {
-          status = 'error';
-          statusNote = '缺少學號或姓名';
-          errorCount++;
-        } else if (seenIdsInFile.has(id)) {
-          status = 'error';
-          statusNote = '檔案內學號重複';
-          errorCount++;
-        } else {
-          seenIdsInFile.add(id);
-          const normSess = normalizeImportedSession(rawSession, defaultSession);
-          const existingStu = appState.students.find((s) => s.id.toLowerCase() === id.toLowerCase());
-
-          if (normSess.type === 'waitlist') {
-            status = 'waitlist';
-            statusNote = '匯入為備取名單';
-            waitlistCount++;
-          } else if (mode === 'append' && existingStu) {
-            status = 'skip';
-            statusNote = '已存在（略過）';
-            skipCount++;
-          } else if (mode === 'upsert' && existingStu) {
-            status = 'update';
-            statusNote = '更新基本資料';
-            validUpdateCount++;
-          } else {
-            status = 'new';
-            statusNote = '新增為正取';
-            validNewCount++;
-          }
-
-          const isTeacherTest = className === '教師測試';
-          const email = rawEmail || (isTeacherTest ? `${id}@kcislk.ntpc.edu.tw` : `${id}@stu.kcislk.ntpc.edu.tw`);
-
-          bulkMappedRecords.push({
-            rowNum: r + 1,
-            status,
-            statusNote,
-            no: Number(rawNo) || 0,
-            className: className || '未填',
-            seat: Number(seatRaw) || 0,
-            id,
-            name,
-            sessionType: normSess.type,
-            session: normSess.session,
-            email,
-            pref
-          });
-          continue;
-        }
-
-        bulkMappedRecords.push({
-          rowNum: r + 1,
-          status,
-          statusNote,
-          no: Number(rawNo) || 0,
-          className: className || '—',
-          seat: Number(seatRaw) || 0,
-          id: id || '（缺）',
-          name: name || '（缺）',
-          sessionType: 'regular',
-          session: rawSession || defaultSession,
-          email: rawEmail || '—',
-          pref
+      if (!hasHeader) {
+        const sample = rows[0].map((c) => String(c ?? '').trim());
+        sample.forEach((val, idx) => {
+          if (/^(LJ|LS)\d+/i.test(val) && map.id === -1) map.id = idx;
+          else if (/^(上午A|上午B|下午|上午|AM|PM)$/i.test(val) && map.session === -1) map.session = idx;
+          else if (/@/.test(val) && map.email === -1) map.email = idx;
+          else if (/^(\d{3}|\d[A-F]|教師測試)$/i.test(val) && map.className === -1) map.className = idx;
+          else if (/^\d{1,2}$/.test(val) && map.seat === -1) map.seat = idx;
+          else if (/^[\u4e00-\u9fffA-Za-z\s]{2,20}$/.test(val) && map.name === -1) map.name = idx;
         });
       }
 
+      bulkColMap = map;
+    }
+
+    function renderBulkColumnMappingSelectors() {
+      const maxCols = bulkRawRows.reduce((m, r) => Math.max(m, r.length), 0);
+      const headerRow = bulkRawRows[0] || [];
+      const colOptions = [`<option value="-1">（未指定／自動）</option>`];
+      for (let c = 0; c < maxCols; c++) {
+        const sampleLabel = String(headerRow[c] ?? '').trim() || `第 ${c + 1} 欄`;
+        colOptions.push(`<option value="${c}">第 ${c + 1} 欄（${escapeHtml(sampleLabel.slice(0, 14))}）</option>`);
+      }
+
+      const fields = [
+        { key: 'id', label: '學號 *（必填）' },
+        { key: 'name', label: '姓名 *（必填）' },
+        { key: 'className', label: '班級' },
+        { key: 'seat', label: '座號' },
+        { key: 'session', label: '錄取梯次' },
+        { key: 'no', label: '序號' },
+        { key: 'email', label: '校園信箱' }
+      ];
+
+      document.getElementById('bulkColumnMappingGrid').innerHTML = fields.map((f) => `
+        <div>
+          <label class="block text-[11px] font-bold text-[#243a32] mb-1">${f.label}</label>
+          <select onchange="onBulkColMapChange('${f.key}', this.value)"
+            class="w-full rounded-lg border border-[#dfe4dc] bg-white px-2 py-1.5 text-xs font-bold">
+            ${colOptions.map((opt) => {
+              const valMatch = opt.match(/value="(-?\d+)"/);
+              const isSel = valMatch && Number(valMatch[1]) === bulkColMap[f.key];
+              return isSel ? opt.replace('<option ', '<option selected ') : opt;
+            }).join('')}
+          </select>
+        </div>
+      `).join('');
+    }
+
+    function onBulkColMapChange(fieldKey, colIdxStr) {
+      bulkColMap[fieldKey] = Number(colIdxStr);
+      recomputeBulkPreview();
+    }
+
+    function normalizeSessionLabel(rawSess, fallbackSess) {
+      const s = String(rawSess || '').trim().toUpperCase();
+      if (!s) return fallbackSess;
+      if (s.includes('上午A') || s === 'AM-A' || s === 'AMA') return '上午A';
+      if (s.includes('上午B') || s === 'AM-B' || s === 'AMB') return '上午B';
+      if (s.includes('上午') || s === 'AM') return '上午A';
+      if (s.includes('下午') || s === 'PM') return '下午';
+      return fallbackSess;
+    }
+
+    function recomputeBulkPreview() {
+      const hasHeader = document.getElementById('bulkHasHeaderChk').checked;
+      const mode = document.getElementById('bulkImportModeSelect').value;
+      const defaultSess = document.getElementById('bulkDefaultSessionSelect').value;
+
+      document.getElementById('bulkReplaceWarningBox').classList.toggle('hidden', mode !== 'replace');
+
+      const startIdx = hasHeader ? 1 : 0;
+      const existingMap = new Map(appState.students.map((s) => [s.id.toLowerCase(), s]));
+      const seenInBatch = new Set();
+
+      let validNewCount = 0;
+      let validUpdateCount = 0;
+      let skipCount = 0;
+      let errorCount = 0;
+
+      const records = [];
+      let nextAutoNo = mode === 'replace'
+        ? 1
+        : appState.students.reduce((m, s) => Math.max(m, Number(s.no) || 0), 0) + 1;
+
+      for (let r = startIdx; r < bulkRawRows.length; r++) {
+        const row = bulkRawRows[r];
+        const getCell = (idx) => (idx >= 0 && idx < row.length) ? String(row[idx] ?? '').trim() : '';
+
+        const rawId = getCell(bulkColMap.id);
+        const name = getCell(bulkColMap.name);
+        const className = getCell(bulkColMap.className) || '未分班';
+        const seatRaw = getCell(bulkColMap.seat);
+        const seat = seatRaw ? (parseInt(seatRaw, 10) || 1) : 1;
+        const rawNo = getCell(bulkColMap.no);
+        const no = rawNo ? (parseInt(rawNo, 10) || nextAutoNo++) : nextAutoNo++;
+        const session = normalizeSessionLabel(getCell(bulkColMap.session), defaultSess);
+
+        const isTeacher = className === '教師測試' || /^(chunyichou|yiyunchen)$/i.test(rawId);
+        const id = isTeacher ? rawId.toLowerCase() : rawId.toUpperCase();
+        const email = getCell(bulkColMap.email) || (isTeacher ? `${id}@kcislk.ntpc.edu.tw` : `${id}@stu.kcislk.ntpc.edu.tw`);
+
+        let status = 'new';
+        let statusLabel = '＋ 新增';
+        let statusCls = 'bg-[#e7eddf] text-[#234c3c]';
+        let reason = '';
+
+        if (!id || !name) {
+          status = 'error';
+          statusLabel = '✕ 缺學號或姓名';
+          statusCls = 'bg-[#fdf0f1] text-[#992634]';
+          reason = '學號與姓名為必填欄位';
+          errorCount++;
+        } else if (seenInBatch.has(id.toLowerCase())) {
+          status = 'error';
+          statusLabel = '⚠️ 檔案內重複學號';
+          statusCls = 'bg-[#fdf6e7] text-[#825612]';
+          reason = '同一份匯入名單中出現重複學號，已略過';
+          errorCount++;
+        } else {
+          seenInBatch.add(id.toLowerCase());
+          const exists = mode !== 'replace' && existingMap.has(id.toLowerCase());
+          if (exists && mode === 'append') {
+            status = 'skip';
+            statusLabel = '⏭ 已存在略過';
+            statusCls = 'bg-[#f3f5f1] text-[#52625a]';
+            skipCount++;
+          } else if (exists && mode === 'upsert') {
+            status = 'update';
+            statusLabel = '↻ 合併更新';
+            statusCls = 'bg-[#eef4f8] text-[#244b63]';
+            validUpdateCount++;
+          } else {
+            status = 'new';
+            statusLabel = '＋ 新增錄取';
+            statusCls = 'bg-[#e7eddf] text-[#234c3c]';
+            validNewCount++;
+          }
+        }
+
+        records.push({
+          rowNum: r + 1,
+          status,
+          statusLabel,
+          statusCls,
+          reason,
+          no,
+          className,
+          seat,
+          id,
+          name,
+          session,
+          email,
+          isTeacher
+        });
+      }
+
+      bulkParsedRecords = records;
+
       document.getElementById('bulkPreviewSummaryBadges').innerHTML = `
-        <span class="rounded bg-[#e7eddf] px-2.5 py-1 font-bold text-[#234c3c]">新增正取：${validNewCount}</span>
-        <span class="rounded bg-[#eef4f8] px-2.5 py-1 font-bold text-[#244b63]">更新正取：${validUpdateCount}</span>
-        <span class="rounded bg-[#fdf6e7] px-2.5 py-1 font-bold text-[#825612]">匯入備取：${waitlistCount}</span>
-        ${skipCount > 0 ? `<span class="rounded bg-[#f4f7f1] px-2.5 py-1 font-bold text-[#52625a]">略過重複：${skipCount}</span>` : ''}
-        ${errorCount > 0 ? `<span class="rounded bg-[#fdf0f1] px-2.5 py-1 font-bold text-[#992634]">異常略過：${errorCount}</span>` : ''}
+        <span class="rounded-full bg-[#e7eddf] px-3 py-0.5 font-bold text-[#234c3c]">預計新增：${validNewCount} 筆</span>
+        <span class="rounded-full bg-[#eef4f8] px-3 py-0.5 font-bold text-[#244b63]">合併更新：${validUpdateCount} 筆</span>
+        <span class="rounded-full bg-[#f3f5f1] px-3 py-0.5 font-bold text-[#52625a]">略過重複：${skipCount} 筆</span>
+        <span class="rounded-full bg-[#fdf0f1] px-3 py-0.5 font-bold text-[#992634]">異常列：${errorCount} 筆</span>
       `;
 
-      document.getElementById('bulkPreviewTableBody').innerHTML = bulkMappedRecords.slice(0, 150).map((rec) => {
-        let badgeCls = 'bg-[#e7eddf] text-[#234c3c]';
-        if (rec.status === 'update') badgeCls = 'bg-[#eef4f8] text-[#244b63]';
-        else if (rec.status === 'waitlist') badgeCls = 'bg-[#fdf6e7] text-[#825612]';
-        else if (rec.status === 'skip') badgeCls = 'bg-[#f4f7f1] text-[#52625a]';
-        else if (rec.status === 'error') badgeCls = 'bg-[#fdf0f1] text-[#992634]';
+      document.getElementById('bulkPreviewTableBody').innerHTML = records.map((rec) => `
+        <tr class="${rec.status === 'error' ? 'bg-[#fdf0f1]/50' : ''}">
+          <td class="px-3 py-2 text-[#52625a]">${rec.rowNum}</td>
+          <td class="px-3 py-2"><span class="rounded px-2 py-0.5 text-[11px] font-bold ${rec.statusCls}">${rec.statusLabel}</span></td>
+          <td class="px-3 py-2 font-bold">${rec.no}</td>
+          <td class="px-3 py-2 font-bold">${escapeHtml(rec.className)}</td>
+          <td class="px-3 py-2">${rec.seat}</td>
+          <td class="px-3 py-2 font-bold">${escapeHtml(rec.id || '—')}</td>
+          <td class="px-3 py-2 font-bold text-[#243a32]">${escapeHtml(rec.name || '—')}</td>
+          <td class="px-3 py-2"><span class="rounded bg-[#edf1e7] px-2 py-0.5 text-[11px] font-bold text-[#234c3c]">${escapeHtml(rec.session)}</span></td>
+          <td class="px-3 py-2 text-xs text-[#52625a]">${escapeHtml(rec.email)}</td>
+        </tr>
+      `).join('');
 
-        return `
-          <tr>
-            <td class="px-3 py-2 text-[#52625a]">${rec.rowNum}</td>
-            <td class="px-3 py-2"><span class="rounded px-2 py-0.5 text-[11px] font-bold ${badgeCls}">${rec.statusNote}</span></td>
-            <td class="px-3 py-2">${rec.no || '自動'}</td>
-            <td class="px-3 py-2 font-bold">${escapeHtml(rec.className)}</td>
-            <td class="px-3 py-2">${rec.seat || '—'}</td>
-            <td class="px-3 py-2 font-bold">${escapeHtml(rec.id)}</td>
-            <td class="px-3 py-2 font-bold text-[#243a32]">${escapeHtml(rec.name)}</td>
-            <td class="px-3 py-2">${escapeHtml(rec.session)}</td>
-            <td class="px-3 py-2 text-[#52625a]">${escapeHtml(rec.email)}</td>
-          </tr>
-        `;
-      }).join('');
-
-      const actionableCount = validNewCount + validUpdateCount + waitlistCount;
+      const actionableTotal = validNewCount + validUpdateCount;
       const btn = document.getElementById('bulkConfirmImportBtn');
-      btn.disabled = actionableCount === 0;
-      document.getElementById('bulkFooterHint').textContent = actionableCount > 0
-        ? `共檢核 ${bulkMappedRecords.length} 列，可匯入 ${actionableCount} 筆有效學生資料`
-        : '無可匯入的有效資料列，請檢查欄位對應或檔案內容';
+      btn.disabled = actionableTotal === 0;
+      document.getElementById('bulkFooterHint').textContent = actionableTotal > 0
+        ? `檢核通過，共可寫入 ${actionableTotal} 筆有效名單資料`
+        : '無可寫入的有效資料列，請檢查欄位對應與必填欄位';
     }
 
     function executeBulkImport() {
       const mode = document.getElementById('bulkImportModeSelect').value;
-      const actionable = bulkMappedRecords.filter((r) => ['new', 'update', 'waitlist'].includes(r.status));
+      const actionable = bulkParsedRecords.filter((r) => r.status === 'new' || r.status === 'update');
       if (actionable.length === 0) return;
 
       if (mode === 'replace') {
         appState.students = [];
-        appState.waitlist = [];
       }
 
-      let nextNo = appState.students.reduce((m, s) => Math.max(m, Number(s.no || 0)), 0) + 1;
-      let addedCount = 0;
-      let updatedCount = 0;
-      let waitAddedCount = 0;
+      const existingMap = new Map(appState.students.map((s) => [s.id.toLowerCase(), s]));
+      let added = 0;
+      let updated = 0;
 
       actionable.forEach((rec) => {
-        if (rec.sessionType === 'waitlist') {
-          appState.waitlist = appState.waitlist.filter((w) => w.id.toLowerCase() !== rec.id.toLowerCase());
-          appState.waitlist.push({
-            rank: appState.waitlist.length + 1,
-            className: rec.className,
-            seat: rec.seat,
-            id: rec.id,
-            name: rec.name,
-            pref: rec.pref
-          });
-          waitAddedCount++;
-          return;
-        }
-
-        const existing = appState.students.find((s) => s.id.toLowerCase() === rec.id.toLowerCase());
-        if (existing) {
-          existing.className = rec.className;
-          existing.seat = rec.seat;
-          existing.name = rec.name;
-          existing.session = rec.session;
-          existing.email = rec.email;
-          if (rec.no > 0) existing.no = rec.no;
-          updatedCount++;
+        const key = rec.id.toLowerCase();
+        if (existingMap.has(key)) {
+          const s = existingMap.get(key);
+          s.no = rec.no;
+          s.className = rec.className;
+          s.seat = rec.seat;
+          s.name = rec.name;
+          s.session = rec.session;
+          s.email = rec.email;
+          updated++;
         } else {
-          const assignedNo = rec.no > 0 ? rec.no : nextNo++;
-          if (rec.no >= nextNo) nextNo = rec.no + 1;
           appState.students.push({
-            no: assignedNo,
+            no: rec.no,
             className: rec.className,
             seat: rec.seat,
             id: rec.id,
             name: rec.name,
             session: rec.session,
-            isTeacherTest: rec.className === '教師測試',
+            isTeacherTest: rec.isTeacher,
             email: rec.email,
             password: rec.id,
             confirmed: false,
@@ -5190,19 +4997,180 @@ function appendMailLog(type, studentId, name, email, subject, status) {
             urgentAlert: false,
             teacherNote: ''
           });
-          addedCount++;
+          added++;
         }
       });
 
-      appState.waitlist.forEach((w, idx) => { w.rank = idx + 1; });
-
+      appState.students.sort((a, b) => Number(a.no) - Number(b.no));
       saveAppState();
       closeBulkImportModal();
       renderRosterAdminTable();
-      showToast(`✓ 總名單匯入完成：新增正取 ${addedCount} 筆、更新 ${updatedCount} 筆、備取 ${waitAddedCount} 筆`, '✓');
+      showToast(`總名單匯入完成！新增 ${added} 筆、更新 ${updated} 筆（目前總計 ${appState.students.length} 人）`, '✓');
     }
 
-    /* --- TAB ④: FULL-SITE CMS, VIDEO PATH & LOCKED QUIZ EDITOR --- */
+    function openStudentCrudModal(mode, stuId = '') {
+      document.getElementById('crudMode').value = mode;
+      document.getElementById('crudTargetOrigId').value = stuId;
+
+      if (mode === 'add') {
+        document.getElementById('crudModalHeading').textContent = '新增學生報名資料';
+        document.getElementById('crudClassInput').value = '';
+        document.getElementById('crudSeatInput').value = '';
+        document.getElementById('crudSessionInput').value = '上午A';
+        document.getElementById('crudIdInput').value = '';
+        document.getElementById('crudIdInput').disabled = false;
+        document.getElementById('crudNameInput').value = '';
+        document.getElementById('crudEmailInput').value = '';
+        document.getElementById('crudConfirmedInput').value = 'false';
+        document.getElementById('crudAttendanceInput').value = 'pending';
+        document.getElementById('crudWsScoreInput').value = '0';
+        document.getElementById('crudWsLockedInput').value = 'false';
+        document.getElementById('crudRefLockedInput').value = 'false';
+      } else {
+        const s = appState.students.find((st) => st.id === stuId);
+        if (!s) return;
+        document.getElementById('crudModalHeading').textContent = `編輯學生資料：${s.name}（${s.id}）`;
+        document.getElementById('crudClassInput').value = s.className;
+        document.getElementById('crudSeatInput').value = s.seat;
+        document.getElementById('crudSessionInput').value = s.session;
+        document.getElementById('crudIdInput').value = s.id;
+        document.getElementById('crudIdInput').disabled = true;
+        document.getElementById('crudNameInput').value = s.name;
+        document.getElementById('crudEmailInput').value = s.email;
+        document.getElementById('crudConfirmedInput').value = String(Boolean(s.confirmed));
+        document.getElementById('crudAttendanceInput').value = s.attendance;
+        document.getElementById('crudWsScoreInput').value = s.wsScore;
+        document.getElementById('crudWsLockedInput').value = String(Boolean(s.wsLocked));
+        document.getElementById('crudRefLockedInput').value = String(Boolean(s.refLocked));
+      }
+
+      document.getElementById('studentCrudModal').classList.remove('hidden');
+      document.getElementById('studentCrudModal').classList.add('flex');
+    }
+
+    function closeStudentCrudModal() {
+      document.getElementById('studentCrudModal').classList.add('hidden');
+      document.getElementById('studentCrudModal').classList.remove('flex');
+    }
+
+    function onCrudStudentIdInput(val) {
+      if (document.getElementById('crudMode').value !== 'add') return;
+      const clean = val.trim().toUpperCase();
+      document.getElementById('crudEmailInput').value = clean ? `${clean}@stu.kcislk.ntpc.edu.tw` : '';
+    }
+
+    function saveStudentCrudForm() {
+      const mode = document.getElementById('crudMode').value;
+      const className = document.getElementById('crudClassInput').value.trim();
+      const seat = Number(document.getElementById('crudSeatInput').value);
+      const session = document.getElementById('crudSessionInput').value;
+      const rawId = document.getElementById('crudIdInput').value.trim();
+      const name = document.getElementById('crudNameInput').value.trim();
+      const email = document.getElementById('crudEmailInput').value.trim();
+      const confirmed = document.getElementById('crudConfirmedInput').value === 'true';
+      const attendance = document.getElementById('crudAttendanceInput').value;
+      const wsScore = Number(document.getElementById('crudWsScoreInput').value || 0);
+      const wsLocked = document.getElementById('crudWsLockedInput').value === 'true';
+      const refLocked = document.getElementById('crudRefLockedInput').value === 'true';
+
+      if (mode === 'add') {
+        const id = rawId.toUpperCase();
+        if (appState.students.some((st) => st.id.toLowerCase() === id.toLowerCase())) {
+          showToast(`學號 ${id} 已存在於名單中！`, '⚠️');
+          return;
+        }
+        const maxNo = appState.students.reduce((m, s) => Math.max(m, Number(s.no) || 0), 0);
+        appState.students.push({
+          no: maxNo + 1,
+          className,
+          seat,
+          id,
+          name,
+          session,
+          isTeacherTest: false,
+          email: email || `${id}@stu.kcislk.ntpc.edu.tw`,
+          password: id,
+          confirmed,
+          confirmedAt: confirmed ? nowFullTimestamp() : '',
+          shifts: [],
+          shiftsLocked: false,
+          shiftsLockedAt: '',
+          videoWatched: wsLocked,
+          answers: {},
+          qScores: {},
+          wsScore,
+          wsLocked,
+          wsSubmittedAt: wsLocked ? nowFullTimestamp() : '',
+          attendance,
+          attTimestamp: attendance !== 'pending' ? `後台登錄 (${nowClockTime()})` : '',
+          attHours: attendance === 'present' ? 3.0 : (attendance === 'late' ? 2.5 : (attendance === 'early' ? 2.0 : 0)),
+          reflectionText: '',
+          refLocked,
+          refSubmittedAt: refLocked ? nowFullTimestamp() : '',
+          reviews: {
+            pre: 'pending',
+            warehouse: (attendance !== 'pending' && attendance !== 'absent') ? 'passed' : 'pending',
+            campus: 'pending',
+            reflection: 'pending'
+          },
+          urgentAlert: false,
+          teacherNote: ''
+        });
+        showToast(`已新增學生 ${name}（${id}）！`, '✓');
+      } else {
+        const origId = document.getElementById('crudTargetOrigId').value;
+        const s = appState.students.find((st) => st.id === origId);
+        if (!s) return;
+        s.className = className;
+        s.seat = seat;
+        s.session = session;
+        s.name = name;
+        s.email = email;
+        s.confirmed = confirmed;
+        if (confirmed && !s.confirmedAt) s.confirmedAt = nowFullTimestamp();
+        s.attendance = attendance;
+        if (attendance === 'present') s.attHours = 3.0;
+        else if (attendance === 'late') s.attHours = 2.5;
+        else if (attendance === 'absent') s.attHours = 0;
+        s.wsScore = wsScore;
+        s.wsLocked = wsLocked;
+        s.refLocked = refLocked;
+        showToast(`已更新 ${name} 的報名與任務資料！`, '✓');
+      }
+
+      saveAppState();
+      closeStudentCrudModal();
+      renderRosterAdminTable();
+    }
+
+    function confirmDeleteStudent(stuId) {
+      const s = appState.students.find((st) => st.id === stuId);
+      if (!s) return;
+      document.getElementById('deleteConfirmMessage').textContent =
+        `確定要從名單中刪除「${s.name}（${s.className}-${s.seat}／${s.id}）」嗎？此操作無法復原。`;
+      const btn = document.getElementById('deleteConfirmBtn');
+      btn.onclick = () => {
+        appState.students = appState.students.filter((st) => st.id !== stuId);
+        saveAppState();
+        closeDeleteConfirmModal();
+        renderRosterAdminTable();
+        showToast(`已刪除 ${s.name} 的名單資料`, '✓');
+      };
+      document.getElementById('deleteConfirmModal').classList.remove('hidden');
+      document.getElementById('deleteConfirmModal').classList.add('flex');
+    }
+
+    function closeDeleteConfirmModal() {
+      document.getElementById('deleteConfirmModal').classList.add('hidden');
+      document.getElementById('deleteConfirmModal').classList.remove('flex');
+    }
+
+    function exportRosterFile(type) {
+      if (type === 'xlsx') exportAllParticipantsHoursXlsx();
+      else exportAllParticipantsHoursCsv();
+    }
+
+    /* --- TAB ④: FULL CMS & QUIZ LOCK/UNLOCK EDITOR --- */
     function renderCmsEditorSection() {
       const cfg = appState.siteConfig;
       document.getElementById('cmsHeroMetaInput').value = cfg.heroMeta;
@@ -5211,10 +5179,10 @@ function appendMailLog(type, studentId, name, email, subject, status) {
       document.getElementById('cmsContactInput').value = cfg.contactInfo;
 
       document.getElementById('cmsAnnouncementsList').innerHTML = cfg.announcements.map((a, idx) => `
-        <div class="grid grid-cols-1 gap-2 rounded-xl border border-[#dfe4dc] bg-[#fafaf5] p-3 sm:grid-cols-12 items-center">
-          <input type="text" data-cms-ann-title="${idx}" value="${escapeAttr(a.title)}" class="sm:col-span-4 rounded border border-[#dfe4dc] bg-white px-2.5 py-1.5 text-xs font-bold" />
-          <input type="text" data-cms-ann-desc="${idx}" value="${escapeAttr(a.desc)}" class="sm:col-span-7 rounded border border-[#dfe4dc] bg-white px-2.5 py-1.5 text-xs" />
-          <button type="button" onclick="removeCmsAnnouncement(${idx})" class="sm:col-span-1 text-xs font-bold text-[#992634]">刪除</button>
+        <div class="grid grid-cols-1 gap-2 rounded-xl border border-[#dfe4dc] bg-[#fafaf5] p-3 sm:grid-cols-12 items-start">
+          <input type="text" data-cms-ann-title="${idx}" value="${escapeAttr(a.title)}" class="sm:col-span-4 rounded-lg border border-[#dfe4dc] bg-white px-2.5 py-1.5 text-xs font-bold" />
+          <input type="text" data-cms-ann-desc="${idx}" value="${escapeAttr(a.desc)}" class="sm:col-span-7 rounded-lg border border-[#dfe4dc] bg-white px-2.5 py-1.5 text-xs" />
+          <button type="button" onclick="removeCmsAnnouncement(${idx})" class="sm:col-span-1 rounded border border-[#ecc4c8] bg-white py-1.5 text-xs font-bold text-[#992634]">刪</button>
         </div>
       `).join('');
 
@@ -5222,7 +5190,7 @@ function appendMailLog(type, studentId, name, email, subject, status) {
         <div class="flex items-center gap-1.5">
           <input type="text" data-cms-am-time="${idx}" value="${escapeAttr(r.time)}" class="tabular-nums w-28 rounded border border-[#dfe4dc] bg-white px-2 py-1 text-xs font-bold" />
           <input type="text" data-cms-am-desc="${idx}" value="${escapeAttr(r.desc)}" class="flex-1 rounded border border-[#dfe4dc] bg-white px-2 py-1 text-xs" />
-          <button type="button" onclick="removeCmsAgendaRow('am', ${idx})" class="text-xs font-bold text-[#992634] px-1">✕</button>
+          <button type="button" onclick="removeCmsAgendaRow('am', ${idx})" class="px-1.5 text-xs font-bold text-[#992634]">✕</button>
         </div>
       `).join('');
 
@@ -5230,7 +5198,7 @@ function appendMailLog(type, studentId, name, email, subject, status) {
         <div class="flex items-center gap-1.5">
           <input type="text" data-cms-pm-time="${idx}" value="${escapeAttr(r.time)}" class="tabular-nums w-28 rounded border border-[#dfe4dc] bg-white px-2 py-1 text-xs font-bold" />
           <input type="text" data-cms-pm-desc="${idx}" value="${escapeAttr(r.desc)}" class="flex-1 rounded border border-[#dfe4dc] bg-white px-2 py-1 text-xs" />
-          <button type="button" onclick="removeCmsAgendaRow('pm', ${idx})" class="text-xs font-bold text-[#992634] px-1">✕</button>
+          <button type="button" onclick="removeCmsAgendaRow('pm', ${idx})" class="px-1.5 text-xs font-bold text-[#992634]">✕</button>
         </div>
       `).join('');
 
@@ -5242,73 +5210,79 @@ function appendMailLog(type, studentId, name, email, subject, status) {
       `).join('');
 
       const vCfg = appState.videoConfig;
-      document.getElementById('cmsVideoTitleInput').value = vCfg.title;
-      document.getElementById('cmsVideoUrlInput').value = vCfg.url;
+      const vLockBtn = document.getElementById('cmsVideoLockBtn');
+      vLockBtn.textContent = vCfg.locked ? '🔒 影片鎖定指定路徑（點此解除鎖定）' : '🔓 影片路徑已解鎖（可編輯）';
+      const vTitleInp = document.getElementById('cmsVideoTitleInput');
+      const vUrlInp = document.getElementById('cmsVideoUrlInput');
+      vTitleInp.value = vCfg.title;
+      vUrlInp.value = vCfg.url;
+      vTitleInp.disabled = vCfg.locked;
+      vUrlInp.disabled = vCfg.locked;
+      vTitleInp.classList.toggle('locked-field', vCfg.locked);
+      vUrlInp.classList.toggle('locked-field', vCfg.locked);
       document.getElementById('cmsPassScoreInput').value = vCfg.passScore;
-      document.getElementById('cmsVideoUrlInput').disabled = vCfg.locked;
-      document.getElementById('cmsVideoUrlInput').classList.toggle('locked-field', vCfg.locked);
-      document.getElementById('cmsVideoLockBtn').textContent = vCfg.locked
-        ? '🔒 影片鎖定指定路徑（點此解鎖修改）'
-        : '🔓 已解鎖影片路徑（編輯後請點儲存）';
 
-      const qLocked = appState.quizLocked;
-      document.getElementById('cmsQuizLockBtn').textContent = qLocked
+      const qLockBtn = document.getElementById('cmsQuizLockBtn');
+      qLockBtn.textContent = appState.quizLocked
         ? '🔒 問題題目鎖定（點此解除鎖定）'
-        : '🔓 題目編輯已解鎖（完成請點儲存）';
+        : '🔓 問題題目已解除鎖定（點此重新鎖定）';
 
-      document.getElementById('cmsQuestionsEditorWrap').innerHTML = appState.questions.map((q, idx) => `
-        <div class="rounded-xl border border-[#dfe4dc] ${qLocked ? 'bg-[#fafaf5]' : 'bg-white'} p-4 space-y-2.5">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-[#234c3c]">第 ${q.num} 題（${escapeHtml(q.type)}｜${q.points} 分）</span>
-            <span class="text-xs text-[#52625a]">${qLocked ? '🔒 題目已鎖定' : '✏️ 可編輯模式'}</span>
-          </div>
-          <div>
-            <label class="block text-[11px] font-bold text-[#52625a] mb-1">題目題幹</label>
-            <textarea rows="2" data-q-text="${idx}" ${qLocked ? 'disabled' : ''}
-              class="w-full rounded-lg border border-[#dfe4dc] px-3 py-1.5 text-xs sm:text-sm ${qLocked ? 'locked-field' : ''}">${escapeHtml(q.text)}</textarea>
-          </div>
-          ${Array.isArray(q.options) && q.options.length > 0 ? `
-            <div>
-              <label class="block text-[11px] font-bold text-[#52625a] mb-1">單選選項（每行一個選項）</label>
-              <textarea rows="4" data-q-opts="${idx}" ${qLocked ? 'disabled' : ''}
-                class="w-full rounded-lg border border-[#dfe4dc] px-3 py-1.5 text-xs ${qLocked ? 'locked-field' : ''}">${escapeHtml(q.options.join('\n'))}</textarea>
+      document.getElementById('cmsQuestionsEditorWrap').innerHTML = appState.questions.map((q, idx) => {
+        const dis = appState.quizLocked ? 'disabled' : '';
+        const lCls = appState.quizLocked ? 'locked-field' : 'bg-white';
+        const optsEditor = (q.options && q.options.length > 0)
+          ? `<div class="mt-2 space-y-1">
+              <div class="text-[11px] font-bold text-[#52625a]">單選題選項與正確答案代號（${escapeHtml(q.correctOption || '')}）：</div>
+              ${q.options.map((op, oIdx) => `<input type="text" ${dis} data-q-opt="${idx}-${oIdx}" value="${escapeAttr(op)}" class="w-full rounded border border-[#dfe4dc] px-2.5 py-1 text-xs ${lCls}" />`).join('')}
+            </div>`
+          : '';
+
+        return `
+          <div class="rounded-xl border border-[#dfe4dc] bg-[#fafaf5] p-4 space-y-2">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span class="tabular-nums text-xs font-bold text-[#234c3c]">第 ${q.num} 題【${escapeHtml(q.type)}】｜配分 ${q.points} 分</span>
+              <span class="text-[11px] text-[#52625a]">${appState.quizLocked ? '🔒 題目已鎖定' : '✏️ 可編輯模式'}</span>
             </div>
-          ` : ''}
-          <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
-            <div>
-              <label class="block text-[11px] font-bold text-[#52625a] mb-1">參考答案</label>
-              <input type="text" data-q-ref="${idx}" value="${escapeAttr(q.refAnswer)}" ${qLocked ? 'disabled' : ''}
-                class="w-full rounded-lg border border-[#dfe4dc] px-3 py-1.5 text-xs ${qLocked ? 'locked-field' : ''}" />
-            </div>
-            <div>
-              <label class="block text-[11px] font-bold text-[#52625a] mb-1">評分標準</label>
-              <input type="text" data-q-rubric="${idx}" value="${escapeAttr(q.rubric)}" ${qLocked ? 'disabled' : ''}
-                class="w-full rounded-lg border border-[#dfe4dc] px-3 py-1.5 text-xs ${qLocked ? 'locked-field' : ''}" />
+            <textarea rows="2" ${dis} data-q-text="${idx}" class="w-full rounded-lg border border-[#dfe4dc] px-3 py-1.5 text-xs sm:text-sm font-bold ${lCls}">${escapeHtml(q.text)}</textarea>
+            ${optsEditor}
+            <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
+              <div>
+                <label class="block text-[11px] font-bold text-[#52625a] mb-0.5">參考答案</label>
+                <input type="text" ${dis} data-q-ref="${idx}" value="${escapeAttr(q.refAnswer)}" class="w-full rounded border border-[#dfe4dc] px-2.5 py-1 text-xs ${lCls}" />
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-[#52625a] mb-0.5">教師評分依據</label>
+                <input type="text" ${dis} data-q-rubric="${idx}" value="${escapeAttr(q.rubric)}" class="w-full rounded border border-[#dfe4dc] px-2.5 py-1 text-xs ${lCls}" />
+              </div>
             </div>
           </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     function addCmsAnnouncement() {
-      appState.siteConfig.announcements.push({ title: '新公告標題', desc: '請輸入公告內容說明' });
+      appState.siteConfig.announcements.push({ title: '新公告標題', desc: '請輸入公告詳細說明內容。' });
+      saveAppState();
       renderCmsEditorSection();
     }
 
     function removeCmsAnnouncement(idx) {
       appState.siteConfig.announcements.splice(idx, 1);
+      saveAppState();
       renderCmsEditorSection();
     }
 
     function addCmsAgendaRow(half) {
-      if (half === 'am') appState.siteConfig.amAgenda.push({ time: '12:00–12:30', desc: '新增行程內容' });
-      else appState.siteConfig.pmAgenda.push({ time: '16:30–17:00', desc: '新增行程內容' });
+      if (half === 'am') appState.siteConfig.amAgenda.push({ time: '12:30–12:40', desc: '新行程項目' });
+      else appState.siteConfig.pmAgenda.push({ time: '17:00–17:10', desc: '新行程項目' });
+      saveAppState();
       renderCmsEditorSection();
     }
 
     function removeCmsAgendaRow(half, idx) {
       if (half === 'am') appState.siteConfig.amAgenda.splice(idx, 1);
       else appState.siteConfig.pmAgenda.splice(idx, 1);
+      saveAppState();
       renderCmsEditorSection();
     }
 
@@ -5319,25 +5293,36 @@ function appendMailLog(type, studentId, name, email, subject, status) {
       cfg.heroDesc = document.getElementById('cmsHeroDescInput').value.trim();
       cfg.contactInfo = document.getElementById('cmsContactInput').value.trim();
 
-      cfg.announcements.forEach((a, idx) => {
-        a.title = document.querySelector(`[data-cms-ann-title="${idx}"]`).value.trim();
-        a.desc = document.querySelector(`[data-cms-ann-desc="${idx}"]`).value.trim();
+      cfg.announcements.forEach((a, i) => {
+        const t = document.querySelector(`[data-cms-ann-title="${i}"]`);
+        const d = document.querySelector(`[data-cms-ann-desc="${i}"]`);
+        if (t) a.title = t.value.trim();
+        if (d) a.desc = d.value.trim();
       });
-      cfg.amAgenda.forEach((r, idx) => {
-        r.time = document.querySelector(`[data-cms-am-time="${idx}"]`).value.trim();
-        r.desc = document.querySelector(`[data-cms-am-desc="${idx}"]`).value.trim();
+
+      cfg.amAgenda.forEach((r, i) => {
+        const t = document.querySelector(`[data-cms-am-time="${i}"]`);
+        const d = document.querySelector(`[data-cms-am-desc="${i}"]`);
+        if (t) r.time = t.value.trim();
+        if (d) r.desc = d.value.trim();
       });
-      cfg.pmAgenda.forEach((r, idx) => {
-        r.time = document.querySelector(`[data-cms-pm-time="${idx}"]`).value.trim();
-        r.desc = document.querySelector(`[data-cms-pm-desc="${idx}"]`).value.trim();
+
+      cfg.pmAgenda.forEach((r, i) => {
+        const t = document.querySelector(`[data-cms-pm-time="${i}"]`);
+        const d = document.querySelector(`[data-cms-pm-desc="${i}"]`);
+        if (t) r.time = t.value.trim();
+        if (d) r.desc = d.value.trim();
       });
-      cfg.milestones.forEach((m, idx) => {
-        m.title = document.querySelector(`[data-cms-ms-title="${idx}"]`).value.trim();
-        m.desc = document.querySelector(`[data-cms-ms-desc="${idx}"]`).value.trim();
+
+      cfg.milestones.forEach((m, i) => {
+        const t = document.querySelector(`[data-cms-ms-title="${i}"]`);
+        const d = document.querySelector(`[data-cms-ms-desc="${i}"]`);
+        if (t) m.title = t.value.trim();
+        if (d) m.desc = d.value.trim();
       });
 
       saveAppState();
-      showToast('已儲存活動總覽首頁公告與行程設定！', '✓');
+      showToast('活動總覽首頁資訊與公告已儲存更新！', '✓');
     }
 
     function toggleVideoPathLock() {
@@ -5353,63 +5338,64 @@ function appendMailLog(type, studentId, name, email, subject, status) {
     }
 
     function saveVideoAndQuizSettings() {
-      appState.videoConfig.title = document.getElementById('cmsVideoTitleInput').value.trim();
-      appState.videoConfig.url = document.getElementById('cmsVideoUrlInput').value.trim();
+      if (!appState.videoConfig.locked) {
+        appState.videoConfig.title = document.getElementById('cmsVideoTitleInput').value.trim();
+        appState.videoConfig.url = document.getElementById('cmsVideoUrlInput').value.trim();
+      }
       appState.videoConfig.passScore = Number(document.getElementById('cmsPassScoreInput').value || 80);
 
       if (!appState.quizLocked) {
         appState.questions.forEach((q, idx) => {
-          q.text = document.querySelector(`[data-q-text="${idx}"]`).value.trim();
-          const optEl = document.querySelector(`[data-q-opts="${idx}"]`);
-          if (optEl) {
-            q.options = optEl.value.split('\n').map((x) => x.trim()).filter(Boolean);
+          const t = document.querySelector(`[data-q-text="${idx}"]`);
+          const r = document.querySelector(`[data-q-ref="${idx}"]`);
+          const rb = document.querySelector(`[data-q-rubric="${idx}"]`);
+          if (t) q.text = t.value.trim();
+          if (r) q.refAnswer = r.value.trim();
+          if (rb) q.rubric = rb.value.trim();
+          if (Array.isArray(q.options)) {
+            q.options = q.options.map((op, oIdx) => {
+              const inp = document.querySelector(`[data-q-opt="${idx}-${oIdx}"]`);
+              return inp ? inp.value.trim() : op;
+            });
           }
-          q.refAnswer = document.querySelector(`[data-q-ref="${idx}"]`).value.trim();
-          q.rubric = document.querySelector(`[data-q-rubric="${idx}"]`).value.trim();
         });
-        appState.quizLocked = true;
       }
 
-      appState.videoConfig.locked = true;
       saveAppState();
-      renderCmsEditorSection();
-      showToast('已儲存影片指定路徑與 10 題題庫並重新鎖定！', '🔒');
+      showToast('行前影片路徑與學習單題庫設定已儲存！', '✓');
     }
 
-    /* --- TAB ⑤: LIVE EMAIL ENGINE, SHEETS SYNC & ADMIN MANAGEMENT --- */
+    /* --- TAB ⑤: SYSTEM & LIVE EMAIL ENGINE & GOOGLE SHEETS SYNC --- */
     function renderSystemAdminSection() {
       document.getElementById('sysGasUrlInput').value = getActiveGasUrl();
+      document.getElementById('sysSyncStatusText').textContent =
+        `就緒（${appState.students.length} 筆錄取＋${appState.waitlist.length} 筆備取）`;
 
-      const logs = Array.isArray(appState.mailLogs) ? appState.mailLogs : [];
-      document.getElementById('sysMailLogsBody').innerHTML = logs.length === 0
-        ? `<tr><td colspan="5" class="px-3 py-4 text-center text-[#52625a]">尚無發信紀錄</td></tr>`
-        : logs.slice(0, 30).map((l) => `
-            <tr>
-              <td class="px-3 py-2 text-[#52625a]">${escapeHtml(l.time)}</td>
-              <td class="px-3 py-2 font-bold text-[#234c3c]">${escapeHtml(l.type)}</td>
-              <td class="px-3 py-2">${escapeHtml(l.recipient)}</td>
-              <td class="px-3 py-2">${escapeHtml(l.subject)}</td>
-              <td class="px-3 py-2 font-bold text-[#234c3c]">✓ ${escapeHtml(l.status)}</td>
-            </tr>
-          `).join('');
+      const logsBody = document.getElementById('sysMailLogsBody');
+      if (!Array.isArray(appState.mailLogs) || appState.mailLogs.length === 0) {
+        logsBody.innerHTML = `<tr><td colspan="5" class="px-3 py-4 text-center text-[#52625a]">尚無本機寄信紀錄</td></tr>`;
+      } else {
+        logsBody.innerHTML = appState.mailLogs.slice(0, 30).map((l) => `
+          <tr>
+            <td class="px-3 py-2 text-[#52625a]">${escapeHtml(l.time)}</td>
+            <td class="px-3 py-2 font-bold text-[#234c3c]">${escapeHtml(l.type)}</td>
+            <td class="px-3 py-2">${escapeHtml(l.recipient)}</td>
+            <td class="px-3 py-2">${escapeHtml(l.subject)}</td>
+            <td class="px-3 py-2 font-bold text-[#234c3c]">${escapeHtml(l.status)}</td>
+          </tr>
+        `).join('');
+      }
 
       document.getElementById('sysAdminsList').innerHTML = appState.admins.map((a, idx) => `
-        <div class="rounded-xl border border-[#dfe4dc] bg-[#fafaf5] p-4 space-y-2.5">
+        <div class="rounded-xl border border-[#dfe4dc] bg-[#fafaf5] p-4 space-y-2">
           <div class="flex items-center justify-between">
-            <div>
-              <div class="text-sm font-bold text-[#243a32]">${escapeHtml(a.name)}</div>
-              <div class="tabular-nums text-xs text-[#52625a]">${escapeHtml(a.email)}</div>
-            </div>
-            <span class="rounded bg-[#234c3c] px-2 py-0.5 text-[11px] font-bold text-white">
-              ${a.role === 'admin' ? '管理員' : '點名工作人員'}
-            </span>
+            <span class="text-sm font-bold text-[#243a32]">${escapeHtml(a.name)}</span>
+            <span class="rounded bg-[#234c3c] px-2 py-0.5 text-[11px] font-bold text-white">${a.role === 'admin' ? '管理員' : '點名人員'}</span>
           </div>
-          <div class="flex items-center gap-2">
-            <input type="text" id="adm-pass-${idx}" value="${escapeAttr(a.password)}"
-              class="tabular-nums flex-1 rounded-lg border border-[#dfe4dc] bg-white px-2.5 py-1.5 text-xs" />
-            <button type="button" onclick="updateAdminPassword(${idx})" class="btn-outline rounded-lg px-3 py-1.5 text-xs font-bold">
-              變更密碼
-            </button>
+          <div class="tabular-nums text-xs text-[#52625a]">${escapeHtml(a.email)}</div>
+          <div class="flex items-center gap-2 pt-1">
+            <input type="text" id="sysAdminPass_${idx}" value="${escapeAttr(a.password)}" class="tabular-nums flex-1 rounded border border-[#dfe4dc] bg-white px-2.5 py-1 text-xs" />
+            <button type="button" onclick="updateAdminPassword(${idx})" class="btn-outline rounded px-3 py-1 text-xs font-bold">更新密碼</button>
           </div>
         </div>
       `).join('');
@@ -5417,74 +5403,77 @@ function appendMailLog(type, studentId, name, email, subject, status) {
 
     async function saveGasEndpoint() {
       const url = document.getElementById('sysGasUrlInput').value.trim();
-      if (url && !url.startsWith('https://script.google.com/macros/')) {
-        showToast('請輸入正確的 Google Apps Script Web App 網址（https://script.google.com/macros/s/.../exec）', '⚠️');
-        return;
-      }
       appState.gasWebAppUrl = url;
-      saveAppState();
+      saveAppState(true);
       updateTeacherMailEngineBanner();
 
       if (!url && !isAppsScriptHosted()) {
-        document.getElementById('sysMailQuotaInfo').textContent = '已清除 Apps Script 網址。';
-        showToast('已清除發信引擎網址', '✓');
+        document.getElementById('sysMailQuotaInfo').textContent = '';
+        showToast('已清除發信引擎網址設定', '✓');
         return;
       }
 
-      document.getElementById('sysSyncStatusText').textContent = '連線測試中...';
+      showToast('正在驗證發信與雲端資料庫連線...', '⏳');
       try {
         const res = await callMailBackendApi({ action: 'ping' });
-        if (res && res.ok) {
-          document.getElementById('sysSyncStatusText').textContent = `已連線 (${res.serverTime || nowClockTime()})`;
-          document.getElementById('sysMailQuotaInfo').textContent =
-            `✓ 連線成功！發信帳號：${res.senderEmail || '學校 Google 帳號'}｜今日剩餘可寄信額度：${res.remainingQuota ?? '正常'} 封`;
-          showToast('✓ 校內信箱發信引擎連線驗證成功！', '✓');
-        } else {
-          throw new Error((res && res.error) || '連線失敗');
-        }
+        if (!res || !res.ok) throw new Error(res?.error || '無法取得回應');
+        document.getElementById('sysMailQuotaInfo').textContent =
+          `✓ 連線驗證成功！發信執行帳號：${res.senderEmail || '已授權 Google 帳號'}｜今日剩餘可寄信額度：${res.remainingQuota ?? '正常'} 封｜伺服器時間：${res.serverTime || ''}`;
+        document.getElementById('sysSyncStatusText').textContent = `已連線至試算表 (${res.serverTime || '線上'})`;
+        await syncFullStateFromCloud(true);
+        showToast('✓ 雲端同步與發信引擎連線驗證成功！', '✓');
       } catch (err) {
-        document.getElementById('sysSyncStatusText').textContent = '連線異常';
-        document.getElementById('sysMailQuotaInfo').textContent = `⚠️ 連線測試失敗：${err.message}`;
-        showToast(`連線驗證失敗：${err.message}`, '⚠️');
+        document.getElementById('sysMailQuotaInfo').textContent = `⚠️ 連線失敗：${err.message}`;
+        showToast(`連線失敗：${err.message}`, '⚠️');
+      }
+    }
+
+    async function pullFromCloudSheet() {
+      if (!isLiveMailBackendAvailable()) {
+        showToast('請先儲存 Apps Script Web App 網址再載入！', '⚠️');
+        return;
+      }
+      showToast('正在從雲端試算表載入所有學生最新進度...', '⏳');
+      const ok = await syncFullStateFromCloud(false);
+      if (!ok) {
+        showToast('雲端試算表目前尚無儲存紀錄，可點選「寫回同步至試算表」建立初始資料。', 'ℹ️');
       }
     }
 
     async function sendLiveTestEmail() {
-      const to = document.getElementById('sysTestEmailInput').value.trim();
+      const targetEmail = document.getElementById('sysTestEmailInput').value.trim();
       const btn = document.getElementById('sysSendTestMailBtn');
-      if (!to || !to.includes('@')) {
-        showToast('請輸入正確的測試收件信箱', '⚠️');
+      if (!targetEmail || !targetEmail.includes('@')) {
+        showToast('請輸入有效的收件信箱地址', '⚠️');
         return;
       }
       if (!isLiveMailBackendAvailable()) {
-        showToast('請先在上方欄位貼入並儲存 Apps Script Web App 網址！', '⚠️');
+        showToast('請先於上方貼入並儲存 Apps Script Web App 網址！', '⚠️');
         return;
       }
 
       btn.disabled = true;
-      btn.textContent = '寄送測試信中...';
+      btn.textContent = '正在寄出測試信...';
       try {
+        const subject = '【康橋 × 舊鞋救命】校內信箱發信引擎連線測試成功';
         const res = await callMailBackendApi({
           action: 'sendNotice',
           portalUrl: getPortalPublicUrl(),
           recipients: [{
             id: 'TEST',
             name: '測試收件人',
-            email: to,
-            category: '系統發信測試',
-            subject: '【康橋 × 舊鞋救命】校內信箱發信引擎測試信',
-            message: '這是一封來自「康橋 × 舊鞋救命 2026 服務學習管理系統」的正式發信測試信件。若您收到此信，代表學生 6 位數驗證碼與教師批次通知信箱功能已正常運作！'
+            email: targetEmail,
+            category: '連線測試信',
+            subject,
+            message: '這是一封由「康橋 × 舊鞋救命 2026 服務學習平台」實際寄出的系統測試信。收到此信代表您的學校信箱發信功能已正式啟用！'
           }]
         });
-
-        if (res && res.ok && res.sentCount > 0) {
-          recordLocalMailLog('系統發信測試', to, '校內信箱發信引擎測試信', '已寄出');
-          renderSystemAdminSection();
-          showToast(`✓ 測試信已實際寄送至 ${to}，請前往信箱查收！`, '✉');
-        } else {
-          const reason = (res && res.failedList && res.failedList[0]?.reason) || (res && res.error) || '寄送失敗';
-          throw new Error(reason);
+        if (!res || !res.ok || res.sentCount === 0) {
+          throw new Error((res && res.failedList && res.failedList[0]?.reason) || res?.error || '測試信寄送失敗');
         }
+        recordLocalMailLog('連線測試信', targetEmail, subject, '已寄出');
+        renderSystemAdminSection();
+        showToast(`✓ 測試信已實際寄出至 ${targetEmail}，請至信箱查收！`, '✉️');
       } catch (err) {
         showToast(`測試信寄送失敗：${err.message}`, '⚠️');
       } finally {
@@ -5500,86 +5489,57 @@ function appendMailLog(type, studentId, name, email, subject, status) {
       showToast('已清空本機發信紀錄', '✓');
     }
 
-    async function pullFromCloudSheet() {
-      if (!isLiveMailBackendAvailable()) {
-        showToast('請先綁定 Apps Script Web App 網址後即可與 Google 試算表雙向同步！', '⚠️');
-        return;
-      }
-      document.getElementById('sysSyncStatusText').textContent = '正在從試算表載入進度...';
-      const ok = await syncFullStateFromCloud(false);
-      document.getElementById('sysSyncStatusText').textContent = ok
-        ? `已從雲端載入（${nowClockTime()}）`
-        : '雲端尚無資料或載入失敗';
-      if (ok) renderSystemAdminSection();
-    }
-
-    async function runFourLayerSheetsSync() {
-      if (!isLiveMailBackendAvailable()) {
-        showToast('請先綁定 Apps Script Web App 網址後即可同步至試算表！', '⚠️');
-        return;
-      }
-      document.getElementById('sysSyncStatusText').textContent = '正在寫回 Google 試算表...';
-      try {
-        const res = await callMailBackendApi({
-          action: 'pushFullState',
-          state: appState
-        });
-        if (res && res.ok) {
-          document.getElementById('sysSyncStatusText').textContent = `已寫回試算表（${res.syncedAt || nowClockTime()}）`;
-          showToast(`✓ 已將全部學生與設定資料寫回 Google 試算表！`, '✓');
-        } else {
-          throw new Error((res && res.error) || '同步失敗');
-        }
-      } catch (err) {
-        document.getElementById('sysSyncStatusText').textContent = '同步失敗';
-        showToast(`試算表同步失敗：${err.message}`, '⚠️');
-      }
-    }
-
     function copyGasScriptToClipboard() {
       const code = document.getElementById('sysGasCodePre').textContent;
       navigator.clipboard?.writeText(code);
-      showToast('已複製 Code.gs 完整程式碼至剪貼簿！', '✓');
+      showToast('已複製完整 Code.gs 程式碼！', '✓');
     }
 
     function downloadCodeGsFile() {
       const code = document.getElementById('sysGasCodePre').textContent;
       const blob = new Blob([code], { type: 'text/plain;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'Code.gs';
-      a.click();
-      URL.revokeObjectURL(url);
-      showToast('已下載 Code.gs 檔案', '✓');
+      triggerDownloadBlob(blob, 'Code.gs');
+      showToast('已下載 Code.gs 後端檔案！', '✓');
+    }
+
+    async function runFourLayerSheetsSync() {
+      if (!isLiveMailBackendAvailable()) {
+        showToast('請先儲存 Apps Script Web App 網址再執行同步！', '⚠️');
+        return;
+      }
+      showToast('正在將全體名單、點名與時數寫入雲端試算表...', '⏳');
+      try {
+        const res = await callMailBackendApi({
+          action: 'pushFullState',
+          state: appState
+        });
+        if (!res || !res.ok) throw new Error(res?.error || '同步失敗');
+        const ts = res.syncedAt || nowFullTimestamp();
+        document.getElementById('sysSyncStatusText').textContent = `已同步至雲端 (${ts})`;
+        showToast(`✓ 已完成雲端試算表雙向同步（共 ${appState.students.length} 筆）！`, '✓');
+      } catch (err) {
+        showToast(`試算表同步失敗：${err.message}`, '⚠️');
+      }
     }
 
     function updateAdminPassword(idx) {
-      const val = document.getElementById(`adm-pass-${idx}`).value.trim();
-      if (val.length < 4) {
-        showToast('管理員密碼請至少 4 個字元', '⚠️');
-        return;
-      }
+      const val = document.getElementById(`sysAdminPass_${idx}`).value.trim();
+      if (!val) return;
       appState.admins[idx].password = val;
       saveAppState();
-      showToast(`已更新 ${appState.admins[idx].name} 的登入密碼`, '✓');
+      showToast(`已更新 ${appState.admins[idx].name} 的管理密碼！`, '✓');
     }
 
     function addAdminStaffAccount() {
       const name = document.getElementById('sysNewAdminName').value.trim();
-      const email = document.getElementById('sysNewAdminEmail').value.trim().toLowerCase();
+      const email = document.getElementById('sysNewAdminEmail').value.trim();
       const password = document.getElementById('sysNewAdminPass').value.trim();
       if (!name || !email || !password) {
-        showToast('請完整填寫姓名、校內信箱與登入密碼', '⚠️');
+        showToast('請完整填寫姓名、校內信箱與密碼', '⚠️');
         return;
       }
-      appState.admins.push({
-        id: email.split('@')[0],
-        name,
-        email,
-        password,
-        role: 'staff'
-      });
+      const id = email.split('@')[0];
+      appState.admins.push({ id, name, email, password, role: 'staff' });
       saveAppState();
       document.getElementById('sysNewAdminName').value = '';
       document.getElementById('sysNewAdminEmail').value = '';
@@ -5588,12 +5548,13 @@ function appendMailLog(type, studentId, name, email, subject, status) {
       showToast(`已新增工作人員帳號：${name}`, '✓');
     }
 
-    // Boot Application & Auto-Pull Cloud State
+    /* ========================================================================
+       J. INITIALIZE ON PAGE LOAD
+       ======================================================================== */
     document.addEventListener('DOMContentLoaded', () => {
       renderRootByRole();
       syncFullStateFromCloud(true);
     });
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js" defer></script>
 </body>
 </html>
